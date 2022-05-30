@@ -29,6 +29,7 @@
         android:labelFor="@id/input_phone_number"
         android:minWidth="200dp"
         android:textAlignment="center"
+        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/enter_phone_number_title"

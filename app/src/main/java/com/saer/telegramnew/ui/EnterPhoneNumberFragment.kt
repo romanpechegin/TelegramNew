@@ -1,27 +1,29 @@
 package com.saer.telegramnew.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import by.kirich1409.viewbindingdelegate.CreateMethod
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.redmadrobot.inputmask.helper.AffinityCalculationStrategy
 import com.saer.telegramnew.R
 import com.saer.telegramnew.appComponent
 import com.saer.telegramnew.databinding.FragmentEnterPhoneNumberBinding
 import com.saer.telegramnew.model.*
+import com.saer.telegramnew.utils.showKeyboard
 import javax.inject.Inject
 
-class EnterPhoneNumberFragment : Fragment() {
+
+class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
 
     @Inject
     lateinit var viewModel: EnterPhoneNumberFragmentViewModel
 
-    private var _binding: FragmentEnterPhoneNumberBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentEnterPhoneNumberBinding by viewBinding(CreateMethod.INFLATE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,6 @@ class EnterPhoneNumberFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEnterPhoneNumberBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,20 +45,20 @@ class EnterPhoneNumberFragment : Fragment() {
         }
 
         viewModel.observeResult(viewLifecycleOwner) { result ->
-            binding.sendCodeButton.visibility = when (result) {
+             when (result) {
                 is ErrorResult -> {
                     Toast.makeText(context, result.exception.message, Toast.LENGTH_LONG).show()
-                    View.GONE
+                    binding.sendCodeButton.visibility = View.GONE
                 }
-                is PendingResult -> View.GONE
-                is SuccessResult -> View.VISIBLE
+                is PendingResult -> binding.sendCodeButton.visibility = View.GONE
+                is SuccessResult -> binding.sendCodeButton.visibility = View.VISIBLE
                 is UserActionSuccessResult -> {
                     binding.enterPhoneNumberTitle.text = requireContext().getString(result.message)
-                    View.VISIBLE
+                    binding.sendCodeButton.visibility = View.VISIBLE
                 }
                 is UserActionErrorResult -> {
                     binding.enterPhoneNumberTitle.text = requireContext().getString(result.message)
-                    View.GONE
+                    binding.sendCodeButton.visibility = View.GONE
                 }
             }
         }
@@ -71,10 +72,6 @@ class EnterPhoneNumberFragment : Fragment() {
             AffinityCalculationStrategy.PREFIX
         )
         binding.inputPhoneNumber.hint = maskedTextChangedListener.placeholder()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        showKeyboard()
     }
 }
