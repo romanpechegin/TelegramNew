@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.redmadrobot.inputmask.MaskedTextChangedListener
@@ -45,7 +47,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         }
 
         viewModel.observeResult(viewLifecycleOwner) { result ->
-             when (result) {
+            when (result) {
                 is ErrorResult -> {
                     Toast.makeText(context, result.exception.message, Toast.LENGTH_LONG).show()
                     binding.sendCodeButton.visibility = View.GONE
@@ -73,5 +75,9 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         )
         binding.inputPhoneNumber.hint = maskedTextChangedListener.placeholder()
         showKeyboard()
+        binding.sendCodeButton.setOnClickListener {
+            it.findNavController()
+                .navigate(R.id.action_EnterPhoneNumberFragment_to_enterCodeFragment)
+        }
     }
 }

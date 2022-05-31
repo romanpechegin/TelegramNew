@@ -1,7 +1,7 @@
 package com.saer.telegramnew.interactors
 
-import org.junit.Assert.*
 import org.junit.Test
+import com.google.common.truth.Truth.assertThat
 
 private const val LOGIN = "login"
 private const val PASS = "pass"
@@ -12,7 +12,7 @@ class AuthInteractorTest {
     @Test
     fun `test getToken`() {
         val authInteractor = AuthInteractor.Base(TestAuthRepository())
-        assertEquals(SUCCESS_TOKEN, authInteractor.getToken(LOGIN, PASS))
+        assertThat(authInteractor.getToken(LOGIN, PASS)).isEqualTo(SUCCESS_TOKEN)
     }
 
     class TestAuthRepository : AuthRepository {

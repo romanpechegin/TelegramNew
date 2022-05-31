@@ -3,11 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/enterPhoneNumberFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/enterPhoneNumberFragment"
         android:name="com.saer.telegramnew.ui.EnterPhoneNumberFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_enter_phone_number" />
+        tools:layout="@layout/fragment_enter_phone_number" >
+        <action
+            android:id="@+id/action_EnterPhoneNumberFragment_to_enterCodeFragment"
+            app:destination="@id/enterCodeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterCodeFragment"
+        android:name="com.saer.telegramnew.ui.EnterCodeFragment"
+        android:label="fragment_enter_code"
+        tools:layout="@layout/fragment_enter_code" />
 </navigation>
