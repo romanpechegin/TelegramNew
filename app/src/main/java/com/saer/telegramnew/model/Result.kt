@@ -1,7 +1,5 @@
 package com.saer.telegramnew.model
 
-import androidx.annotation.StringRes
-
 sealed class Result<T>
 
 sealed class FinalResult<T> : Result<T>()
@@ -16,37 +14,7 @@ class PendingResult<T> : Result<T>() {
     }
 }
 
-class UserActionSuccessResult<T>(
-    @StringRes
-    val message: Int
-) : Result<T>() {
-    override fun equals(other: Any?): Boolean {
-        if (other !is UserActionSuccessResult<*>) return false
-        return message == other.message
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
-}
-
-class UserActionErrorResult<T>(
-    @StringRes
-    val message: Int
-) : Result<T>() {
-    override fun equals(other: Any?): Boolean {
-        if (other !is UserActionErrorResult<*>) return false
-        return message == other.message
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
-}
-
-class ErrorResult<T>(
-    val exception: Exception
-) : FinalResult<T>() {
+class ErrorResult<T>: FinalResult<T>() {
     override fun equals(other: Any?): Boolean {
         return other is ErrorResult<*>
     }
@@ -60,7 +28,8 @@ class SuccessResult<T>(
     val data: T? = null
 ) : FinalResult<T>() {
     override fun equals(other: Any?): Boolean {
-        return other is SuccessResult<*>
+        return if (other !is SuccessResult<*>) false
+        else data == other.data
     }
 
     override fun hashCode(): Int {

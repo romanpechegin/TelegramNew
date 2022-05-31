@@ -3,6 +3,7 @@ package com.saer.telegramnew
 import android.app.Application
 import android.content.Context
 import com.saer.telegramnew.di.AppComponent
+import com.saer.telegramnew.di.AppModule
 import com.saer.telegramnew.di.DaggerAppComponent
 
 class App : Application() {
@@ -11,7 +12,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
     }
 }
 

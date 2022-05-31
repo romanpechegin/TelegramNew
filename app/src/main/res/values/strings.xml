@@ -3,8 +3,14 @@
 
     // Buttons
     <string name="send_code">Send code</string>
+
+    // Label
     <string name="enter_phone_number">Please, enter phone number</string>
     <string name="click_send_code">Please, click send code</string>
+
+    // Error
+    <string name="illegal_phone_number">Illegal phone number</string>
+    <string name="error">Error</string>
 
     // Phone number mask
     <string name="phone_number_musk1">8 ([000]) [000]-[00]-[00]</string>
