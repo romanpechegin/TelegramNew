@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.saer.telegramnew.CORRECT_PHONE_NUMBER
 import com.saer.telegramnew.INCORRECT_PHONE_NUMBER
-import com.saer.telegramnew.R
 import com.saer.telegramnew.common.Resources
 import com.saer.telegramnew.communications.ResultCheckPhoneCommunication
 import com.saer.telegramnew.communications.ResultSendCodeCommunication

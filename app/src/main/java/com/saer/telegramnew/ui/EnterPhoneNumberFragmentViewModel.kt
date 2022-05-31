@@ -36,9 +36,11 @@ class EnterPhoneNumberFragmentViewModel @Inject constructor(
         resultSendCodeCommunication.observe(owner, observer)
 
     fun sendCode() {
-        if (resultCheckPhoneCommunication.value == SuccessResult<Boolean>())
-            resultSendCodeCommunication.map(SuccessResult())
-        else
-            resultSendCodeCommunication.map(ErrorResult())
+        when (resultCheckPhoneCommunication.value) {
+            is ErrorResult -> resultSendCodeCommunication.map(ErrorResult())
+            is SuccessResult -> resultSendCodeCommunication.map(SuccessResult())
+            is PendingResult -> resultSendCodeCommunication.map(PendingResult())
+            null -> throw Exception() // TODO
+        }
     }
 }

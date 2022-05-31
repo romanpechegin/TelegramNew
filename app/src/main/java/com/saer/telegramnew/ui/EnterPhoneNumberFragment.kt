@@ -47,7 +47,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         viewModel.observeCheckPhoneResult(viewLifecycleOwner) { result ->
             when (result) {
                 is ErrorResult -> {
-                    Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show()
+//                    Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show()
                     binding.sendCodeButton.visibility = View.GONE
                     binding.enterPhoneNumberTitle.text =
                         requireContext().getString(R.string.enter_phone_number)
@@ -63,13 +63,11 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
 
         viewModel.observeSendCodeResult(viewLifecycleOwner) { result ->
             when (result) {
-                is ErrorResult -> Toast.makeText(
-                    context,
-                    getString(R.string.error),
-                    Toast.LENGTH_LONG
-                ).show()
-                is SuccessResult -> findNavController()
-                    .navigate(R.id.action_EnterPhoneNumberFragment_to_enterCodeFragment)
+                is ErrorResult ->
+                    Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show()
+                is SuccessResult ->
+                    findNavController()
+                        .navigate(R.id.action_EnterPhoneNumberFragment_to_enterCodeFragment)
                 is PendingResult -> {
 
                 }
@@ -78,6 +76,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
 
         setPhoneNumberMask(binding.inputPhoneNumber, requireContext())
         showKeyboard()
+
         binding.sendCodeButton.setOnClickListener {
             viewModel.sendCode()
         }

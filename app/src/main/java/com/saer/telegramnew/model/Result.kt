@@ -14,7 +14,7 @@ class PendingResult<T> : Result<T>() {
     }
 }
 
-class ErrorResult<T>: FinalResult<T>() {
+class ErrorResult<T> : FinalResult<T>() {
     override fun equals(other: Any?): Boolean {
         return other is ErrorResult<*>
     }

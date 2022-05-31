@@ -22,6 +22,7 @@ interface Communication<T> {
             liveData.observe(viewLifecycleOwner, observer)
         }
 
-        override val value: T? = liveData.value
+        override val value: T?
+            get() = liveData.value
     }
 }
