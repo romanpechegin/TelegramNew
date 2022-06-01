@@ -4,7 +4,7 @@ import android.content.Context
 import com.saer.telegramnew.App
 import com.saer.telegramnew.MainActivity
 import com.saer.telegramnew.common.Resources
-import com.saer.telegramnew.communications.ResultCheckPhoneCommunication
+import com.saer.telegramnew.communications.EnterPhoneUiCommunication
 import com.saer.telegramnew.communications.ResultSendCodeCommunication
 import com.saer.telegramnew.interactors.AuthInteractor
 import com.saer.telegramnew.interactors.AuthRepository
@@ -12,6 +12,7 @@ import com.saer.telegramnew.ui.EnterPhoneNumberFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import kotlinx.telegram.core.TelegramFlow
 import javax.inject.Singleton
 
 @Component(modules = [AppModule::class, NetworkModule::class, CommunicationModule::class, CommonModule::class])
@@ -33,21 +34,31 @@ class AppModule(private val application: App) {
     fun provideAuthInteractor(authRepository: AuthRepository): AuthInteractor =
         AuthInteractor.Base(authRepository)
 
+    @Singleton
     @Provides
-    fun provideAuthRepository(): AuthRepository = AuthRepository.Base()
+    fun provideAuthRepository(telegramFlow: TelegramFlow): AuthRepository =
+        AuthRepository.Base(telegramFlow)
 
 }
 
 @Module
 class NetworkModule {
 
+    @Singleton
+    @Provides
+    fun provideTelegramFlow(): TelegramFlow {
+        val api = TelegramFlow()
+        api.attachClient()
+        return api
+    }
 }
 
 @Module
 class CommunicationModule {
 
     @Provides
-    fun provideResultCommunication(): ResultCheckPhoneCommunication = ResultCheckPhoneCommunication.Base()
+    fun provideResultCommunication(): EnterPhoneUiCommunication =
+        EnterPhoneUiCommunication.Base()
 
     @Provides
     fun provideResultInputPhoneCommunication(): ResultSendCodeCommunication =
