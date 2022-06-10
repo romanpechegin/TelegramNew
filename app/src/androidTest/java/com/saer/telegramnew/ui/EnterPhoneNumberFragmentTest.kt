@@ -5,16 +5,18 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.saer.telegramnew.R
 import com.saer.telegramnew.utils.getNavController
 import com.saer.telegramnew.utils.isKeyboardShown
+import com.saer.telegramnew.utils.waitFor
 import org.hamcrest.Matchers.not
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 
-@RunWith(AndroidJUnit4ClassRunner::class)
+@RunWith(AndroidJUnit4::class)
 class EnterPhoneNumberFragmentTest {
 
     @Test
@@ -25,7 +27,7 @@ class EnterPhoneNumberFragmentTest {
         onView(withId(R.id.send_code_button)).check(matches(not(isDisplayed())))
         onView(withId(R.id.input_phone_number)).check(matches(withText("+7 (")))
         onView(withId(R.id.input_phone_number)).check(matches(isFocused()))
-        assertEquals(true, isKeyboardShown())
+        assertThat(isKeyboardShown()).isEqualTo(true)
 
         onView(withId(R.id.input_phone_number)).perform(replaceText("989"))
         onView(withId(R.id.input_phone_number)).check(matches(withText("+7 (989) ")))
@@ -68,6 +70,7 @@ class EnterPhoneNumberFragmentTest {
         onView(withId(R.id.send_code_button)).check(matches(isDisplayed()))
 
         onView(withId(R.id.send_code_button)).perform(click())
-        assertEquals(R.id.enterCodeFragment, navController.currentDestination?.id)
+        onView(isRoot()).perform(waitFor(5000))
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.enterCodeFragment)
     }
 }

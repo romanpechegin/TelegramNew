@@ -37,6 +37,10 @@ class AuthInteractorTest {
 //            }
         }
 
+        override suspend fun checkCode(code: String) {
+            TODO("Not yet implemented")
+        }
+
         override fun observeAuthState(): Flow<TdApi.AuthorizationState> {
             TODO("Not yet implemented")
         }

@@ -7,13 +7,18 @@ interface AuthInteractor {
 
     fun observeAuthState(): Flow<TdApi.AuthorizationState>
     suspend fun checkPhoneNumber(phoneNumber: String)
+    suspend fun checkCode(code: String)
 
     class Base(private val authRepository: AuthRepository) : AuthInteractor {
         override fun observeAuthState(): Flow<TdApi.AuthorizationState> =
             authRepository.observeAuthState()
 
         override suspend fun checkPhoneNumber(phoneNumber: String) {
-            return authRepository.checkPhoneNumber(phoneNumber)
+            authRepository.checkPhoneNumber(phoneNumber)
+        }
+
+        override suspend fun checkCode(code: String) {
+            authRepository.checkCode(code)
         }
     }
 }

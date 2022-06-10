@@ -4,14 +4,18 @@ import android.content.Context
 import com.saer.telegramnew.App
 import com.saer.telegramnew.MainActivity
 import com.saer.telegramnew.common.Resources
+import com.saer.telegramnew.communications.EnterCodeUiCommunication
 import com.saer.telegramnew.communications.EnterPhoneUiCommunication
-import com.saer.telegramnew.communications.ResultSendCodeCommunication
 import com.saer.telegramnew.interactors.AuthInteractor
 import com.saer.telegramnew.interactors.AuthRepository
+import com.saer.telegramnew.ui.EnterCodeFragment
 import com.saer.telegramnew.ui.EnterPhoneNumberFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.telegram.core.TelegramFlow
 import javax.inject.Singleton
 
@@ -20,6 +24,7 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(fragment: EnterPhoneNumberFragment)
+    fun inject(fragment: EnterCodeFragment)
 }
 
 @Module
@@ -61,9 +66,8 @@ class CommunicationModule {
         EnterPhoneUiCommunication.Base()
 
     @Provides
-    fun provideResultInputPhoneCommunication(): ResultSendCodeCommunication =
-        ResultSendCodeCommunication.Base()
-
+    fun provideEnterCodeCommunication(): EnterCodeUiCommunication =
+        EnterCodeUiCommunication.Base()
 }
 
 @Module
@@ -71,5 +75,11 @@ class CommonModule {
 
     @Provides
     fun provideResources(context: Context): Resources = Resources.Base(context)
+
+    @Provides
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    fun provideMainDispatcher(): MainCoroutineDispatcher = Dispatchers.Main
 
 }

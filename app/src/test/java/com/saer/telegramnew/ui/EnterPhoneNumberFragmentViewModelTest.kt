@@ -4,89 +4,85 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.saer.telegramnew.CORRECT_PHONE_NUMBER
-import com.saer.telegramnew.INCORRECT_PHONE_NUMBER
+import com.saer.telegramnew.MainDispatcherRule
+import com.saer.telegramnew.R
 import com.saer.telegramnew.common.Resources
 import com.saer.telegramnew.communications.EnterPhoneUiCommunication
-import com.saer.telegramnew.communications.ResultSendCodeCommunication
 import com.saer.telegramnew.interactors.AuthInteractor
-import com.saer.telegramnew.model.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.runTest
 import org.drinkless.td.libcore.telegram.TdApi
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
+import org.mockito.kotlin.mock
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class EnterPhoneNumberFragmentViewModelTest {
 
-    private val testResultCheckPhoneCommunication = TestEnterPhoneUiCommunication()
+    @get:Rule
+    val coroutineRule = MainDispatcherRule()
+    private val testEnterPhoneUiCommunication = TestEnterPhoneUiCommunication()
     private val testAuthInteractor = TestAuthInteractor()
-    private val testResources = TestResources()
-    private val viewModel =
+    private val testResources = mock<Resources>()
+    private val viewModel by lazy {
         EnterPhoneNumberFragmentViewModel(
-            testResultCheckPhoneCommunication,
+            testEnterPhoneUiCommunication,
             testAuthInteractor,
-            testResources
+            testResources,
+            coroutineRule.testDispatcher
         )
+    }
 
-    @Test
-    fun `test input phone number`() {
-        assertThat(testResultCheckPhoneCommunication.result)
-            .isEqualTo(null)
-
-        viewModel.inputPhoneNumber("7")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(ErrorResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(1)
-
-        viewModel.inputPhoneNumber("")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(ErrorResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(2)
-
-        viewModel.inputPhoneNumber("+79892634770")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(SuccessResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(3)
-        viewModel.sendCode()
-
-        viewModel.inputPhoneNumber("+7 (989) 263-47-70")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(SuccessResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(4)
-        viewModel.sendCode()
-
-        viewModel.inputPhoneNumber("79892634770")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(SuccessResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(5)
-        viewModel.sendCode()
-
-        viewModel.inputPhoneNumber("7989263477")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(ErrorResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(6)
-        viewModel.sendCode()
-
-        viewModel.inputPhoneNumber("7989263477asdf^0")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(SuccessResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(7)
-        viewModel.sendCode()
-
-        viewModel.inputPhoneNumber("7989263477asdf^00")
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(ErrorResult<Boolean>())
-        assertThat(testResultCheckPhoneCommunication.count).isEqualTo(8)
-        viewModel.sendCode()
+    @Before
+    fun setup() {
+        Mockito.`when`(testResources.getInt(R.integer.phone_size)).thenReturn(11)
     }
 
     @Test
-    fun `test check phone number`() {
-        viewModel.inputPhoneNumber(CORRECT_PHONE_NUMBER)
-        assertThat(testResultCheckPhoneCommunication.result)
-            .isEqualTo(SuccessResult<Any>())
+    fun `test input phone number`() = runTest {
+        assertThat(testEnterPhoneUiCommunication.result)
+            .isEqualTo(null)
 
+        viewModel.inputPhoneNumber("7")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
         viewModel.sendCode()
-        assertThat(testResultCheckPhoneCommunication.result).isEqualTo(SuccessResult<Any>())
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
 
-        viewModel.inputPhoneNumber(INCORRECT_PHONE_NUMBER)
-        assertThat(testResultCheckPhoneCommunication.result)
-            .isEqualTo(ErrorResult<Boolean>())
+        viewModel.inputPhoneNumber("")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
 
+        viewModel.inputPhoneNumber("+79892634770")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.CompleteInputPhoneUi::class.java)
         viewModel.sendCode()
-        assertThat(testResultCheckPhoneCommunication.result)
-            .isEqualTo(ErrorResult<Boolean>())
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.SendCodeUi::class.java)
 
+        viewModel.inputPhoneNumber("+7 (989) 263-47-7")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
+        viewModel.sendCode()
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
+
+        viewModel.inputPhoneNumber("79892634770")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.CompleteInputPhoneUi::class.java)
+        viewModel.sendCode()
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.SendCodeUi::class.java)
+
+        viewModel.inputPhoneNumber("7989263477")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
+        viewModel.sendCode()
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
+
+        viewModel.inputPhoneNumber("7989263477asdf^0")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.CompleteInputPhoneUi::class.java)
+        viewModel.sendCode()
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.SendCodeUi::class.java)
+
+        viewModel.inputPhoneNumber("7989263477asdf^00")
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
+        viewModel.sendCode()
+        assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
     }
 
     class TestEnterPhoneUiCommunication : EnterPhoneUiCommunication {
@@ -108,18 +104,19 @@ class EnterPhoneNumberFragmentViewModelTest {
     }
 
     class TestAuthInteractor : AuthInteractor {
-        var countCallCheckPhoneNumber = 0
+        private var phoneNumber: String? = null
+        private val authStateFlow = MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitPhoneNumber())
+
+        override fun observeAuthState(): Flow<TdApi.AuthorizationState> = authStateFlow
 
         override suspend fun checkPhoneNumber(phoneNumber: String) {
-            countCallCheckPhoneNumber++
+            this.phoneNumber = phoneNumber
+            when (phoneNumber) {
+                CORRECT_PHONE_NUMBER -> authStateFlow.emit(TdApi.AuthorizationStateWaitCode())
+                else -> authStateFlow.emit(TdApi.AuthorizationStateWaitPhoneNumber())
+            }
         }
 
-        override fun observeAuthState(): Flow<TdApi.AuthorizationState> {
-            TODO("Not yet implemented")
-        }
-    }
-
-    class TestResources : Resources {
-        override fun getInt(resId: Int): Int = 11
+        override suspend fun checkCode(code: String) {}
     }
 }

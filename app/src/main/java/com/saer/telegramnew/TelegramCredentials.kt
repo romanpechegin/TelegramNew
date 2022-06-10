@@ -15,5 +15,6 @@ object TelegramCredentials {
         systemVersion = "Example"
         applicationVersion = "1.0"
         enableStorageOptimizer = true
+        useTestDc = true
     }
 }

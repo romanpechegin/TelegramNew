@@ -1,7 +1,6 @@
 package com.saer.telegramnew.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,11 +25,12 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        context?.appComponent?.inject(this)
+        requireContext().appComponent.inject(this)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
 
@@ -45,8 +45,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             it.apply(
                 binding.sendCodeButton,
                 binding.enterPhoneNumberTitle,
-                requireContext(),
-                findNavController()
+                requireContext()
             )
         }
 
