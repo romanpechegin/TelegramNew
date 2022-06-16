@@ -1,4 +1,4 @@
-package com.saer.telegramnew.ui
+package com.saer.telegramnew.auth.ui
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saer.telegramnew.R
 import com.saer.telegramnew.common.Resources
-import com.saer.telegramnew.communications.EnterPhoneUiCommunication
-import com.saer.telegramnew.interactors.AuthInteractor
+import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
+import com.saer.telegramnew.auth.interactors.AuthRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class EnterPhoneNumberFragmentViewModel @Inject constructor(
     private val enterPhoneUiCommunication: EnterPhoneUiCommunication,
-    private val authInteractor: AuthInteractor,
+    private val authRepository: AuthRepository,
     private val resources: Resources,
     private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -26,29 +26,24 @@ class EnterPhoneNumberFragmentViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            try {
-                authInteractor.observeAuthState()
-                    .map {
-                        when (it) {
-                            is TdApi.AuthorizationStateReady -> EnterPhoneUi.WaitInputPhoneUi()
-                            is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.SendCodeUi()
-                            is TdApi.AuthorizationStateWaitPassword -> EnterPhoneUi.WaitInputPhoneUi()
-                            is TdApi.AuthorizationStateWaitPhoneNumber -> EnterPhoneUi.WaitInputPhoneUi()
-                            is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPhoneUi.WaitInputPhoneUi()
-                            is TdApi.AuthorizationStateWaitEncryptionKey -> EnterPhoneUi.WaitInputPhoneUi()
-                            else -> EnterPhoneUi.ErrorPhoneUi(Throwable(it.javaClass.simpleName))
-                        }
+            authRepository.observeAuthState()
+                .map {
+                    when (it) {
+                        is TdApi.AuthorizationStateReady -> EnterPhoneUi.WaitInputPhoneUi()
+                        is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.SendCodeUi()
+                        is TdApi.AuthorizationStateWaitPassword -> EnterPhoneUi.WaitInputPhoneUi()
+                        is TdApi.AuthorizationStateWaitPhoneNumber -> EnterPhoneUi.WaitInputPhoneUi()
+                        is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPhoneUi.WaitInputPhoneUi()
+                        is TdApi.AuthorizationStateWaitEncryptionKey -> EnterPhoneUi.WaitInputPhoneUi()
+                        else -> EnterPhoneUi.ErrorPhoneUi(Throwable(it.javaClass.simpleName))
                     }
-                    .catch { e ->
-                        enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
-                    }
-                    .collectLatest {
-                        enterPhoneUiCommunication.map(it)
-                    }
-
-            } catch (e: Exception) {
-                enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
-            }
+                }
+                .catch { e ->
+                    enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
+                }
+                .collectLatest {
+                    enterPhoneUiCommunication.map(it)
+                }
         }
     }
 
@@ -59,7 +54,7 @@ class EnterPhoneNumberFragmentViewModel @Inject constructor(
         else null
     }
 
-    fun inputPhoneNumber(phoneNumber: String) {
+    fun enterPhoneNumber(phoneNumber: String) {
         if (this.phoneNumber != phoneNumber) {
             val correctPhone = correctPhoneNumber(phoneNumber)
             if (correctPhone != null) enterPhoneUiCommunication.map(EnterPhoneUi.CompleteInputPhoneUi())
@@ -74,7 +69,7 @@ class EnterPhoneNumberFragmentViewModel @Inject constructor(
         if (correctPhoneNumber() != null) {
             viewModelScope.launch(ioDispatcher) {
                 try {
-                    authInteractor.checkPhoneNumber(phoneNumber)
+                    authRepository.checkPhoneNumber(phoneNumber)
                 } catch (e: Throwable) {
                     enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
                 }

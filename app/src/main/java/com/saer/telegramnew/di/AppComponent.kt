@@ -4,12 +4,13 @@ import android.content.Context
 import com.saer.telegramnew.App
 import com.saer.telegramnew.MainActivity
 import com.saer.telegramnew.common.Resources
-import com.saer.telegramnew.communications.EnterCodeUiCommunication
-import com.saer.telegramnew.communications.EnterPhoneUiCommunication
-import com.saer.telegramnew.interactors.AuthInteractor
-import com.saer.telegramnew.interactors.AuthRepository
-import com.saer.telegramnew.ui.EnterCodeFragment
-import com.saer.telegramnew.ui.EnterPhoneNumberFragment
+import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
+import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
+import com.saer.telegramnew.auth.communication.RegistrationUiCommunication
+import com.saer.telegramnew.auth.interactors.AuthRepository
+import com.saer.telegramnew.auth.ui.EnterCodeFragment
+import com.saer.telegramnew.auth.ui.EnterPhoneNumberFragment
+import com.saer.telegramnew.auth.ui.RegistrationFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,7 @@ interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(fragment: EnterPhoneNumberFragment)
     fun inject(fragment: EnterCodeFragment)
+    fun inject(registrationFragment: RegistrationFragment)
 }
 
 @Module
@@ -34,10 +36,6 @@ class AppModule(private val application: App) {
     fun provideContext(): Context {
         return application.applicationContext
     }
-
-    @Provides
-    fun provideAuthInteractor(authRepository: AuthRepository): AuthInteractor =
-        AuthInteractor.Base(authRepository)
 
     @Singleton
     @Provides
@@ -68,6 +66,10 @@ class CommunicationModule {
     @Provides
     fun provideEnterCodeCommunication(): EnterCodeUiCommunication =
         EnterCodeUiCommunication.Base()
+
+    @Provides
+    fun provideRegistrationCommunication(): RegistrationUiCommunication =
+        RegistrationUiCommunication.Base()
 }
 
 @Module

@@ -1,18 +1,15 @@
-package com.saer.telegramnew.ui
+package com.saer.telegramnew.auth.ui
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
-import com.saer.telegramnew.CORRECT_PHONE_NUMBER
 import com.saer.telegramnew.MainDispatcherRule
 import com.saer.telegramnew.R
+import com.saer.telegramnew.TestAuthRepository
 import com.saer.telegramnew.common.Resources
-import com.saer.telegramnew.communications.EnterPhoneUiCommunication
-import com.saer.telegramnew.interactors.AuthInteractor
+import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
-import org.drinkless.td.libcore.telegram.TdApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,12 +22,12 @@ class EnterPhoneNumberFragmentViewModelTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
     private val testEnterPhoneUiCommunication = TestEnterPhoneUiCommunication()
-    private val testAuthInteractor = TestAuthInteractor()
+    private val testAuthRepository = TestAuthRepository()
     private val testResources = mock<Resources>()
     private val viewModel by lazy {
         EnterPhoneNumberFragmentViewModel(
             testEnterPhoneUiCommunication,
-            testAuthInteractor,
+            testAuthRepository,
             testResources,
             coroutineRule.testDispatcher
         )
@@ -42,44 +39,44 @@ class EnterPhoneNumberFragmentViewModelTest {
     }
 
     @Test
-    fun `test input phone number`() = runTest {
+    fun `test enter phone number`() = runTest {
         assertThat(testEnterPhoneUiCommunication.result)
             .isEqualTo(null)
 
-        viewModel.inputPhoneNumber("7")
+        viewModel.enterPhoneNumber("7")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
 
-        viewModel.inputPhoneNumber("")
+        viewModel.enterPhoneNumber("")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
 
-        viewModel.inputPhoneNumber("+79892634770")
+        viewModel.enterPhoneNumber("+79892634770")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.CompleteInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.SendCodeUi::class.java)
 
-        viewModel.inputPhoneNumber("+7 (989) 263-47-7")
+        viewModel.enterPhoneNumber("+7 (989) 263-47-7")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
 
-        viewModel.inputPhoneNumber("79892634770")
+        viewModel.enterPhoneNumber("79892634770")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.CompleteInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.SendCodeUi::class.java)
 
-        viewModel.inputPhoneNumber("7989263477")
+        viewModel.enterPhoneNumber("7989263477")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
 
-        viewModel.inputPhoneNumber("7989263477asdf^0")
+        viewModel.enterPhoneNumber("7989263477asdf^0")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.CompleteInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.SendCodeUi::class.java)
 
-        viewModel.inputPhoneNumber("7989263477asdf^00")
+        viewModel.enterPhoneNumber("7989263477asdf^00")
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
         viewModel.sendCode()
         assertThat(testEnterPhoneUiCommunication.result).isInstanceOf(EnterPhoneUi.WaitInputPhoneUi::class.java)
@@ -101,22 +98,5 @@ class EnterPhoneNumberFragmentViewModelTest {
             viewLifecycleOwner: LifecycleOwner,
             observer: Observer<EnterPhoneUi>
         ) = Unit
-    }
-
-    class TestAuthInteractor : AuthInteractor {
-        private var phoneNumber: String? = null
-        private val authStateFlow = MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitPhoneNumber())
-
-        override fun observeAuthState(): Flow<TdApi.AuthorizationState> = authStateFlow
-
-        override suspend fun checkPhoneNumber(phoneNumber: String) {
-            this.phoneNumber = phoneNumber
-            when (phoneNumber) {
-                CORRECT_PHONE_NUMBER -> authStateFlow.emit(TdApi.AuthorizationStateWaitCode())
-                else -> authStateFlow.emit(TdApi.AuthorizationStateWaitPhoneNumber())
-            }
-        }
-
-        override suspend fun checkCode(code: String) {}
     }
 }

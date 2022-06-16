@@ -11,6 +11,9 @@
     // Error
     <string name="illegal_phone_number">Illegal phone number</string>
     <string name="too_many_requests">Too many requests: try again in </string>
+    <string name="invalid_phone_number">Invalid phone number</string>
+    <string name="invalid_phone_code">Invalid phone code</string>
+    <string name="unauthorized">Could not register</string>
     <string name="error">Error</string>
 
     // Phone number mask

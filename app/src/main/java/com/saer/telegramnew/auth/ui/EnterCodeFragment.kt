@@ -1,4 +1,4 @@
-package com.saer.telegramnew.ui
+package com.saer.telegramnew.auth.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,13 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.saer.telegramnew.R
 import com.saer.telegramnew.appComponent
+import com.saer.telegramnew.base.BaseFragment
 import com.saer.telegramnew.databinding.FragmentEnterCodeBinding
 import javax.inject.Inject
 
-class EnterCodeFragment : Fragment() {
+class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
 
     @Inject
     lateinit var viewModel: EnterCodeFragmentViewModel
@@ -25,7 +27,8 @@ class EnterCodeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
 
@@ -37,7 +40,7 @@ class EnterCodeFragment : Fragment() {
         }
 
         viewModel.observeEnterCodeUi(viewLifecycleOwner) {
-            it.apply(binding, viewModel)
+            it.apply(requireContext(), binding, viewModel)
         }
     }
 }

@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.saer.telegramnew.utils.getNavController
 import org.junit.Test
 import com.saer.telegramnew.R
+import com.saer.telegramnew.auth.ui.EnterCodeFragment
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)

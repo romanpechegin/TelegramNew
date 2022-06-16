@@ -1,4 +1,4 @@
-package com.saer.telegramnew.communications
+package com.saer.telegramnew.common
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

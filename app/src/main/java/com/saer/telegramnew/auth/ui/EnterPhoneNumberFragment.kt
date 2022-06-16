@@ -1,15 +1,15 @@
-package com.saer.telegramnew.ui
+package com.saer.telegramnew.auth.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
-import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.telegramnew.R
 import com.saer.telegramnew.appComponent
+import com.saer.telegramnew.base.BaseFragment
 import com.saer.telegramnew.common.setPhoneNumberMask
 import com.saer.telegramnew.databinding.FragmentEnterPhoneNumberBinding
 import com.saer.telegramnew.utils.showKeyboard
@@ -38,7 +38,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         super.onViewCreated(view, savedInstanceState)
 
         binding.inputPhoneNumber.doOnTextChanged { text, _, _, _ ->
-            viewModel.inputPhoneNumber(text.toString())
+            viewModel.enterPhoneNumber(text.toString())
         }
 
         viewModel.observeEnterPhoneUi(viewLifecycleOwner) {
