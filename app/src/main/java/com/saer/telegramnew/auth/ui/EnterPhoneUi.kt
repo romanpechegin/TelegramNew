@@ -19,7 +19,7 @@ interface EnterPhoneUi {
         context: Context
     )
 
-    class WaitInputPhoneUi : EnterPhoneUi {
+    class WaitEnterPhoneUi : EnterPhoneUi {
 
         override fun apply(
             sendCodeButton: FloatingActionButton,
@@ -42,7 +42,7 @@ interface EnterPhoneUi {
         }
     }
 
-    class CompleteInputPhoneUi : EnterPhoneUi {
+    class CompleteEnterPhoneUi : EnterPhoneUi {
         override fun apply(
             sendCodeButton: FloatingActionButton,
             phoneTitle: TextView,

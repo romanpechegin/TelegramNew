@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
-class EnterPhoneNumberFragmentViewModel @Inject constructor(
+class EnterPhoneNumberViewModel @Inject constructor(
     private val enterPhoneUiCommunication: EnterPhoneUiCommunication,
     private val authRepository: AuthRepository,
     private val resources: Resources,
@@ -29,12 +29,12 @@ class EnterPhoneNumberFragmentViewModel @Inject constructor(
             authRepository.observeAuthState()
                 .map {
                     when (it) {
-                        is TdApi.AuthorizationStateReady -> EnterPhoneUi.WaitInputPhoneUi()
+                        is TdApi.AuthorizationStateReady -> EnterPhoneUi.WaitEnterPhoneUi()
                         is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.SendCodeUi()
-                        is TdApi.AuthorizationStateWaitPassword -> EnterPhoneUi.WaitInputPhoneUi()
-                        is TdApi.AuthorizationStateWaitPhoneNumber -> EnterPhoneUi.WaitInputPhoneUi()
-                        is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPhoneUi.WaitInputPhoneUi()
-                        is TdApi.AuthorizationStateWaitEncryptionKey -> EnterPhoneUi.WaitInputPhoneUi()
+                        is TdApi.AuthorizationStateWaitPassword -> EnterPhoneUi.WaitEnterPhoneUi()
+                        is TdApi.AuthorizationStateWaitPhoneNumber -> EnterPhoneUi.WaitEnterPhoneUi()
+                        is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPhoneUi.WaitEnterPhoneUi()
+                        is TdApi.AuthorizationStateWaitEncryptionKey -> EnterPhoneUi.WaitEnterPhoneUi()
                         else -> EnterPhoneUi.ErrorPhoneUi(Throwable(it.javaClass.simpleName))
                     }
                 }
@@ -57,9 +57,9 @@ class EnterPhoneNumberFragmentViewModel @Inject constructor(
     fun enterPhoneNumber(phoneNumber: String) {
         if (this.phoneNumber != phoneNumber) {
             val correctPhone = correctPhoneNumber(phoneNumber)
-            if (correctPhone != null) enterPhoneUiCommunication.map(EnterPhoneUi.CompleteInputPhoneUi())
-            else enterPhoneUiCommunication.map(EnterPhoneUi.WaitInputPhoneUi())
-        } else enterPhoneUiCommunication.map(EnterPhoneUi.WaitInputPhoneUi())
+            if (correctPhone != null) enterPhoneUiCommunication.map(EnterPhoneUi.CompleteEnterPhoneUi())
+            else enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
+        } else enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
     }
 
     fun observeEnterPhoneUi(owner: LifecycleOwner, observer: Observer<EnterPhoneUi>) =

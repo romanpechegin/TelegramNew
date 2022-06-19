@@ -16,7 +16,7 @@ import javax.inject.Inject
 class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
 
     @Inject
-    lateinit var viewModel: RegistrationFragmentViewModel
+    lateinit var viewModel: RegistrationViewModel
 
     private val binding: FragmentRegistrationBinding by viewBinding(CreateMethod.INFLATE)
 

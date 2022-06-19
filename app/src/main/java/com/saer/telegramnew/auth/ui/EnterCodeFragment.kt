@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.telegramnew.R
@@ -17,7 +16,7 @@ import javax.inject.Inject
 class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
 
     @Inject
-    lateinit var viewModel: EnterCodeFragmentViewModel
+    lateinit var viewModel: EnterCodeViewModel
 
     private val binding: FragmentEnterCodeBinding by viewBinding(CreateMethod.INFLATE)
 

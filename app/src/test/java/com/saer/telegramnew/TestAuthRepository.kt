@@ -12,6 +12,12 @@ const val INCORRECT_CODE = "11111"
 const val UNIQUE_FIRST_NAME = "Roman"
 const val BUSY_FIRST_NAME = "Ivan"
 
+const val CORRECT_PASSWORD = "Password true"
+const val INCORRECT_PASSWORD = "afdssafd"
+
+const val CORRECT_PHONE_NUMBER = "79892634770"
+const val INCORRECT_PHONE_NUMBER = "79892634771"
+
 class TestAuthRepository : AuthRepository {
     private val authStateFlow =
         MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
@@ -39,6 +45,14 @@ class TestAuthRepository : AuthRepository {
             UNIQUE_FIRST_NAME -> authStateFlow.emit(TdApi.AuthorizationStateReady())
 //            BUSY_FIRST_NAME -> authStateFlow.emit()
             else -> authStateFlow.emit(TdApi.AuthorizationStateWaitRegistration())
+        }
+    }
+
+    override suspend fun checkPassword(password: String) {
+        when (password) {
+            CORRECT_PASSWORD -> authStateFlow.emit(TdApi.AuthorizationStateReady())
+            INCORRECT_PASSWORD -> authStateFlow.emit(TdApi.AuthorizationStateWaitPassword())
+            else -> authStateFlow.emit(TdApi.AuthorizationStateWaitPassword())
         }
     }
 }

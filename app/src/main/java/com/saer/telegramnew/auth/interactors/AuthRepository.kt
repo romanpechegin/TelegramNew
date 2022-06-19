@@ -23,6 +23,7 @@ interface AuthRepository {
     suspend fun checkPhoneNumber(phoneNumber: String)
     suspend fun checkCode(code: String)
     suspend fun sendName(firstName: String, lastName: String)
+    suspend fun checkPassword(password: String)
 
     class Base @Inject constructor(
         private val api: TelegramFlow
@@ -50,6 +51,10 @@ interface AuthRepository {
 
         override suspend fun sendName(firstName: String, lastName: String) {
             api.setName(firstName, lastName)
+        }
+
+        override suspend fun checkPassword(password: String) {
+            api.checkAuthenticationPassword(password)
         }
     }
 }

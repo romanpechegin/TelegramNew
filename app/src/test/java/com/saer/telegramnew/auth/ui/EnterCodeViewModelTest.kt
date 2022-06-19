@@ -7,7 +7,6 @@ import com.saer.telegramnew.*
 import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
 import com.saer.telegramnew.common.Resources
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -16,7 +15,7 @@ import org.mockito.Mockito
 import org.mockito.kotlin.mock
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class EnterCodeFragmentViewModelTest {
+class EnterCodeViewModelTest {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
@@ -25,7 +24,7 @@ class EnterCodeFragmentViewModelTest {
     private val authRepository = TestAuthRepository()
 
     private val viewModel by lazy {
-        EnterCodeFragmentViewModel(
+        EnterCodeViewModel(
             coroutineRule.testDispatcher,
             enterCodeUiCommunication,
             authRepository,

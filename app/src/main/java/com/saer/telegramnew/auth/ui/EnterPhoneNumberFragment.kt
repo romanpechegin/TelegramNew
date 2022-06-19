@@ -19,7 +19,7 @@ import javax.inject.Inject
 class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
 
     @Inject
-    lateinit var viewModel: EnterPhoneNumberFragmentViewModel
+    lateinit var viewModel: EnterPhoneNumberViewModel
 
     private val binding: FragmentEnterPhoneNumberBinding by viewBinding(CreateMethod.INFLATE)
 

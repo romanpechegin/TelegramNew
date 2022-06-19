@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
-class EnterCodeFragmentViewModel @Inject constructor(
+class EnterCodeViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     private val enterCodeUiCommunication: EnterCodeUiCommunication,
     private val authRepository: AuthRepository,

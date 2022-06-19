@@ -3,9 +3,7 @@ package com.saer.telegramnew.auth.ui
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.saer.telegramnew.MainDispatcherRule
-import org.junit.Assert.*
 import com.google.common.truth.Truth.assertThat
-import com.saer.telegramnew.BUSY_FIRST_NAME
 import com.saer.telegramnew.TestAuthRepository
 import com.saer.telegramnew.UNIQUE_FIRST_NAME
 import com.saer.telegramnew.auth.communication.RegistrationUiCommunication
@@ -15,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RegistrationFragmentViewModelTest {
+class RegistrationViewModelTest {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
@@ -23,7 +21,7 @@ class RegistrationFragmentViewModelTest {
     private val authRepository = TestAuthRepository()
 
     private val viewModel by lazy {
-        RegistrationFragmentViewModel(
+        RegistrationViewModel(
             authRepository,
             registrationUiCommunication,
             coroutineRule.testDispatcher

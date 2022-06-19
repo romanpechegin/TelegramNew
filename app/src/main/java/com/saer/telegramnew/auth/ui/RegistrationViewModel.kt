@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
-class RegistrationFragmentViewModel @Inject constructor(
+class RegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val registrationUiCommunication: RegistrationUiCommunication,
     private val ioDispatcher: CoroutineDispatcher
