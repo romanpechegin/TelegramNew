@@ -44,9 +44,7 @@ class EnterPhoneNumberViewModelTest(
                 data = it.arguments[0] as EnterPhoneUi
                 return@thenAnswer null
             }
-        Mockito.`when`(testEnterPhoneUiCommunication.value).thenAnswer {
-            return@thenAnswer data
-        }
+        Mockito.`when`(testEnterPhoneUiCommunication.value).thenAnswer { data }
 
         val authStateFlow =
             MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
@@ -83,18 +81,16 @@ class EnterPhoneNumberViewModelTest(
     companion object {
         @Parameterized.Parameters(name = "{index}: phone number = {0}, result = {1}")
         @JvmStatic
-        fun data(): Collection<Array<Any>> {
-            return listOf(
-                arrayOf("7989", EnterPhoneUi.WaitEnterPhoneUi()),
-                arrayOf("1999", EnterPhoneUi.WaitEnterPhoneUi()),
-                arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.SendCodeUi()),
-                arrayOf("+7 (989) 263-47-7", EnterPhoneUi.WaitEnterPhoneUi()),
-                arrayOf(INCORRECT_PHONE_NUMBER, EnterPhoneUi.WaitEnterPhoneUi()),
-                arrayOf("7989263477asdf^00", EnterPhoneUi.WaitEnterPhoneUi()),
-                arrayOf("+79892634770", EnterPhoneUi.SendCodeUi()),
-                arrayOf("79892634770", EnterPhoneUi.SendCodeUi()),
-                arrayOf("7989263477asdf^0", EnterPhoneUi.SendCodeUi())
-            )
-        }
+        fun data() = listOf(
+            arrayOf("7989", EnterPhoneUi.WaitEnterPhoneUi()),
+            arrayOf("1999", EnterPhoneUi.WaitEnterPhoneUi()),
+            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.SendCodeUi()),
+            arrayOf("+7 (989) 263-47-7", EnterPhoneUi.WaitEnterPhoneUi()),
+            arrayOf(INCORRECT_PHONE_NUMBER, EnterPhoneUi.WaitEnterPhoneUi()),
+            arrayOf("7989263477asdf^00", EnterPhoneUi.WaitEnterPhoneUi()),
+            arrayOf("+79892634770", EnterPhoneUi.SendCodeUi()),
+            arrayOf("79892634770", EnterPhoneUi.SendCodeUi()),
+            arrayOf("7989263477asdf^0", EnterPhoneUi.SendCodeUi())
+        )
     }
 }
