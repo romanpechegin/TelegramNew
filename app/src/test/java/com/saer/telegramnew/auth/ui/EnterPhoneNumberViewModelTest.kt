@@ -1,12 +1,19 @@
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+
 package com.saer.telegramnew.auth.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.saer.telegramnew.*
+import com.saer.telegramnew.CORRECT_PHONE_NUMBER
+import com.saer.telegramnew.INCORRECT_PHONE_NUMBER
+import com.saer.telegramnew.MainDispatcherRule
+import com.saer.telegramnew.R
 import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
+import com.saer.telegramnew.auth.interactors.AuthRepository
 import com.saer.telegramnew.common.Resources
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.After
+import org.drinkless.td.libcore.telegram.TdApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -15,7 +22,6 @@ import org.junit.runners.Parameterized
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(Parameterized::class)
@@ -26,15 +32,14 @@ class EnterPhoneNumberViewModelTest(
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
-    private lateinit var testEnterPhoneUiCommunication: EnterPhoneUiCommunication
-    private lateinit var testAuthRepository: TestAuthRepository
-    private lateinit var testResources: Resources
-    private var data: EnterPhoneUi? = null
+    private val testEnterPhoneUiCommunication: EnterPhoneUiCommunication = mock()
+    private val testAuthRepository: AuthRepository = mock()
+    private val testResources: Resources = mock()
 
     @Before
     fun setup() {
-        testEnterPhoneUiCommunication = mock()
-        Mockito.`when`(testEnterPhoneUiCommunication.map(any()))
+        var data: EnterPhoneUi? = null
+        Mockito.`when`(testEnterPhoneUiCommunication.map(data = any()))
             .thenAnswer {
                 data = it.arguments[0] as EnterPhoneUi
                 return@thenAnswer null
@@ -43,28 +48,33 @@ class EnterPhoneNumberViewModelTest(
             return@thenAnswer data
         }
 
-        testAuthRepository = TestAuthRepository()
+        val authStateFlow =
+            MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
+        Mockito.`when`(testAuthRepository.observeAuthState()).thenReturn(authStateFlow)
+        runTest {
+            Mockito.`when`(testAuthRepository.checkPhoneNumber(any()))
+                .thenAnswer {
+                    when (it.arguments[0]) {
+                        CORRECT_PHONE_NUMBER -> authStateFlow.tryEmit(value = TdApi.AuthorizationStateWaitCode())
+                        else -> authStateFlow.tryEmit(value = TdApi.AuthorizationStateWaitPhoneNumber())
+                    }
+                }
+        }
 
-        testResources = mock()
-        Mockito.`when`(testResources.getInt(R.integer.phone_size)).thenReturn(11)
-    }
-
-    @After
-    fun tearDown() {
-        data = null
+        Mockito.`when`(testResources.getInt(resId = R.integer.phone_size)).thenReturn(11)
     }
 
     @Test
     fun `should to return SendCodeUi if phone number is correct and WaitEnterPhoneUi if phone number is incorrect `() =
         runTest {
             val viewModel = EnterPhoneNumberViewModel(
-                testEnterPhoneUiCommunication,
-                testAuthRepository,
-                testResources,
-                coroutineRule.testDispatcher
+                enterPhoneUiCommunication = testEnterPhoneUiCommunication,
+                authRepository = testAuthRepository,
+                resources = testResources,
+                ioDispatcher = coroutineRule.testDispatcher
             )
 
-            viewModel.enterPhoneNumber(phoneNumber)
+            viewModel.enterPhoneNumber(phoneNumber = phoneNumber)
             viewModel.sendCode()
             assertThat(testEnterPhoneUiCommunication.value)
                 .isInstanceOf(expected::class.java)
