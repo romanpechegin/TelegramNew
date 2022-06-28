@@ -1,28 +1,36 @@
 package com.saer.telegramnew.common
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.MutableStateFlow
 
 interface Communication<T> {
 
-    val value: T?
+    val value: T
     fun map(data: T)
-    fun observe(viewLifecycleOwner: LifecycleOwner, observer: Observer<T>)
+    fun observe(
+        lifecycleCoroutineScope: LifecycleCoroutineScope,
+        collector: FlowCollector<T>
+    )
 
-    abstract class Base<T : Any> : Communication<T> {
+    class Base<T : Any>(initValue: T) : Communication<T> {
 
-        private val liveData = MutableLiveData<T>()
+        private val stateFlow = MutableStateFlow(initValue)
 
         override fun map(data: T) {
-            liveData.postValue(data)
+            stateFlow.tryEmit(data)
         }
 
-        override fun observe(viewLifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-            liveData.observe(viewLifecycleOwner, observer)
+        override fun observe(
+            lifecycleCoroutineScope: LifecycleCoroutineScope,
+            collector: FlowCollector<T>
+        ) {
+            lifecycleCoroutineScope.launchWhenResumed {
+                stateFlow.collect(collector = collector)
+            }
         }
 
-        override val value: T?
-            get() = liveData.value
+        override val value: T
+            get() = stateFlow.value
     }
 }

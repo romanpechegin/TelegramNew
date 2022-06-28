@@ -4,21 +4,27 @@ interface EnterPasswordUi {
 
     fun apply()
 
-    class WainPasswordUi : EnterPasswordUi {
+    class Wait : EnterPasswordUi {
         override fun apply() {
             TODO("Not yet implemented")
         }
     }
 
-    class IncorrectPasswordUi : EnterPasswordUi {
+    class IncorrectPassword : EnterPasswordUi {
         override fun apply() {
             TODO("Not yet implemented")
         }
     }
 
-    class SuccessPasswordUi : EnterPasswordUi {
+    class Success : EnterPasswordUi {
         override fun apply() {
             TODO("Not yet implemented")
+        }
+    }
+
+    class ErrorUi(private val throwable: Throwable) : EnterPasswordUi {
+        override fun apply() {
+            throwable.printStackTrace()
         }
     }
 }

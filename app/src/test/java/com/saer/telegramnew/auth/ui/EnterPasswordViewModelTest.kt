@@ -5,7 +5,7 @@ import com.saer.telegramnew.CORRECT_PASSWORD
 import com.saer.telegramnew.INCORRECT_PASSWORD
 import com.saer.telegramnew.MainDispatcherRule
 import com.saer.telegramnew.auth.communication.EnterPasswordUiCommunication
-import com.saer.telegramnew.auth.interactors.AuthRepository
+import com.saer.telegramnew.auth.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -72,9 +72,9 @@ class EnterPasswordViewModelTest(
         @Parameterized.Parameters(name = "{index}, password = {0}, expectedUi = {1}")
         @JvmStatic
         fun data() = listOf(
-            arrayOf("", EnterPasswordUi.WainPasswordUi()),
-            arrayOf(INCORRECT_PASSWORD, EnterPasswordUi.IncorrectPasswordUi()),
-            arrayOf(CORRECT_PASSWORD, EnterPasswordUi.SuccessPasswordUi()),
+            arrayOf("", EnterPasswordUi.Wait()),
+            arrayOf(INCORRECT_PASSWORD, EnterPasswordUi.IncorrectPassword()),
+            arrayOf(CORRECT_PASSWORD, EnterPasswordUi.Success()),
         )
     }
 }

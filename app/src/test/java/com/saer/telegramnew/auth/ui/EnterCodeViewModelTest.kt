@@ -5,7 +5,7 @@ package com.saer.telegramnew.auth.ui
 import com.google.common.truth.Truth.assertThat
 import com.saer.telegramnew.*
 import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
-import com.saer.telegramnew.auth.interactors.AuthRepository
+import com.saer.telegramnew.auth.repositories.AuthRepository
 import com.saer.telegramnew.common.Resources
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,23 +1,23 @@
 package com.saer.telegramnew.auth.ui
 
-import android.content.Context
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.saer.telegramnew.R
-import com.saer.telegramnew.auth.interactors.UNAUTHORIZED_EXCEPTION
+import com.saer.telegramnew.auth.repositories.UNAUTHORIZED_EXCEPTION
+import com.saer.telegramnew.common.Resources
 
 interface RegisterUi {
 
     fun apply(
-        context: Context,
+        resources: Resources,
         enterFirstNameEditText: EditText,
         enterLastNameEditText: EditText
     )
 
     class WaitEnterNameUi : RegisterUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             enterFirstNameEditText: EditText,
             enterLastNameEditText: EditText
         ) {
@@ -28,7 +28,7 @@ interface RegisterUi {
 
     class EnterFirstNameUi : RegisterUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             enterFirstNameEditText: EditText,
             enterLastNameEditText: EditText
         ) {
@@ -38,7 +38,7 @@ interface RegisterUi {
 
     class CheckingNameUi : RegisterUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             enterFirstNameEditText: EditText,
             enterLastNameEditText: EditText
         ) {
@@ -49,21 +49,21 @@ interface RegisterUi {
 
     class SuccessRegisterUi : RegisterUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             enterFirstNameEditText: EditText,
             enterLastNameEditText: EditText
         ) {
-            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+            Toast.makeText(enterFirstNameEditText.context, "Success", Toast.LENGTH_SHORT).show()
         }
     }
 
     class NameIsBusyUi : RegisterUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             enterFirstNameEditText: EditText,
             enterLastNameEditText: EditText
         ) {
-            Toast.makeText(context, "Busy", Toast.LENGTH_SHORT).show()
+            Toast.makeText(enterFirstNameEditText.context, "Busy", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -71,13 +71,13 @@ interface RegisterUi {
         private val throwable: Throwable
     ) : RegisterUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             enterFirstNameEditText: EditText,
             enterLastNameEditText: EditText
         ) {
             throwable.message?.let { throwableMessage ->
                 val message = when (throwableMessage) {
-                    UNAUTHORIZED_EXCEPTION -> context.getString(R.string.unauthorized)
+                    UNAUTHORIZED_EXCEPTION -> resources.getString(R.string.unauthorized)
                     else -> ""
                 }
                 Snackbar.make(

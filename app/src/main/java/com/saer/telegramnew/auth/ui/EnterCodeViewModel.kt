@@ -1,14 +1,14 @@
 package com.saer.telegramnew.auth.ui
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saer.telegramnew.R
+import com.saer.telegramnew.auth.repositories.AuthRepository
+import com.saer.telegramnew.common.Communication
 import com.saer.telegramnew.common.Resources
-import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
-import com.saer.telegramnew.auth.interactors.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class EnterCodeViewModel @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
-    private val enterCodeUiCommunication: EnterCodeUiCommunication,
+    private val enterCodeUiCommunication: Communication<EnterCodeUi>,
     private val authRepository: AuthRepository,
     private val resources: Resources
 ) : ViewModel() {
@@ -47,8 +47,11 @@ class EnterCodeViewModel @Inject constructor(
         }
     }
 
-    fun observeEnterCodeUi(lifecycleOwner: LifecycleOwner, observer: Observer<EnterCodeUi>) {
-        enterCodeUiCommunication.observe(lifecycleOwner, observer)
+    fun observeEnterCodeUi(lifecycleCoroutineScope: LifecycleCoroutineScope, collector: FlowCollector<EnterCodeUi>) {
+        enterCodeUiCommunication.observe(
+            lifecycleCoroutineScope = lifecycleCoroutineScope,
+            collector = collector
+        )
     }
 
     fun enterCode(code: String) {

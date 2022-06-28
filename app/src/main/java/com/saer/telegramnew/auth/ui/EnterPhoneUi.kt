@@ -1,22 +1,21 @@
 package com.saer.telegramnew.auth.ui
 
-import android.content.Context
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.saer.telegramnew.R
-import com.saer.telegramnew.auth.interactors.PHONE_NUMBER_INVALID_EXCEPTION
-import com.saer.telegramnew.auth.interactors.TOO_MANY_REQUESTS_EXCEPTION
+import com.saer.telegramnew.auth.repositories.PHONE_NUMBER_INVALID_EXCEPTION
+import com.saer.telegramnew.auth.repositories.TOO_MANY_REQUESTS_EXCEPTION
+import com.saer.telegramnew.common.Resources
 
 interface EnterPhoneUi {
 
     fun apply(
         sendCodeButton: FloatingActionButton,
         phoneTitle: TextView,
-        context: Context
+        resources: Resources
     )
 
     class WaitEnterPhoneUi : EnterPhoneUi {
@@ -24,10 +23,10 @@ interface EnterPhoneUi {
         override fun apply(
             sendCodeButton: FloatingActionButton,
             phoneTitle: TextView,
-            context: Context
+            resources: Resources
         ) {
             sendCodeButton.visibility = View.GONE
-            phoneTitle.text = context.getString(R.string.enter_phone_number)
+            phoneTitle.text = resources.getString(resId = R.string.enter_phone_number)
         }
     }
 
@@ -35,7 +34,7 @@ interface EnterPhoneUi {
         override fun apply(
             sendCodeButton: FloatingActionButton,
             phoneTitle: TextView,
-            context: Context
+            resources: Resources
         ) {
             sendCodeButton.findNavController()
                 .navigate(R.id.action_EnterPhoneNumberFragment_to_enterCodeFragment)
@@ -46,10 +45,10 @@ interface EnterPhoneUi {
         override fun apply(
             sendCodeButton: FloatingActionButton,
             phoneTitle: TextView,
-            context: Context
+            resources: Resources
         ) {
             sendCodeButton.visibility = View.VISIBLE
-            phoneTitle.text = context.getString(R.string.click_send_code)
+            phoneTitle.text = resources.getString(R.string.click_send_code)
         }
     }
 
@@ -57,7 +56,7 @@ interface EnterPhoneUi {
         override fun apply(
             sendCodeButton: FloatingActionButton,
             phoneTitle: TextView,
-            context: Context
+            resources: Resources
         ) {
             throwable.message?.let { throwableMessage ->
                 var message = ""
@@ -65,14 +64,14 @@ interface EnterPhoneUi {
                 if (throwableMessage.contains(TOO_MANY_REQUESTS_EXCEPTION)) {
                     val countTime: Int = throwableMessage.substringAfter(TOO_MANY_REQUESTS_EXCEPTION).toInt()
                     val countTimeWithStr =
-                        if (countTime >= 3600) "${countTime / 3600} ${context.getString(R.string.hours)}"
-                        else if (countTime >= 60) "${countTime / 60} ${context.getString(R.string.minutes)}"
-                        else "$countTime ${context.getString(R.string.seconds)}"
+                        if (countTime >= 3600) "${countTime / 3600} ${resources.getString(R.string.hours)}"
+                        else if (countTime >= 60) "${countTime / 60} ${resources.getString(R.string.minutes)}"
+                        else "$countTime ${resources.getString(R.string.seconds)}"
 
-                    message = "${context.getString(R.string.too_many_requests)} $countTimeWithStr"
+                    message = "${resources.getString(R.string.too_many_requests)} $countTimeWithStr"
                 } else {
                     when (throwableMessage) {
-                        PHONE_NUMBER_INVALID_EXCEPTION -> message = context.getString(R.string.invalid_phone_number)
+                        PHONE_NUMBER_INVALID_EXCEPTION -> message = resources.getString(R.string.invalid_phone_number)
                     }
                 }
 

@@ -1,10 +1,8 @@
-package com.saer.telegramnew.auth.interactors
+package com.saer.telegramnew.auth.repositories
 
 import android.util.Log
 import com.saer.telegramnew.TelegramCredentials
-import com.saer.telegramnew.auth.ui.RegisterUi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 import kotlinx.telegram.core.TelegramFlow
 import kotlinx.telegram.coroutines.*
@@ -41,20 +39,16 @@ interface AuthRepository {
                     }
                 }
 
-        override suspend fun checkPhoneNumber(phoneNumber: String) {
+        override suspend fun checkPhoneNumber(phoneNumber: String) =
             api.setAuthenticationPhoneNumber(phoneNumber, null)
-        }
 
-        override suspend fun checkCode(code: String) {
+        override suspend fun checkCode(code: String) =
             api.checkAuthenticationCode(code)
-        }
 
-        override suspend fun sendName(firstName: String, lastName: String) {
+        override suspend fun sendName(firstName: String, lastName: String) =
             api.setName(firstName, lastName)
-        }
 
-        override suspend fun checkPassword(password: String) {
+        override suspend fun checkPassword(password: String) =
             api.checkAuthenticationPassword(password)
-        }
     }
 }

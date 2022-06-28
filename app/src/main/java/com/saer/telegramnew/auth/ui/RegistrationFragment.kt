@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.telegramnew.R
 import com.saer.telegramnew.appComponent
 import com.saer.telegramnew.base.BaseFragment
+import com.saer.telegramnew.common.Resources
 import com.saer.telegramnew.databinding.FragmentRegistrationBinding
 import javax.inject.Inject
 
@@ -17,6 +19,9 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
 
     @Inject
     lateinit var viewModel: RegistrationViewModel
+
+    @Inject
+    lateinit var resources: Resources
 
     private val binding: FragmentRegistrationBinding by viewBinding(CreateMethod.INFLATE)
 
@@ -42,11 +47,11 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
             viewModel.lastName = text.toString()
         }
 
-        viewModel.observeRegistrationUi(viewLifecycleOwner) {
+        viewModel.observeRegistrationUi(lifecycleScope) {
             it.apply(
-                requireContext(),
-                binding.enterFirstNameEditText,
-                binding.enterLastNameEditText
+                resources = resources,
+                enterFirstNameEditText = binding.enterFirstNameEditText,
+                enterLastNameEditText = binding.enterLastNameEditText
             )
         }
 

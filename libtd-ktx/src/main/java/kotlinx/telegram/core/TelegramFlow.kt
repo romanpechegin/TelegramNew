@@ -1,5 +1,6 @@
 package kotlinx.telegram.core
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.filterIsInstance
@@ -14,7 +15,7 @@ import kotlin.coroutines.suspendCoroutine
  * Main class to interact with Telegram API client
  * @param resultHandler transforms results from [TdApi] client to [Flow] of the [TdApi.Object]
  */
-class TelegramFlow(
+class TelegramFlow @OptIn(ExperimentalCoroutinesApi::class) constructor(
     private val resultHandler: ResultHandlerFlow = ResultHandlerStateFlow()
 ) : Flow<TdApi.Object> by resultHandler, Closeable {
 

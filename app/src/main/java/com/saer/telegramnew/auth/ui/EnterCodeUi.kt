@@ -1,23 +1,23 @@
 package com.saer.telegramnew.auth.ui
 
-import android.content.Context
 import android.util.Log
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.saer.telegramnew.R
-import com.saer.telegramnew.auth.interactors.PHONE_CODE_INVALID_EXCEPTION
+import com.saer.telegramnew.auth.repositories.PHONE_CODE_INVALID_EXCEPTION
+import com.saer.telegramnew.common.Resources
 import com.saer.telegramnew.databinding.FragmentEnterCodeBinding
 
 interface EnterCodeUi {
     fun apply(
-        context: Context,
+        resources: Resources,
         binding: FragmentEnterCodeBinding,
         viewModel: EnterCodeViewModel
     )
 
     class WaitCodeUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -28,7 +28,7 @@ interface EnterCodeUi {
 
     class ErrorCodeFormatUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -39,7 +39,7 @@ interface EnterCodeUi {
 
     class WaitPasswordUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -49,7 +49,7 @@ interface EnterCodeUi {
 
     class CompleteEnterCodeUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -59,7 +59,7 @@ interface EnterCodeUi {
 
     class SuccessAuthUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -71,7 +71,7 @@ interface EnterCodeUi {
         private val throwable: Throwable
     ) : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -80,7 +80,7 @@ interface EnterCodeUi {
 
                 when (throwableMessage) {
                     PHONE_CODE_INVALID_EXCEPTION -> message =
-                        context.getString(R.string.invalid_phone_code)
+                        resources.getString(R.string.invalid_phone_code)
                 }
                 Snackbar.make(
                     binding.root,
@@ -94,7 +94,7 @@ interface EnterCodeUi {
 
     class WaitPhoneUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
@@ -104,7 +104,7 @@ interface EnterCodeUi {
 
     class EnterNameUi : EnterCodeUi {
         override fun apply(
-            context: Context,
+            resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {

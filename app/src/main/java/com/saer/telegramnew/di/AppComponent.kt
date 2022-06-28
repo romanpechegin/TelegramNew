@@ -3,14 +3,10 @@ package com.saer.telegramnew.di
 import android.content.Context
 import com.saer.telegramnew.App
 import com.saer.telegramnew.MainActivity
+import com.saer.telegramnew.auth.repositories.AuthRepository
+import com.saer.telegramnew.auth.ui.*
+import com.saer.telegramnew.common.Communication
 import com.saer.telegramnew.common.Resources
-import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
-import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
-import com.saer.telegramnew.auth.communication.RegistrationUiCommunication
-import com.saer.telegramnew.auth.interactors.AuthRepository
-import com.saer.telegramnew.auth.ui.EnterCodeFragment
-import com.saer.telegramnew.auth.ui.EnterPhoneNumberFragment
-import com.saer.telegramnew.auth.ui.RegistrationFragment
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -60,16 +56,16 @@ class NetworkModule {
 class CommunicationModule {
 
     @Provides
-    fun provideResultCommunication(): EnterPhoneUiCommunication =
-        EnterPhoneUiCommunication.Base()
+    fun provideResultCommunication(): Communication<EnterPhoneUi> =
+        Communication.Base(EnterPhoneUi.WaitEnterPhoneUi())
 
     @Provides
-    fun provideEnterCodeCommunication(): EnterCodeUiCommunication =
-        EnterCodeUiCommunication.Base()
+    fun provideEnterCodeCommunication(): Communication<EnterCodeUi> =
+        Communication.Base(EnterCodeUi.WaitCodeUi())
 
     @Provides
-    fun provideRegistrationCommunication(): RegistrationUiCommunication =
-        RegistrationUiCommunication.Base()
+    fun provideRegistrationCommunication(): Communication<RegisterUi> =
+        Communication.Base(RegisterUi.WaitEnterNameUi())
 }
 
 @Module

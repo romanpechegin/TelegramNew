@@ -2,9 +2,8 @@ package com.saer.telegramnew.auth.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saer.telegramnew.auth.communication.EnterPasswordUiCommunication
-import com.saer.telegramnew.auth.communication.RegistrationUiCommunication
-import com.saer.telegramnew.auth.interactors.AuthRepository
+import com.saer.telegramnew.auth.repositories.AuthRepository
+import com.saer.telegramnew.common.Communication
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 class EnterPasswordViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val enterPasswordUiCommunication: EnterPasswordUiCommunication,
+    private val enterPasswordUiCommunication: Communication<EnterPasswordUi>,
     private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -32,7 +31,7 @@ class EnterPasswordViewModel @Inject constructor(
                     }
                 }
                 .catch { e ->
-//                    enterPasswordUiCommunication.map(RegisterUi.ErrorUi(e))
+                    enterPasswordUiCommunication.map(EnterPasswordUi.ErrorUi(e))
                 }
                 .collectLatest {
                     enterPasswordUiCommunication.map(it)

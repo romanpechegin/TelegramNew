@@ -8,7 +8,7 @@ import com.saer.telegramnew.INCORRECT_PHONE_NUMBER
 import com.saer.telegramnew.MainDispatcherRule
 import com.saer.telegramnew.R
 import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
-import com.saer.telegramnew.auth.interactors.AuthRepository
+import com.saer.telegramnew.auth.repositories.AuthRepository
 import com.saer.telegramnew.common.Resources
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

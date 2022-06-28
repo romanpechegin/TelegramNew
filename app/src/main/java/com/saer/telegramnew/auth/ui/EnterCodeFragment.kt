@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.telegramnew.R
 import com.saer.telegramnew.appComponent
 import com.saer.telegramnew.base.BaseFragment
+import com.saer.telegramnew.common.Resources
 import com.saer.telegramnew.databinding.FragmentEnterCodeBinding
 import javax.inject.Inject
 
@@ -17,6 +19,9 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
 
     @Inject
     lateinit var viewModel: EnterCodeViewModel
+
+    @Inject
+    lateinit var resources: Resources
 
     private val binding: FragmentEnterCodeBinding by viewBinding(CreateMethod.INFLATE)
 
@@ -35,11 +40,11 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.enterCodeEditText.doOnTextChanged { code, _, _, _ ->
-            viewModel.enterCode(code.toString())
+            viewModel.enterCode(code = code.toString())
         }
 
-        viewModel.observeEnterCodeUi(viewLifecycleOwner) {
-            it.apply(requireContext(), binding, viewModel)
+        viewModel.observeEnterCodeUi(lifecycleScope) {
+            it.apply(resources = resources, binding = binding, viewModel = viewModel)
         }
     }
 }
