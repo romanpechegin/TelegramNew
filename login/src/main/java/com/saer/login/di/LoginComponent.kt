@@ -3,11 +3,13 @@ package com.saer.login.di
 import androidx.annotation.RestrictTo
 import androidx.lifecycle.ViewModel
 import com.saer.core.Resources
+import com.saer.core.di.Feature
 import com.saer.login.ui.EnterPhoneNumberFragment
 import dagger.Component
 import kotlinx.telegram.core.TelegramFlow
 import kotlin.properties.Delegates
 
+@Feature
 @Component(dependencies = [LoginDeps::class], modules = [LoginModule::class])
 internal interface LoginComponent {
 

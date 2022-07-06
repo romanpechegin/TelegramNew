@@ -9,7 +9,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import javax.inject.Scope
 
 @Component(
     modules = [
@@ -18,7 +18,7 @@ import javax.inject.Singleton
         CoreModule::class
     ]
 )
-@Singleton
+@AppScope
 interface AppComponent : LoginDeps {
 
     @Component.Builder
@@ -38,8 +38,7 @@ class AppModule {
     fun provideContext(application: Application): Context {
         return application.applicationContext
     }
-//
-//    @Provides
-//    @Singleton
-//    fun provideResources(application: Application): Resources = Resources.Base(application)
 }
+
+@Scope
+annotation class AppScope
