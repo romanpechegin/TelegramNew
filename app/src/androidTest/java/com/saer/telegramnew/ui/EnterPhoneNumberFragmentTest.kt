@@ -7,15 +7,14 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import com.saer.login.ui.EnterPhoneNumberFragment
 import com.saer.telegramnew.R
-import com.saer.telegramnew.auth.ui.EnterPhoneNumberFragment
 import com.saer.telegramnew.utils.getNavController
 import com.saer.telegramnew.utils.isKeyboardShown
 import com.saer.telegramnew.utils.waitFor
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 
 @RunWith(AndroidJUnit4::class)
 class EnterPhoneNumberFragmentTest {

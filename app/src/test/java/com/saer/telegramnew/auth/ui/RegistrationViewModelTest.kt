@@ -3,10 +3,12 @@
 package com.saer.telegramnew.auth.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.saer.core.Communication
+import com.saer.login.repositories.AuthRepository
+import com.saer.login.ui.RegisterUi
+import com.saer.login.ui.RegistrationViewModel
 import com.saer.telegramnew.MainDispatcherRule
 import com.saer.telegramnew.UNIQUE_FIRST_NAME
-import com.saer.telegramnew.auth.repositories.AuthRepository
-import com.saer.telegramnew.common.Communication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest

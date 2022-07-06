@@ -1,25 +1,20 @@
 package com.saer.telegramnew
 
 import android.app.Application
-import android.content.Context
+import com.saer.login.di.LoginDepsProvider
 import com.saer.telegramnew.di.AppComponent
-import com.saer.telegramnew.di.AppModule
 import com.saer.telegramnew.di.DaggerAppComponent
 
 class App : Application() {
 
-    lateinit var appComponent: AppComponent
+    private val appComponent: AppComponent by lazy {
+        DaggerAppComponent.builder()
+            .application(this)
+            .build()
+    }
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
+        LoginDepsProvider.deps = appComponent
     }
 }
-
-val Context.appComponent: AppComponent
-    get() = when (this) {
-        is App -> appComponent
-        else -> this.applicationContext.appComponent
-    }

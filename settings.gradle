@@ -17,3 +17,7 @@ dependencyResolutionManagement {
 rootProject.name = "Telegram New"
 include ':app'
 include ':libtd-ktx'
+include ':login'
+include ':base_classes'
+include ':core'
+include ':api'

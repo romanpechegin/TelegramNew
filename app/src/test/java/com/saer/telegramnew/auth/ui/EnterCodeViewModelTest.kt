@@ -3,10 +3,11 @@
 package com.saer.telegramnew.auth.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.saer.login.repositories.AuthRepository
+import com.saer.login.ui.EnterCodeUi
+import com.saer.login.ui.EnterCodeViewModel
 import com.saer.telegramnew.*
 import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
-import com.saer.telegramnew.auth.repositories.AuthRepository
-import com.saer.telegramnew.common.Resources
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -31,7 +32,7 @@ class EnterCodeViewModelTest(
     @get:Rule
     val coroutineRule = MainDispatcherRule()
     private val enterCodeUiCommunication: EnterCodeUiCommunication = mock()
-    private val resources: Resources = mock()
+    private val resources: com.saer.core.Resources = mock()
     private val authRepository: AuthRepository = mock()
 
     @Before

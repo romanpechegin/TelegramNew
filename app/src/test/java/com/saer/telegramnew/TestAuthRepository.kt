@@ -1,6 +1,6 @@
 package com.saer.telegramnew
 
-import com.saer.telegramnew.auth.repositories.AuthRepository
+import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.drinkless.td.libcore.telegram.TdApi
