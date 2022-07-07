@@ -1,13 +1,11 @@
-package com.saer.telegramnew.auth.ui
+package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.saer.core.Communication
+import com.saer.login.CORRECT_PASSWORD
+import com.saer.login.INCORRECT_PASSWORD
+import com.saer.login.MainDispatcherRule
 import com.saer.login.repositories.AuthRepository
-import com.saer.login.ui.EnterPasswordUi
-import com.saer.login.ui.EnterPasswordViewModel
-import com.saer.telegramnew.CORRECT_PASSWORD
-import com.saer.telegramnew.INCORRECT_PASSWORD
-import com.saer.telegramnew.MainDispatcherRule
-import com.saer.telegramnew.auth.communication.EnterPasswordUiCommunication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -31,7 +29,7 @@ class EnterPasswordViewModelTest(
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
-    private val enterPasswordUiCommunication: EnterPasswordUiCommunication = mock()
+    private val enterPasswordUiCommunication: Communication<EnterPasswordUi> = mock()
     private val authRepository: AuthRepository = mock()
 
     @Before

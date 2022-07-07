@@ -1,8 +1,7 @@
-package com.saer.telegramnew.ui
+package com.saer.login.ui
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.saer.login.ui.EnterCodeFragment
-import com.saer.telegramnew.utils.getNavController
+import com.saer.login.utils.getNavController
 import org.junit.Test
 import org.junit.runner.RunWith
 

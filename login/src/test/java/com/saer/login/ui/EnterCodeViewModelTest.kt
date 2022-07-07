@@ -1,13 +1,11 @@
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
-package com.saer.telegramnew.auth.ui
+package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.saer.core.Communication
+import com.saer.login.*
 import com.saer.login.repositories.AuthRepository
-import com.saer.login.ui.EnterCodeUi
-import com.saer.login.ui.EnterCodeViewModel
-import com.saer.telegramnew.*
-import com.saer.telegramnew.auth.communication.EnterCodeUiCommunication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -31,7 +29,7 @@ class EnterCodeViewModelTest(
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
-    private val enterCodeUiCommunication: EnterCodeUiCommunication = mock()
+    private val enterCodeUiCommunication: Communication<EnterCodeUi> = mock()
     private val resources: com.saer.core.Resources = mock()
     private val authRepository: AuthRepository = mock()
 

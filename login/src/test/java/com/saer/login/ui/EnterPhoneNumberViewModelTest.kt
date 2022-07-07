@@ -1,16 +1,14 @@
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
-package com.saer.telegramnew.auth.ui
+package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
+import com.saer.core.Communication
+import com.saer.login.CORRECT_PHONE_NUMBER
+import com.saer.login.INCORRECT_PHONE_NUMBER
+import com.saer.login.MainDispatcherRule
+import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
-import com.saer.login.ui.EnterPhoneNumberViewModel
-import com.saer.login.ui.EnterPhoneUi
-import com.saer.telegramnew.CORRECT_PHONE_NUMBER
-import com.saer.telegramnew.INCORRECT_PHONE_NUMBER
-import com.saer.telegramnew.MainDispatcherRule
-import com.saer.telegramnew.R
-import com.saer.telegramnew.auth.communication.EnterPhoneUiCommunication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -33,7 +31,7 @@ class EnterPhoneNumberViewModelTest(
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
-    private val testEnterPhoneUiCommunication: EnterPhoneUiCommunication = mock()
+    private val testEnterPhoneUiCommunication: Communication<EnterPhoneUi> = mock()
     private val testAuthRepository: AuthRepository = mock()
     private val testResources: com.saer.core.Resources = mock()
 

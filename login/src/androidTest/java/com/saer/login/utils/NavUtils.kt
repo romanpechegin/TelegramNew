@@ -1,11 +1,11 @@
-package com.saer.telegramnew.utils
+package com.saer.login.utils
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import com.saer.telegramnew.R
+import com.saer.login.R
 
 inline fun <reified T : Fragment>getNavController(): TestNavHostController {
     val navController = TestNavHostController(ApplicationProvider.getApplicationContext())

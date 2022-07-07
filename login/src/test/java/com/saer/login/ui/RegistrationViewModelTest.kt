@@ -1,14 +1,12 @@
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
-package com.saer.telegramnew.auth.ui
+package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
 import com.saer.core.Communication
+import com.saer.login.MainDispatcherRule
+import com.saer.login.UNIQUE_FIRST_NAME
 import com.saer.login.repositories.AuthRepository
-import com.saer.login.ui.RegisterUi
-import com.saer.login.ui.RegistrationViewModel
-import com.saer.telegramnew.MainDispatcherRule
-import com.saer.telegramnew.UNIQUE_FIRST_NAME
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest

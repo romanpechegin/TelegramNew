@@ -1,4 +1,4 @@
-package com.saer.telegramnew.ui
+package com.saer.login.ui
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -7,11 +7,10 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.saer.login.ui.EnterPhoneNumberFragment
-import com.saer.telegramnew.R
-import com.saer.telegramnew.utils.getNavController
-import com.saer.telegramnew.utils.isKeyboardShown
-import com.saer.telegramnew.utils.waitFor
+import com.saer.login.R
+import com.saer.login.utils.getNavController
+import com.saer.login.utils.isKeyboardShown
+import com.saer.login.utils.waitFor
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
