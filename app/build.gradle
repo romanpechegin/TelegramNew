@@ -38,17 +38,6 @@ android {
 
 dependencies {
 
-//    implementation 'androidx.core:core-ktx:1.8.0'
-//    implementation 'androidx.appcompat:appcompat:1.4.2'
-//    implementation 'com.google.android.material:material:1.6.1'
-//    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-//    testImplementation 'junit:junit:4.13.2'
-//    testImplementation "com.google.truth:truth:1.1.3"
-//    androidTestImplementation "com.google.truth:truth:1.1.3"
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-//    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
-
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -58,28 +47,9 @@ dependencies {
     api "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
 
-//    implementation "com.github.RedMadRobot:input-mask-android:$input_mask"
-
-//    implementation "com.github.kirich1409:viewbindingpropertydelegate:$viewBindingDelegate"
-
     implementation project(':libtd-ktx')
     implementation project(':login')
     implementation project(':base_classes')
     implementation project(':core')
     implementation project(':api')
-//    implementation "com.github.tdlibx:td:$tdlibx"
-
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-//    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ktx"
-//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ktx"
-//    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extensions"
-
-//    testImplementation "org.mockito:mockito-core:4.6.1"
-//    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
-//    androidTestImplementation "org.mockito:mockito-core:4.6.1"
-
-    implementation "com.github.valeryponomarenko.componentsmanager:androidx:$components_manager"
-
 }

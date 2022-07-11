@@ -41,15 +41,15 @@ dependencies {
     implementation project(':libtd-ktx')
     implementation project(':api')
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation "com.google.truth:truth:1.1.3"
-    androidTestImplementation "com.google.truth:truth:1.1.3"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation "androidx.core:core-ktx:$core_ktx"
+    implementation "androidx.appcompat:appcompat:$app_compat"
+    implementation "com.google.android.material:material:$material"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    testImplementation "junit:junit:$junit"
+    testImplementation "com.google.truth:truth:$google_truth"
+    androidTestImplementation "com.google.truth:truth:$google_truth"
+    androidTestImplementation "androidx.test.ext:junit:$google_truth"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
 
     // Navigation
@@ -60,8 +60,6 @@ dependencies {
     // Dagger
     api "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
-
-    implementation "com.github.RedMadRobot:input-mask-android:$input_mask"
 
     implementation "com.github.kirich1409:viewbindingpropertydelegate:$viewBindingDelegate"
 
@@ -75,8 +73,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extensions"
 
 //    testImplementation "org.mockito:mockito-core:4.6.1"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
-    androidTestImplementation "org.mockito:mockito-core:4.6.1"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin"
+    androidTestImplementation "org.mockito:mockito-core:$mockito_core"
 
     api "com.github.valeryponomarenko.componentsmanager:androidx:$components_manager"
 
