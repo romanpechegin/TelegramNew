@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.core.di.Feature
+import com.saer.core.di.IoDispatcher
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,8 +19,7 @@ import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
-@Feature
-class EnterPhoneNumberViewModel @Inject constructor(
+class EnterPhoneNumberViewModel(
     private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
     private val authRepository: AuthRepository,
     private val resources: Resources,
@@ -87,11 +87,12 @@ class EnterPhoneNumberViewModel @Inject constructor(
     }
 
     @Suppress("UNCHECKED_CAST")
+    @Feature
     class Factory @Inject constructor(
         private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
         private val authRepository: AuthRepository,
         private val resources: Resources,
-        private val ioDispatcher: CoroutineDispatcher
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == EnterPhoneNumberViewModel::class.java)

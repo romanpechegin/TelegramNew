@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.Resources
+import com.saer.core.di.IoDispatcher
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,7 +18,7 @@ import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
 class EnterCodeViewModel @Inject constructor(
-    private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val enterCodeUiCommunication: Communication<EnterCodeUi>,
     private val authRepository: AuthRepository,
     private val resources: Resources

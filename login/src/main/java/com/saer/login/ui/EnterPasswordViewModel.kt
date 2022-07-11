@@ -3,6 +3,7 @@ package com.saer.login.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
+import com.saer.core.di.IoDispatcher
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.catch
@@ -15,7 +16,7 @@ import javax.inject.Inject
 class EnterPasswordViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val enterPasswordUiCommunication: Communication<EnterPasswordUi>,
-    private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     init {
@@ -34,7 +35,7 @@ class EnterPasswordViewModel @Inject constructor(
                     enterPasswordUiCommunication.map(EnterPasswordUi.ErrorUi(e))
                 }
                 .collectLatest {
-                    enterPasswordUiCommunication.map(it)
+                    enterPasswordUiCommunication.map(data = it)
                 }
         }
     }

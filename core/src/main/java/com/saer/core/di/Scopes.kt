@@ -13,4 +13,8 @@ annotation class Feature
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class AuthorisationFlowQualifier
+annotation class MainDispatcher
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class IoDispatcher

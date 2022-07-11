@@ -1,9 +1,9 @@
 package com.saer.login.di
 
-import com.saer.api.TelegramCredentials
 import com.saer.core.Communication
-import com.saer.core.di.AuthorisationFlowQualifier
 import com.saer.core.di.Feature
+import com.saer.core.di.IoDispatcher
+import com.saer.core.di.MainDispatcher
 import com.saer.login.repositories.AuthRepository
 import com.saer.login.ui.EnterCodeUi
 import com.saer.login.ui.EnterPhoneUi
@@ -14,14 +14,6 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainCoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.telegram.core.TelegramFlow
-import kotlinx.telegram.coroutines.checkDatabaseEncryptionKey
-import kotlinx.telegram.coroutines.setTdlibParameters
-import kotlinx.telegram.flows.authorizationStateFlow
-import org.drinkless.td.libcore.telegram.TdApi
-import org.drinkless.td.libcore.telegram.TdApi.AuthorizationState
 
 @Module(includes = [LoginBindModule::class])
 class LoginModule {
@@ -42,26 +34,13 @@ class LoginModule {
 
     @Provides
     @Feature
+    @IoDispatcher
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
     @Feature
+    @MainDispatcher
     fun provideMainDispatcher(): MainCoroutineDispatcher = Dispatchers.Main
-
-    @Feature
-    @Provides
-    @AuthorisationFlowQualifier
-    fun authorizationFlow(api: TelegramFlow): Flow<AuthorizationState> {
-        return api.authorizationStateFlow()
-            .onEach {
-                when (it) {
-                    is TdApi.AuthorizationStateWaitTdlibParameters ->
-                        api.setTdlibParameters(TelegramCredentials.parameters)
-                    is TdApi.AuthorizationStateWaitEncryptionKey ->
-                        api.checkDatabaseEncryptionKey(null)
-                }
-            }
-    }
 }
 
 @Module
