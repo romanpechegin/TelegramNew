@@ -1,13 +1,14 @@
 package com.saer.login.repositories
 
-import android.util.Log
 import com.saer.api.TelegramCredentials
+import com.saer.core.di.Feature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.telegram.core.TelegramFlow
 import kotlinx.telegram.coroutines.*
 import kotlinx.telegram.flows.authorizationStateFlow
 import org.drinkless.td.libcore.telegram.TdApi
+import org.drinkless.td.libcore.telegram.TdApi.AuthorizationState
 import javax.inject.Inject
 
 const val TOO_MANY_REQUESTS_EXCEPTION = "Too Many Requests: retry after "
@@ -17,20 +18,20 @@ const val UNAUTHORIZED_EXCEPTION = "Unauthorized"
 
 interface AuthRepository {
 
-    fun observeAuthState(): Flow<TdApi.AuthorizationState>
+    fun observeAuthState(): Flow<AuthorizationState>
     suspend fun checkPhoneNumber(phoneNumber: String)
     suspend fun checkCode(code: String)
     suspend fun sendName(firstName: String, lastName: String)
     suspend fun checkPassword(password: String)
 
+    @Feature
     class Base @Inject constructor(
         private val api: TelegramFlow
     ) : AuthRepository {
 
-        override fun observeAuthState(): Flow<TdApi.AuthorizationState> =
+        override fun observeAuthState(): Flow<AuthorizationState> =
             api.authorizationStateFlow()
                 .onEach {
-                    Log.e("TAG", "observeAuthState: ${it.javaClass.simpleName}")
                     when (it) {
                         is TdApi.AuthorizationStateWaitTdlibParameters ->
                             api.setTdlibParameters(TelegramCredentials.parameters)

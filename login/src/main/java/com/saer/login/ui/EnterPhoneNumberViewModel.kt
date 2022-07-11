@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.Resources
+import com.saer.core.di.Feature
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
+@Feature
 class EnterPhoneNumberViewModel @Inject constructor(
     private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
     private val authRepository: AuthRepository,
@@ -67,8 +69,7 @@ class EnterPhoneNumberViewModel @Inject constructor(
     fun observeEnterPhoneUi(
         lifecycleCoroutineScope: LifecycleCoroutineScope,
         collector: FlowCollector<EnterPhoneUi>
-    ) =
-        enterPhoneUiCommunication.observe(
+    ) = enterPhoneUiCommunication.observe(
             lifecycleCoroutineScope = lifecycleCoroutineScope,
             collector = collector
         )

@@ -3,14 +3,15 @@ package com.saer.telegramnew.di
 import android.app.Application
 import android.content.Context
 import com.saer.api.ApiModule
+import com.saer.core.di.AppScope
 import com.saer.core.di.CoreModule
 import com.saer.login.di.LoginDeps
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Scope
 
+@AppScope
 @Component(
     modules = [
         AppModule::class,
@@ -18,7 +19,6 @@ import javax.inject.Scope
         CoreModule::class
     ]
 )
-@AppScope
 interface AppComponent : LoginDeps {
 
     @Component.Builder
@@ -34,11 +34,9 @@ interface AppComponent : LoginDeps {
 @Module
 class AppModule {
 
+    @AppScope
     @Provides
     fun provideContext(application: Application): Context {
         return application.applicationContext
     }
 }
-
-@Scope
-annotation class AppScope

@@ -37,7 +37,7 @@ interface LoginDepsProvider {
     companion object : LoginDepsProvider by LoginDepsStore
 }
 
-object LoginDepsStore : LoginDepsProvider {
+internal object LoginDepsStore : LoginDepsProvider {
 
     override var deps: LoginDeps by Delegates.notNull()
 }

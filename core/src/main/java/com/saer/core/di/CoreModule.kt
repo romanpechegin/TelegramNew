@@ -8,6 +8,7 @@ import dagger.Provides
 @Module
 class CoreModule {
 
+    @AppScope
     @Provides
     fun provideResources(application: Application): Resources = Resources.Base(application)
 }

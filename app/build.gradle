@@ -67,7 +67,7 @@ dependencies {
     implementation project(':base_classes')
     implementation project(':core')
     implementation project(':api')
-    implementation "com.github.tdlibx:td:$tdlibx"
+//    implementation "com.github.tdlibx:td:$tdlibx"
 
 //    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 //    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
