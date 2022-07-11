@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.Resources
-import com.saer.core.di.Feature
 import com.saer.core.di.IoDispatcher
+import com.saer.core.di.LoginFeature
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -87,7 +87,7 @@ class EnterPhoneNumberViewModel(
     }
 
     @Suppress("UNCHECKED_CAST")
-    @Feature
+    @LoginFeature
     class Factory @Inject constructor(
         private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
         private val authRepository: AuthRepository,

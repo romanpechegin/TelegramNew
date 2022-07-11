@@ -2,34 +2,38 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/login_graph">
+    android:id="@+id/login_graph"
+    app:startDestination="@id/enterPhoneNumberFragment">
 
     <fragment
         android:id="@+id/enterPhoneNumberFragment"
         android:name="com.saer.login.ui.EnterPhoneNumberFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_enter_phone_number">
+        android:label="fragment_enter_phone_number"
+        tools:layout="@layout/fragment_enter_phone_number" >
         <action
-            android:id="@+id/action_EnterPhoneNumberFragment_to_enterCodeFragment"
+            android:id="@+id/action_enterPhoneNumberFragment_to_enterCodeFragment"
             app:destination="@id/enterCodeFragment" />
     </fragment>
     <fragment
         android:id="@+id/enterCodeFragment"
         android:name="com.saer.login.ui.EnterCodeFragment"
         android:label="fragment_enter_code"
-        tools:layout="@layout/fragment_enter_code">
+        tools:layout="@layout/fragment_enter_code" >
         <action
             android:id="@+id/action_enterCodeFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_enterCodeFragment_to_enterPasswordFragment"
+            app:destination="@id/enterPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.saer.login.ui.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" />
-    <include app:graph="@navigation/login_graph" />
-    <action
-        android:id="@+id/action_global_login_graph"
-        app:destination="@id/login_graph" />
+    <fragment
+        android:id="@+id/enterPasswordFragment"
+        android:name="com.saer.login.ui.EnterPasswordFragment"
+        android:label="fragment_enter_password"
+        tools:layout="@layout/fragment_enter_password" />
 </navigation>

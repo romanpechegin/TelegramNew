@@ -1,7 +1,7 @@
 package com.saer.login.repositories
 
 import com.saer.api.TelegramCredentials
-import com.saer.core.di.Feature
+import com.saer.core.di.LoginFeature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.telegram.core.TelegramFlow
@@ -24,7 +24,7 @@ interface AuthRepository {
     suspend fun sendName(firstName: String, lastName: String)
     suspend fun checkPassword(password: String)
 
-    @Feature
+    @LoginFeature
     class Base @Inject constructor(
         private val api: TelegramFlow
     ) : AuthRepository {

@@ -2,10 +2,12 @@ package com.saer.login.ui
 
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.core.di.IoDispatcher
+import com.saer.core.di.LoginFeature
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -17,8 +19,8 @@ import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
-class EnterCodeViewModel @Inject constructor(
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+class EnterCodeViewModel(
+    private val ioDispatcher: CoroutineDispatcher,
     private val enterCodeUiCommunication: Communication<EnterCodeUi>,
     private val authRepository: AuthRepository,
     private val resources: Resources
@@ -70,6 +72,25 @@ class EnterCodeViewModel @Inject constructor(
                 }
         } else {
             enterCodeUiCommunication.map(EnterCodeUi.WaitCodeUi())
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    @LoginFeature
+    class Factory @Inject constructor(
+        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+        private val enterCodeUiCommunication: Communication<EnterCodeUi>,
+        private val authRepository: AuthRepository,
+        private val resources: Resources
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            require(modelClass == EnterCodeViewModel::class.java)
+            return EnterCodeViewModel(
+                ioDispatcher,
+                enterCodeUiCommunication,
+                authRepository,
+                resources
+            ) as T
         }
     }
 }

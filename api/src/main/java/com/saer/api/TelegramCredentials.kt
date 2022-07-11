@@ -15,6 +15,6 @@ object TelegramCredentials {
         systemVersion = "Example"
         applicationVersion = "1.0"
         enableStorageOptimizer = true
-//        useTestDc = true    // TODO(добавить BuildFlavors)
+        useTestDc = true    // TODO(добавить BuildFlavors)
     }
 }

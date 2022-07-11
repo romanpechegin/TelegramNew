@@ -38,6 +38,13 @@ android {
 
 dependencies {
 
+    implementation project(':libtd-ktx')
+    implementation project(':login')
+    implementation project(':base_classes')
+    implementation project(':core')
+    implementation project(':api')
+    implementation project(':navigation')
+
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
@@ -46,10 +53,4 @@ dependencies {
     // Dagger
     api "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
-
-    implementation project(':libtd-ktx')
-    implementation project(':login')
-    implementation project(':base_classes')
-    implementation project(':core')
-    implementation project(':api')
 }

@@ -3,17 +3,21 @@ package com.saer.login.di
 import androidx.annotation.RestrictTo
 import androidx.lifecycle.ViewModel
 import com.saer.core.Resources
-import com.saer.core.di.Feature
+import com.saer.core.di.LoginFeature
+import com.saer.login.ui.EnterCodeFragment
 import com.saer.login.ui.EnterPhoneNumberFragment
+import com.saer.login.ui.RegistrationFragment
 import dagger.Component
 import kotlinx.telegram.core.TelegramFlow
 import kotlin.properties.Delegates
 
-@Feature
+@LoginFeature
 @Component(dependencies = [LoginDeps::class], modules = [LoginModule::class])
 internal interface LoginComponent {
 
     fun inject(fragment: EnterPhoneNumberFragment)
+    fun inject(fragment: EnterCodeFragment)
+    fun inject(fragment: RegistrationFragment)
 
     @Component.Builder
     interface Builder {

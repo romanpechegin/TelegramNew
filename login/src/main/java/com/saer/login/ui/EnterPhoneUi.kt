@@ -2,6 +2,7 @@ package com.saer.login.ui
 
 import android.view.View
 import android.widget.TextView
+import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.saer.core.Resources
@@ -35,8 +36,8 @@ interface EnterPhoneUi {
             phoneTitle: TextView,
             resources: Resources
         ) {
-//            sendCodeButton.findNavController()
-//                .navigate(R.id.action_EnterPhoneNumberFragment_to_enterCodeFragment)
+            sendCodeButton.findNavController()
+                .navigate(R.id.action_enterPhoneNumberFragment_to_enterCodeFragment)
         }
     }
 

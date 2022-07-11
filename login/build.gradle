@@ -40,6 +40,7 @@ dependencies {
     implementation project(':core')
     implementation project(':libtd-ktx')
     implementation project(':api')
+    implementation project(':navigation')
 
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$app_compat"

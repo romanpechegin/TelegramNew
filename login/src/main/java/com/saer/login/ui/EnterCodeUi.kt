@@ -1,6 +1,7 @@
 package com.saer.login.ui
 
 import android.util.Log
+import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.saer.core.Resources
 import com.saer.login.R
@@ -107,8 +108,8 @@ interface EnterCodeUi {
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
-//            binding.root.findNavController()
-//                .navigate(R.id.action_enterCodeFragment_to_registrationFragment)
+            binding.root.findNavController()
+                .navigate(R.id.action_enterCodeFragment_to_registrationFragment)
         }
     }
 }

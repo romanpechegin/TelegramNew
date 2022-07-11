@@ -7,10 +7,6 @@ import javax.inject.Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class AppScope
 
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class Feature
-
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class MainDispatcher
@@ -18,3 +14,7 @@ annotation class MainDispatcher
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class IoDispatcher
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class LoginFeature
