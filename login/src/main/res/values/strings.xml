@@ -5,7 +5,9 @@
     <string name="send_code">Send code</string>
 
     // Label
-    <string name="enter_phone_number">Please, enter phone number</string>
+    <string name="your_phone_number">Your phone number</string>
+    <string name="phone_number">Phone number</string>
+    <string name="confirm_country_code_and_phone_number">Please confirm your country code and enter your phone number.</string>
     <string name="click_send_code">Please, click send code</string>
 
     // Error

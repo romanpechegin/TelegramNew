@@ -7,35 +7,56 @@
     android:fitsSystemWindows="true"
     tools:context="com.saer.login.ui.EnterPhoneNumberFragment">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/enter_phone_number_title"
-        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/enter_phone_number"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/your_phone_number"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/input_phone_number"
-        style="@style/TextAppearance.AppCompat.Title"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/confirm_country_code_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:gravity="center"
+        android:text="@string/confirm_country_code_and_phone_number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enter_phone_number_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:autofillHints="phone"
-        android:digits="0123456789 -.+()"
-        android:focusableInTouchMode="true"
-        android:inputType="phone"
-
-        android:labelFor="@id/input_phone_number"
-        android:minWidth="200dp"
-        android:textAlignment="center"
+        android:layout_margin="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_phone_number_title"
-        tools:text="+79892634770" />
+        android:hint="@string/phone_number"
+        app:layout_constraintTop_toBottomOf="@id/confirm_country_code_title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_phone_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="phone"
+            android:digits="0123456789 -.+()"
+            android:focusableInTouchMode="true"
+            android:inputType="phone"
+            android:labelFor="@id/input_phone_number"
+            android:minWidth="200dp"
+            android:minHeight="48dp"
+            android:textAlignment="center"
+            tools:text="+79892634770" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/send_code_button"
@@ -45,6 +66,7 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_baseline_arrow_forward_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

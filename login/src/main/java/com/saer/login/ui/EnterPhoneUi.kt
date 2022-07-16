@@ -1,6 +1,5 @@
 package com.saer.login.ui
 
-import android.view.View
 import android.widget.TextView
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,8 +24,8 @@ interface EnterPhoneUi {
             phoneTitle: TextView,
             resources: Resources
         ) {
-            sendCodeButton.visibility = View.GONE
-            phoneTitle.text = resources.getString(resId = R.string.enter_phone_number)
+//            sendCodeButton.visibility = View.GONE
+            phoneTitle.text = resources.getString(resId = R.string.your_phone_number)
         }
     }
 
@@ -47,7 +46,7 @@ interface EnterPhoneUi {
             phoneTitle: TextView,
             resources: Resources
         ) {
-            sendCodeButton.visibility = View.VISIBLE
+//            sendCodeButton.visibility = View.VISIBLE
             phoneTitle.text = resources.getString(R.string.click_send_code)
         }
     }

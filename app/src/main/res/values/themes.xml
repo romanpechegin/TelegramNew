@@ -14,10 +14,9 @@
 <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
 <!--    </style>-->
 <!--</resources>-->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.Material3Example" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
     </style>
 
     <style name="Theme.Material3Example" parent="Base.Theme.Material3Example" />
