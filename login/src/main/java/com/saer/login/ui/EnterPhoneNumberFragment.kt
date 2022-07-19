@@ -9,7 +9,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
@@ -55,7 +54,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             viewModel.enterPhoneNumber(phoneNumber = text.toString())
         }
 
-        viewModel.observeEnterPhoneUi(lifecycleScope) {
+        viewModel.observeEnterPhoneUi(viewLifecycleOwner) {
             it.apply(
                 sendCodeButton = binding.sendCodeButton,
                 phoneTitle = binding.enterPhoneNumberTitle,

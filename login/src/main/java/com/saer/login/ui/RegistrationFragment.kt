@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
@@ -51,7 +50,7 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
             viewModel.lastName = text.toString()
         }
 
-        viewModel.observeRegistrationUi(lifecycleScope) {
+        viewModel.observeRegistrationUi(viewLifecycleOwner) {
             it.apply(
                 resources = resources,
                 enterFirstNameEditText = binding.enterFirstNameEditText,

@@ -9,7 +9,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
@@ -53,12 +53,16 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
             viewModel.enterCode(code = code.toString())
         }
 
-        viewModel.observeEnterCodeUi(lifecycleScope) {
+        viewModel.observeEnterCodeUi(viewLifecycleOwner) {
             it.apply(
                 resources = resources,
                 binding = binding,
                 viewModel = viewModel
             )
+        }
+
+        binding.backButton.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 }

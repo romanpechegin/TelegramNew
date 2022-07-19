@@ -16,8 +16,6 @@
 <!--</resources>-->
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.Material3Example" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
     </style>
-
-    <style name="Theme.Material3Example" parent="Base.Theme.Material3Example" />
 </resources>

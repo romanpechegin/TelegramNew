@@ -1,6 +1,6 @@
 package com.saer.login.ui
 
-import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,6 @@ import com.saer.core.di.LoginFeature
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -67,12 +66,12 @@ class EnterPhoneNumberViewModel(
     }
 
     fun observeEnterPhoneUi(
-        lifecycleCoroutineScope: LifecycleCoroutineScope,
-        collector: FlowCollector<EnterPhoneUi>
+        viewLifecycleOwner: LifecycleOwner,
+        collector: (value: EnterPhoneUi) -> Unit
     ) = enterPhoneUiCommunication.observe(
-            lifecycleCoroutineScope = lifecycleCoroutineScope,
-            collector = collector
-        )
+        viewLifecycleOwner = viewLifecycleOwner,
+        collector = collector
+    )
 
     fun sendCode() {
         if (correctPhoneNumber() != null) {

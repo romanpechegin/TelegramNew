@@ -19,18 +19,18 @@ import kotlinx.coroutines.MainCoroutineDispatcher
 class LoginModule {
     @Provides
     @LoginFeature
-    fun provideResultCommunication(): Communication<EnterPhoneUi> =
-        Communication.Base(EnterPhoneUi.WaitEnterPhoneUi())
+    fun provideEnterPhoneCommunication(): Communication<EnterPhoneUi> =
+        Communication.StateFlow(EnterPhoneUi.WaitEnterPhoneUi())
 
     @Provides
     @LoginFeature
     fun provideEnterCodeCommunication(): Communication<EnterCodeUi> =
-        Communication.Base(EnterCodeUi.WaitCodeUi())
+        Communication.StateFlow(EnterCodeUi.WaitCodeUi())
 
     @Provides
     @LoginFeature
     fun provideRegistrationCommunication(): Communication<RegisterUi> =
-        Communication.Base(RegisterUi.WaitEnterNameUi())
+        Communication.StateFlow(RegisterUi.WaitEnterNameUi())
 
     @Provides
     @LoginFeature

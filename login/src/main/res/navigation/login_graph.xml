@@ -9,7 +9,7 @@
         android:id="@+id/enterPhoneNumberFragment"
         android:name="com.saer.login.ui.EnterPhoneNumberFragment"
         android:label="fragment_enter_phone_number"
-        tools:layout="@layout/fragment_enter_phone_number" >
+        tools:layout="@layout/fragment_enter_phone_number">
         <action
             android:id="@+id/action_enterPhoneNumberFragment_to_enterCodeFragment"
             app:destination="@id/enterCodeFragment" />
@@ -18,7 +18,7 @@
         android:id="@+id/enterCodeFragment"
         android:name="com.saer.login.ui.EnterCodeFragment"
         android:label="fragment_enter_code"
-        tools:layout="@layout/fragment_enter_code" >
+        tools:layout="@layout/fragment_enter_code">
         <action
             android:id="@+id/action_enterCodeFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />

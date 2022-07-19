@@ -1,6 +1,6 @@
 package com.saer.login.ui
 
-import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,6 @@ import com.saer.core.di.LoginFeature
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -50,11 +49,11 @@ class EnterCodeViewModel(
         }
     }
 
-    fun observeEnterCodeUi(lifecycleCoroutineScope: LifecycleCoroutineScope, collector: FlowCollector<EnterCodeUi>) {
-        enterCodeUiCommunication.observe(
-            lifecycleCoroutineScope = lifecycleCoroutineScope,
-            collector = collector
-        )
+    fun observeEnterCodeUi(
+        lifecycleOwner: LifecycleOwner,
+        collector: (value: EnterCodeUi) -> Unit
+    ) {
+        enterCodeUiCommunication.observe(lifecycleOwner, collector)
     }
 
     fun enterCode(code: String) {
@@ -63,13 +62,13 @@ class EnterCodeViewModel(
         if (legalCode.isNotEmpty() && legalCode.length == resources.getInt(R.integer.code_size)) {
             enterCodeUiCommunication.map(EnterCodeUi.CompleteEnterCodeUi())
 
-                viewModelScope.launch(ioDispatcher) {
-                    try {
-                        authRepository.checkCode(code)
-                    } catch (e: Throwable) {
-                        enterCodeUiCommunication.map(EnterCodeUi.ErrorCodeUi(e))
-                    }
+            viewModelScope.launch(ioDispatcher) {
+                try {
+                    authRepository.checkCode(code)
+                } catch (e: Throwable) {
+                    enterCodeUiCommunication.map(EnterCodeUi.ErrorCodeUi(e))
                 }
+            }
         } else {
             enterCodeUiCommunication.map(EnterCodeUi.WaitCodeUi())
         }

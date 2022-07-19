@@ -1,33 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/login_graph">
 
-    <fragment
-        android:id="@+id/enterPhoneNumberFragment"
-        android:name="com.saer.login.ui.EnterPhoneNumberFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_enter_phone_number">
-        <action
-            android:id="@+id/action_EnterPhoneNumberFragment_to_enterCodeFragment"
-            app:destination="@id/enterCodeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/enterCodeFragment"
-        android:name="com.saer.login.ui.EnterCodeFragment"
-        android:label="fragment_enter_code"
-        tools:layout="@layout/fragment_enter_code">
-        <action
-            android:id="@+id/action_enterCodeFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/registrationFragment"
-        android:name="com.saer.login.ui.RegistrationFragment"
-        android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration" />
     <include app:graph="@navigation/login_graph" />
     <action
         android:id="@+id/action_global_login_graph"
