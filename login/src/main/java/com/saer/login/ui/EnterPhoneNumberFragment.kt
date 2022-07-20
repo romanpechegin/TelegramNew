@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -50,12 +50,12 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.inputPhoneNumber.doOnTextChanged { text, _, _, _ ->
+        binding.inputPhoneNumber.doAfterTextChanged { text ->
             viewModel.enterPhoneNumber(phoneNumber = text.toString())
         }
 
-        viewModel.observeEnterPhoneUi(viewLifecycleOwner) {
-            it.apply(
+        viewModel.observeEnterPhoneUi(viewLifecycleOwner) { enterPhoneUi ->
+            enterPhoneUi.apply(
                 sendCodeButton = binding.sendCodeButton,
                 phoneTitle = binding.enterPhoneNumberTitle,
                 resources = resources

@@ -5,10 +5,10 @@ group='com.github.tdlibx.td-ktx'
 
 android {
     compileSdkVersion 32
-//    buildToolsVersion "28.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 26
+        minSdkVersion 14
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
@@ -24,11 +24,12 @@ android {
         // use this line to check all rules except those listed
         disable 'InvalidPackage'
     }
+
 }
 
 dependencies {
     implementation 'com.github.tdlibx:td:1.6.0'
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.21"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
 }

@@ -1,12 +1,9 @@
 package com.saer.login.repositories
 
-import android.util.Log
 import com.saer.api.TelegramCredentials
 import com.saer.core.di.LoginFeature
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.telegram.core.TelegramFlow
 import kotlinx.telegram.coroutines.*
 import kotlinx.telegram.flows.authorizationStateFlow
@@ -54,15 +51,5 @@ interface AuthRepository {
 
         override suspend fun checkPassword(password: String) =
             api.checkAuthenticationPassword(password)
-
-        init {
-            GlobalScope.launch {
-                test()
-            }
-        }
-        suspend fun test() {
-            api.getCountryCode()
-            Log.e("TAG", "test: ${api.getCountryCode()}")
-        }
     }
 }
