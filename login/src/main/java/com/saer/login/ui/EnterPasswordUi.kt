@@ -27,4 +27,10 @@ interface EnterPasswordUi {
             throwable.printStackTrace()
         }
     }
+
+    class Registration : EnterPasswordUi {
+        override fun apply() {
+
+        }
+    }
 }

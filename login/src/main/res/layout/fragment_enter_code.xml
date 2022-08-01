@@ -8,15 +8,56 @@
 
     <ImageButton
         android:id="@+id/backButton"
+        style="@style/ImageViewDayNightStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="?android:selectableItemBackgroundBorderless"
         android:layout_margin="32dp"
+        android:background="?android:selectableItemBackgroundBorderless"
         android:backgroundTint="@color/material_on_background_disabled"
+        android:contentDescription="back button"
         android:src="@drawable/ic_baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/material_dynamic_primary100" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/enterCodeImage"
+        style="@style/ImageViewDayNightStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="enter_code_image"
+        android:src="@drawable/enter_code_drawable"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backButton" />
+
+    <TextView
+        android:id="@+id/enterCodeTitle"
+        style="@style/TextViewDayNightStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/enter_code"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enterCodeImage" />
+
+    <TextView
+        android:id="@+id/enterCodeDescription"
+        style="@style/TextViewDayNightStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:text="@string/we_have_sent_sms"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/enterCodeTitle"
+        tools:text="We’ve sent an SMS with an activation code to your phone\n" />
 
     <EditText
         android:id="@+id/enterCodeEditText"
@@ -28,6 +69,6 @@
         android:maxLength="@integer/code_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/enterCodeDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

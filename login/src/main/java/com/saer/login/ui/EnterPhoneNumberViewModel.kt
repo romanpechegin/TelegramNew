@@ -26,6 +26,7 @@ class EnterPhoneNumberViewModel(
 ) : ViewModel() {
 
     private var phoneNumber: String = ""
+    private var correctPhoneNumber: String? = null
 
     init {
         viewModelScope.launch {
@@ -33,7 +34,7 @@ class EnterPhoneNumberViewModel(
                 .map {
                     when (it) {
                         is TdApi.AuthorizationStateReady -> EnterPhoneUi.WaitEnterPhoneUi()
-                        is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.SendCodeUi()
+                        is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.SendCodeUi(phoneNumber)
                         is TdApi.AuthorizationStateWaitPassword -> EnterPhoneUi.WaitEnterPhoneUi()
                         is TdApi.AuthorizationStateWaitPhoneNumber -> EnterPhoneUi.WaitEnterPhoneUi()
                         is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPhoneUi.WaitEnterPhoneUi()
@@ -51,16 +52,16 @@ class EnterPhoneNumberViewModel(
     }
 
     private fun correctPhoneNumber(phoneNumber: String = this.phoneNumber): String? {
-        val onlyDigit = phoneNumber.filter { it.isDigit() }
-        this.phoneNumber = onlyDigit
-        return if (onlyDigit.length == resources.getInt(R.integer.phone_size)) onlyDigit
+        val onlyDigitPhoneNumber = phoneNumber.filter { it.isDigit() }
+        return if (onlyDigitPhoneNumber.length == resources.getInt(R.integer.phone_size)) onlyDigitPhoneNumber
         else null
     }
 
     fun enterPhoneNumber(phoneNumber: String) {
         if (this.phoneNumber != phoneNumber) {
-            val correctPhone = correctPhoneNumber(phoneNumber)
-            if (correctPhone != null) enterPhoneUiCommunication.map(EnterPhoneUi.CompleteEnterPhoneUi())
+            this.phoneNumber = phoneNumber
+            correctPhoneNumber = correctPhoneNumber(phoneNumber)
+            if (correctPhoneNumber != null) enterPhoneUiCommunication.map(EnterPhoneUi.CompleteEnterPhoneUi())
             else enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
         } else enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
     }
@@ -77,7 +78,7 @@ class EnterPhoneNumberViewModel(
         if (correctPhoneNumber() != null) {
             viewModelScope.launch(ioDispatcher) {
                 try {
-                    authRepository.checkPhoneNumber(phoneNumber)
+                    correctPhoneNumber?.let { authRepository.checkPhoneNumber(it) }
                 } catch (e: Throwable) {
                     enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
                 }

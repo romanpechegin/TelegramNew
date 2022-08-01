@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 
 interface Communication<T> {
 
-//    val value: T
+    val value: T
     fun map(data: T)
     fun observe(
         viewLifecycleOwner: LifecycleOwner,
@@ -29,15 +29,15 @@ interface Communication<T> {
             }
         }
 
-//        override val value: T
-//            get() = stateFlow.value
+        override val value: T
+            get() = stateFlow.value
     }
 
     class LiveData<T : Any>(private val initValue: T) : Communication<T> {
         private val liveData = MutableLiveData<T>(initValue)
 
-//        override val value: T
-//            get() = liveData.value ?: initValue
+        override val value: T
+            get() = liveData.value ?: initValue
 
         override fun map(data: T) {
             liveData.value = data

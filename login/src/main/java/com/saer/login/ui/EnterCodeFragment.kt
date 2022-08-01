@@ -49,6 +49,11 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.enterCodeDescription.text = getString(
+            R.string.we_have_sent_sms,
+            arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
+        )
+
         binding.enterCodeEditText.doOnTextChanged { code, _, _, _ ->
             viewModel.enterCode(code = code.toString())
         }

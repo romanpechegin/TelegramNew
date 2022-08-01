@@ -29,14 +29,14 @@ interface EnterPhoneUi {
         }
     }
 
-    class SendCodeUi : EnterPhoneUi {
+    class SendCodeUi(private val phoneNumber: String) : EnterPhoneUi {
         override fun apply(
             sendCodeButton: FloatingActionButton,
             phoneTitle: TextView,
             resources: Resources
         ) {
             sendCodeButton.findNavController()
-                .navigate(R.id.action_enterPhoneNumberFragment_to_enterCodeFragment)
+                .navigate(EnterPhoneNumberFragmentDirections.actionEnterPhoneNumberFragmentToEnterCodeFragment(phoneNumber))
         }
     }
 

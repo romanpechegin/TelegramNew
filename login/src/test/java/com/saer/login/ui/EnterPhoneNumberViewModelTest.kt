@@ -83,13 +83,12 @@ class EnterPhoneNumberViewModelTest(
         fun data() = listOf(
             arrayOf("7989", EnterPhoneUi.WaitEnterPhoneUi()),
             arrayOf("1999", EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.SendCodeUi()),
+            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.SendCodeUi(CORRECT_PHONE_NUMBER)),
             arrayOf("+7 (989) 263-47-7", EnterPhoneUi.WaitEnterPhoneUi()),
             arrayOf(INCORRECT_PHONE_NUMBER, EnterPhoneUi.WaitEnterPhoneUi()),
             arrayOf("7989263477asdf^00", EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf("+79892634770", EnterPhoneUi.SendCodeUi()),
-            arrayOf("79892634770", EnterPhoneUi.SendCodeUi()),
-            arrayOf("7989263477asdf^0", EnterPhoneUi.SendCodeUi())
+            arrayOf("+79892634770", EnterPhoneUi.SendCodeUi(CORRECT_PHONE_NUMBER)),
+            arrayOf("7989263477asdf^0", EnterPhoneUi.SendCodeUi(CORRECT_PHONE_NUMBER))
         )
     }
 }

@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_enterCodeFragment_to_enterPasswordFragment"
             app:destination="@id/enterPasswordFragment" />
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"

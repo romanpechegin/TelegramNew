@@ -14,6 +14,7 @@ const val BUSY_FIRST_NAME = "Ivan"
 
 const val CORRECT_PASSWORD = "Password true"
 const val INCORRECT_PASSWORD = "afdssafd"
+const val UNREGISTER_PASSWORD = "registration"
 
 const val CORRECT_PHONE_NUMBER = "79892634770"
 const val INCORRECT_PHONE_NUMBER = "79892634771"

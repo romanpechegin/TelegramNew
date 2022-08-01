@@ -5,6 +5,7 @@ import com.saer.core.Communication
 import com.saer.login.CORRECT_PASSWORD
 import com.saer.login.INCORRECT_PASSWORD
 import com.saer.login.MainDispatcherRule
+import com.saer.login.UNREGISTER_PASSWORD
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,6 +51,7 @@ class EnterPasswordViewModelTest(
                 when (it.arguments[0]) {
                     CORRECT_PASSWORD -> authStateFlow.tryEmit(TdApi.AuthorizationStateReady())
                     INCORRECT_PASSWORD -> authStateFlow.tryEmit(TdApi.AuthorizationStateWaitPassword())
+                    UNREGISTER_PASSWORD -> authStateFlow.tryEmit(TdApi.AuthorizationStateWaitRegistration())
                     else -> authStateFlow.tryEmit(TdApi.AuthorizationStateWaitPassword())
                 }
             }
@@ -74,6 +76,7 @@ class EnterPasswordViewModelTest(
         fun data() = listOf(
             arrayOf("", EnterPasswordUi.Wait()),
             arrayOf(INCORRECT_PASSWORD, EnterPasswordUi.IncorrectPassword()),
+            arrayOf(UNREGISTER_PASSWORD, EnterPasswordUi.Registration()),
             arrayOf(CORRECT_PASSWORD, EnterPasswordUi.Success()),
         )
     }

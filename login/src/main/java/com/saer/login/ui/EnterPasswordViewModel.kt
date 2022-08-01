@@ -24,11 +24,11 @@ class EnterPasswordViewModel @Inject constructor(
             authRepository.observeAuthState()
                 .map {
                     when (it) {
-                        is TdApi.AuthorizationStateReady -> TODO()
-                        is TdApi.AuthorizationStateWaitRegistration -> TODO()
-                        is TdApi.AuthorizationStateWaitTdlibParameters -> TODO()
-                        is TdApi.AuthorizationStateWaitEncryptionKey -> TODO()
-                        else -> TODO()
+                        is TdApi.AuthorizationStateReady -> EnterPasswordUi.Success()
+                        is TdApi.AuthorizationStateWaitRegistration -> EnterPasswordUi.Registration()
+                        is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPasswordUi.Wait()
+                        is TdApi.AuthorizationStateWaitEncryptionKey -> EnterPasswordUi.Wait()
+                        else -> EnterPasswordUi.ErrorUi(Throwable(it.javaClass.simpleName))
                     }
                 }
                 .catch { e ->
@@ -41,6 +41,8 @@ class EnterPasswordViewModel @Inject constructor(
     }
 
     fun enterPassword(password: String) {
-
+        viewModelScope.launch(ioDispatcher) {
+            authRepository.checkPassword(password)
+        }
     }
 }
