@@ -3,8 +3,4 @@
     <style name="ImageViewDayNightStyle">
         <item name="android:tint">@color/md_theme_dark_onBackground</item>
     </style>
-
-    <style name="TextViewDayNightStyle">
-        <item name="android:textColor">@color/white</item>
-    </style>
 </resources>
