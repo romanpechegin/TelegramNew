@@ -324,20 +324,17 @@ class EnterCodeEditView @JvmOverloads constructor(
 
         var code = arrayOfNulls<Char?>(5)
         var currentDigit by Delegates.notNull<Int>()
-        var animatedDigit by Delegates.notNull<Int>()
 
         constructor(superState: Parcelable) : super(superState)
         constructor(parcel: Parcel) : super(parcel) {
             code = parcel.readArray(code.javaClass.classLoader) as Array<Char?>
             currentDigit = parcel.readInt()
-            animatedDigit = parcel.readInt()
         }
 
         override fun writeToParcel(out: Parcel, flags: Int) {
             super.writeToParcel(out, flags)
             out.writeArray(code)
             out.writeInt(currentDigit)
-            out.writeInt(animatedDigit)
         }
 
         companion object {
