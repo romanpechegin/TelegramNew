@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -14,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
 import com.saer.core.Resources
+import com.saer.core.utils.showKeyboard
 import com.saer.login.R
 import com.saer.login.databinding.FragmentEnterCodeBinding
 import com.saer.login.di.LoginComponentViewModel
@@ -54,7 +55,7 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
             arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
         )
 
-        binding.enterCodeEditText.doOnTextChanged { code, _, _, _ ->
+        binding.enterCodeEditText.doAfterTextChanged { code ->
             viewModel.enterCode(code = code.toString())
         }
 
@@ -69,5 +70,10 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showKeyboard()
     }
 }

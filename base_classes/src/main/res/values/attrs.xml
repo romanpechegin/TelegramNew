@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EnterCodeEditView">
+        <attr name="numberOfDigits" format="integer" />
+        <attr name="bordersColor" format="color" />
+        <attr name="cornerRounding" format="dimension" />
+    </declare-styleable>
+
+    <attr name="enterCodeEditViewStyle" format="reference" />
+
+</resources>

@@ -53,7 +53,7 @@ interface EnterCodeUi {
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
-            binding.enterCodeEditText.isEnabled = false
+//            binding.enterCodeEditText.isEnabled = false
         }
     }
 
