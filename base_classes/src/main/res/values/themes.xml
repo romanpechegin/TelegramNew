@@ -1,6 +1,7 @@
 <resources>
     <style name="DefaultEnterCodeEditViewStyle">
         <item name="bordersColor">#000000</item>
+        <item name="digitColor">#FFFFFF</item>
         <item name="cornerRounding">4dp</item>
     </style>
 </resources>

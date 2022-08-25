@@ -6,6 +6,10 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        saer {
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -20,8 +24,12 @@ android {
 
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
         }
     }
     compileOptions {

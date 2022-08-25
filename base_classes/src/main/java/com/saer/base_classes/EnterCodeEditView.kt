@@ -60,6 +60,7 @@ class EnterCodeEditView @JvmOverloads constructor(
         }
 
     private var bordersColor: Int = DEF_BORDERS_COLOR
+    private var digitColor: Int = DEF_DIGIT_COLOR
     private var cornerRounding: Float = DEF_CORNER_ROUNDING
 
     private val digitRectangles: MutableList<RectF> = mutableListOf()
@@ -110,7 +111,7 @@ class EnterCodeEditView @JvmOverloads constructor(
         }
 
         digitPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.BLACK
+            color = digitColor
             textSize = super.getTextSize()
         }
 
@@ -133,6 +134,8 @@ class EnterCodeEditView @JvmOverloads constructor(
         )
         bordersColor =
             typedArray.getColor(R.styleable.EnterCodeEditView_bordersColor, DEF_BORDERS_COLOR)
+        digitColor =
+            typedArray.getColor(R.styleable.EnterCodeEditView_digitColor, DEF_DIGIT_COLOR)
         cornerRounding =
             typedArray.getDimension(
                 R.styleable.EnterCodeEditView_cornerRounding,
@@ -351,6 +354,7 @@ class EnterCodeEditView @JvmOverloads constructor(
         private const val DEF_NUMBER_OF_DIGITS = 5
         private const val DEF_CORNER_ROUNDING = 4f
         private const val DEF_BORDERS_COLOR = Color.BLACK
+        private const val DEF_DIGIT_COLOR = Color.WHITE
         private const val DEF_RECTANGLE_STROKE = 2f
     }
 }

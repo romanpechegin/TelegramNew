@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.saer.api.BuildConfig
 import com.saer.base_classes.BaseFragment
 import com.saer.core.Resources
 import com.saer.core.common.setPhoneNumberMask
@@ -68,5 +69,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         binding.sendCodeButton.setOnClickListener {
             viewModel.sendCode()
         }
+
+        if (BuildConfig.DEBUG) binding.inputPhoneNumber.setText("9892634770")
     }
 }
