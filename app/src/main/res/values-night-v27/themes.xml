@@ -37,4 +37,9 @@
 
         <item name="enterCodeEditViewStyle">@style/GlobalEnterCodeEditViewStyle</item>
     </style>
+
+    <style name="GlobalEnterCodeEditViewStyle" parent="DefaultEnterCodeEditViewStyle">
+        <item name="bordersColor">@color/md_theme_dark_primary</item>
+        <item name="digitColor">@color/md_theme_dark_onBackground</item>
+    </style>
 </resources>

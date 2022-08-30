@@ -323,6 +323,14 @@ class EnterCodeEditView @JvmOverloads constructor(
 
     override fun afterTextChanged(s: Editable) {}
 
+    fun clearText() {
+        setText("")
+        for (index in 0 until numberOfDigits) {
+            code[index] = null
+        }
+        currentDigit = 0
+    }
+
     class SavedState : BaseSavedState {
 
         var code = arrayOfNulls<Char?>(5)

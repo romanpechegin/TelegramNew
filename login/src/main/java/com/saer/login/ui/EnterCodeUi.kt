@@ -108,6 +108,7 @@ interface EnterCodeUi {
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
+            binding.enterCodeEditText.clearText()
             binding.root.findNavController()
                 .navigate(R.id.action_enterCodeFragment_to_registrationFragment)
         }

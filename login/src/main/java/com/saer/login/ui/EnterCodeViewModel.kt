@@ -1,5 +1,6 @@
 package com.saer.login.ui
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,7 @@ class EnterCodeViewModel(
         viewModelScope.launch {
             authRepository.observeAuthState()
                 .map {
+                    Log.e("TAG", "authorizationState: $it")
                     when (it) {
                         is TdApi.AuthorizationStateReady -> EnterCodeUi.SuccessAuthUi()
                         is TdApi.AuthorizationStateWaitPassword -> EnterCodeUi.WaitPasswordUi()
@@ -71,6 +73,12 @@ class EnterCodeViewModel(
             }
         } else {
             enterCodeUiCommunication.map(EnterCodeUi.WaitCodeUi())
+        }
+    }
+
+    fun sendCode(phoneNumber: String) {
+        viewModelScope.launch {
+            authRepository.checkPhoneNumber(phoneNumber)
         }
     }
 

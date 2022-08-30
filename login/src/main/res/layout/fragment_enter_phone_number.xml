@@ -6,9 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.saer.login.ui.EnterPhoneNumberFragment">
+    tools:context="com.saer.login.ui.EnterPhoneNumberFragment"
+    tools:theme="@style/Theme.Material3.DayNight">
 
-    <com.google.android.material.textview.MaterialTextView
+<com.google.android.material.textview.MaterialTextView
         android:id="@+id/enter_phone_number_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,9 +41,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
+        android:hint="@string/phone_number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/phone_number"
         app:layout_constraintTop_toBottomOf="@id/confirm_country_code_title">
 
         <com.google.android.material.textfield.TextInputEditText

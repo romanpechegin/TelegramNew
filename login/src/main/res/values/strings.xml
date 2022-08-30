@@ -27,6 +27,10 @@
     <string name="enter_code">Enter code</string>
     <string name="we_have_sent_sms">We’ve sent an SMS with an activation code to your phone\n %1$s</string>
 
+    //Registration
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+
     // DateTime
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>

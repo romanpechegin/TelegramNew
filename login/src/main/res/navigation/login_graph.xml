@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_enter_phone_number">
         <action
             android:id="@+id/action_enterPhoneNumberFragment_to_enterCodeFragment"
-            app:destination="@id/enterCodeFragment" />
+            app:destination="@id/enterCodeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/enterCodeFragment"
@@ -21,10 +25,18 @@
         tools:layout="@layout/fragment_enter_code">
         <action
             android:id="@+id/action_enterCodeFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
+            app:destination="@id/registrationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_enterCodeFragment_to_enterPasswordFragment"
-            app:destination="@id/enterPasswordFragment" />
+            app:destination="@id/enterPasswordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <argument
             android:name="phoneNumber"
             app:argType="string" />
