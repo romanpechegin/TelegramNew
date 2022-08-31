@@ -7,16 +7,38 @@
     tools:context="com.saer.login.ui.RegistrationFragment"
     tools:theme="@style/Theme.Material3.DayNight">
 
-<com.google.android.material.textfield.TextInputLayout
+    <ImageButton
+        android:id="@+id/backButton"
+        style="@style/ImageViewDayNightStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="32dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:backgroundTint="@color/material_on_background_disabled"
+        android:contentDescription="@string/back_button"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/registrationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/set_up_your_first_and_last_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backButton" />
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/enterFirstNameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="32dp"
         android:hint="@string/first_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/registrationTitle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/enterFirstNameEditText"
@@ -24,18 +46,31 @@
             android:layout_height="wrap_content"
             android:autofillHints="name"
             android:focusableInTouchMode="true"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapWords"
             android:textAlignment="center" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/enterLastNameEditText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/enterLastNameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:hint="@string/last_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enterFirstNameLayout" />
+        app:layout_constraintTop_toBottomOf="@id/enterFirstNameLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/enterLastNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:focusableInTouchMode="true"
+            android:inputType="textPersonName|textCapWords"
+            android:textAlignment="center" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/send_name_button"

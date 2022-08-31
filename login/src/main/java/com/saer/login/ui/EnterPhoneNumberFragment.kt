@@ -63,13 +63,17 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             )
         }
 
-        setPhoneNumberMask(binding.inputPhoneNumber, requireContext())
-        showKeyboard()
+        context?.let { setPhoneNumberMask(binding.inputPhoneNumber, it) }
 
         binding.sendCodeButton.setOnClickListener {
             viewModel.sendCode()
         }
 
         if (BuildConfig.DEBUG) binding.inputPhoneNumber.setText("9892634770")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showKeyboard(binding.inputPhoneNumber)
     }
 }

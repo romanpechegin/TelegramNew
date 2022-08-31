@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
@@ -42,11 +43,11 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.enterFirstNameEditText.doOnTextChanged { text, _, _, _ ->
+        binding.enterFirstNameEditText.doAfterTextChanged { text ->
             viewModel.firstName = text.toString()
         }
 
-        binding.enterLastNameEditText.doOnTextChanged { text, _, _, _ ->
+        binding.enterLastNameEditText.doAfterTextChanged { text ->
             viewModel.lastName = text.toString()
         }
 
@@ -60,6 +61,10 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
 
         binding.sendNameButton.setOnClickListener {
             viewModel.registerUser()
+        }
+
+        binding.backButton.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

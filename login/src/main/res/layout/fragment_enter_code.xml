@@ -1,82 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.saer.login.ui.EnterCodeFragment"
-    tools:theme="@style/Theme.Material3.DayNight">
+    android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/backButton"
-        style="@style/ImageViewDayNightStyle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="32dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:backgroundTint="@color/material_on_background_disabled"
-        android:contentDescription="back button"
-        android:src="@drawable/ic_baseline_arrow_back_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/enterCodeImage"
-        style="@style/ImageViewDayNightStyle"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="enter_code_image"
-        android:src="@drawable/enter_code_drawable"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backButton" />
+        tools:context="com.saer.login.ui.EnterCodeFragment"
+        tools:theme="@style/Theme.Material3.DayNight">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/enterCodeTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/enter_code"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enterCodeImage" />
+        <ImageButton
+            android:id="@+id/backButton"
+            style="@style/ImageViewDayNightStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="32dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/material_on_background_disabled"
+            android:contentDescription="@string/back_button"
+            android:src="@drawable/ic_baseline_arrow_back_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/enterCodeDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:lineSpacingExtra="4dp"
-        android:text="@string/we_have_sent_sms"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enterCodeTitle"
-        tools:text="We’ve sent an SMS with an activation code to your phone\n" />
+        <ImageView
+            android:id="@+id/enterCodeImage"
+            style="@style/ImageViewDayNightStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/enter_code_image"
+            android:src="@drawable/enter_code_drawable"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backButton" />
 
-    <com.saer.base_classes.EnterCodeEditView
-        android:id="@+id/enterCodeEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:padding="16dp"
-        android:textSize="36sp"
-        app:cornerRounding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enterCodeDescription"
-        app:numberOfDigits="@integer/code_size" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/enterCodeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/enter_code"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enterCodeImage" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/send_code_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enterCodeEditText" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/enterCodeDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/we_have_sent_sms"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enterCodeTitle"
+            tools:text="We’ve sent an SMS with an activation code to your phone\n" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.saer.base_classes.EnterCodeEditView
+            android:id="@+id/enterCodeEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:textSize="36sp"
+            app:cornerRounding="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enterCodeDescription"
+            app:numberOfDigits="@integer/code_size" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/send_code_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enterCodeEditText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

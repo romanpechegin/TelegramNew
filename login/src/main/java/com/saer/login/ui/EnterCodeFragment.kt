@@ -56,7 +56,9 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
         )
 
         binding.sendCodeButton.setOnClickListener {
-            viewModel.sendCode(arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: "")
+            viewModel.sendCode(
+                arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
+            )
         }
 
         binding.enterCodeEditText.doAfterTextChanged { code ->
@@ -72,13 +74,12 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
         }
 
         binding.backButton.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        binding.enterCodeEditText.requestFocus()
-        showKeyboard()
+        showKeyboard(binding.enterCodeEditText)
     }
 }
