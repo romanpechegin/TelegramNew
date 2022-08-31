@@ -56,11 +56,18 @@ class EnterCodeEditView @JvmOverloads constructor(
                 }
             }
             field = if (value >= numberOfDigits) -1 else value
+            isError = false
             invalidate()
+        }
+    var isError: Boolean = false
+        set(value) {
+            if (value) invalidate()
+            field = value
         }
 
     private var bordersColor: Int = DEF_BORDERS_COLOR
     private var digitColor: Int = DEF_DIGIT_COLOR
+    private var errorColor: Int = DEF_ERROR_COLOR
     private var cornerRounding: Float = DEF_CORNER_ROUNDING
 
     private val digitRectangles: MutableList<RectF> = mutableListOf()
@@ -74,6 +81,7 @@ class EnterCodeEditView @JvmOverloads constructor(
     private val rectanglePaint: Paint
     private val currentRectanglePaint: Paint
     private val digitPaint: Paint
+    private val errorPaint: Paint
 
     private var measureText: String = ""
 
@@ -115,6 +123,12 @@ class EnterCodeEditView @JvmOverloads constructor(
             textSize = super.getTextSize()
         }
 
+        errorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = errorColor
+            style = Paint.Style.STROKE
+            strokeWidth = getPixels(DEF_RECTANGLE_STROKE)
+        }
+
         val bounds = Rect()
         digitPaint.getTextBounds("12345", 0, 4, bounds)
         digitHeight = bounds.height()
@@ -136,6 +150,8 @@ class EnterCodeEditView @JvmOverloads constructor(
             typedArray.getColor(R.styleable.EnterCodeEditView_bordersColor, DEF_BORDERS_COLOR)
         digitColor =
             typedArray.getColor(R.styleable.EnterCodeEditView_digitColor, DEF_DIGIT_COLOR)
+        errorColor =
+            typedArray.getColor(R.styleable.EnterCodeEditView_errorColor, DEF_ERROR_COLOR)
         cornerRounding =
             typedArray.getDimension(
                 R.styleable.EnterCodeEditView_cornerRounding,
@@ -231,7 +247,7 @@ class EnterCodeEditView @JvmOverloads constructor(
                 rectF,
                 cornerRounding,
                 cornerRounding,
-                if (i == currentDigit) currentRectanglePaint else rectanglePaint
+                if (isError) errorPaint else if (i == currentDigit) currentRectanglePaint else rectanglePaint
             )
         }
     }
@@ -286,7 +302,6 @@ class EnterCodeEditView @JvmOverloads constructor(
         lengthBefore: Int,
         lengthAfter: Int
     ) {
-        super.onTextChanged(text, start, lengthBefore, lengthAfter)
         if (lengthBefore != lengthAfter) {
             if (lengthAfter > lengthBefore) {
                 code[currentDigit] = text[start]
@@ -324,11 +339,13 @@ class EnterCodeEditView @JvmOverloads constructor(
     override fun afterTextChanged(s: Editable) {}
 
     fun clearText() {
+        val error = isError
         setText("")
         for (index in 0 until numberOfDigits) {
             code[index] = null
         }
         currentDigit = 0
+        if (error) isError = true
     }
 
     class SavedState : BaseSavedState {
@@ -363,6 +380,7 @@ class EnterCodeEditView @JvmOverloads constructor(
         private const val DEF_CORNER_ROUNDING = 4f
         private const val DEF_BORDERS_COLOR = Color.BLACK
         private const val DEF_DIGIT_COLOR = Color.WHITE
+        private const val DEF_ERROR_COLOR = Color.RED
         private const val DEF_RECTANGLE_STROKE = 2f
     }
 }

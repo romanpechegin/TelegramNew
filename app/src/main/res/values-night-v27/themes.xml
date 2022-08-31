@@ -41,5 +41,6 @@
     <style name="GlobalEnterCodeEditViewStyle" parent="DefaultEnterCodeEditViewStyle">
         <item name="bordersColor">@color/md_theme_dark_primary</item>
         <item name="digitColor">@color/md_theme_dark_onBackground</item>
+        <item name="errorColor">@color/md_theme_dark_error</item>
     </style>
 </resources>

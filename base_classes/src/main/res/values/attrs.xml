@@ -4,6 +4,7 @@
         <attr name="numberOfDigits" format="integer" />
         <attr name="bordersColor" format="color" />
         <attr name="digitColor" format="color" />
+        <attr name="errorColor" format="color" />
         <attr name="cornerRounding" format="dimension" />
     </declare-styleable>
 

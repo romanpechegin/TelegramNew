@@ -23,7 +23,6 @@ interface EnterCodeUi {
         ) {
             binding.enterCodeEditText.isEnabled = true
         }
-
     }
 
     class ErrorCodeFormatUi : EnterCodeUi {
@@ -79,8 +78,11 @@ interface EnterCodeUi {
                 var message = ""
 
                 when (throwableMessage) {
-                    PHONE_CODE_INVALID_EXCEPTION -> message =
-                        resources.getString(R.string.invalid_phone_code)
+                    PHONE_CODE_INVALID_EXCEPTION -> {
+                        binding.enterCodeEditText.isError = true
+                        binding.enterCodeEditText.clearText()
+                        message = resources.getString(R.string.invalid_phone_code)
+                    }
                 }
                 Snackbar.make(
                     binding.root,

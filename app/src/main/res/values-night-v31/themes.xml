@@ -40,5 +40,6 @@
     <style name="GlobalEnterCodeEditViewStyle" parent="DefaultEnterCodeEditViewStyle">
         <item name="bordersColor">@android:color/system_accent1_200</item>
         <item name="digitColor">@android:color/primary_text_dark</item>
+        <item name="errorColor">@color/md_theme_dark_error</item>
     </style>
 </resources>
