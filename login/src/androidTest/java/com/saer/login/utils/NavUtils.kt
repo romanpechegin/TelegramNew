@@ -9,9 +9,9 @@ import com.saer.login.R
 
 inline fun <reified T : Fragment>getNavController(): TestNavHostController {
     val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-    val scenario = launchFragmentInContainer<T>(themeResId = R.style.Theme_TelegramNew)
+    val scenario = launchFragmentInContainer<T>()
     scenario.onFragment { fragment ->
-        navController.setGraph(R.navigation.nav_graph)
+        navController.setGraph(R.navigation.login_graph)
         Navigation.setViewNavController(fragment.requireView(), navController)
     }
     return navController

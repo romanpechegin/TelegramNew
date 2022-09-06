@@ -15,6 +15,7 @@ import com.saer.api.BuildConfig
 import com.saer.base_classes.BaseFragment
 import com.saer.core.Resources
 import com.saer.core.common.setPhoneNumberMask
+import com.saer.core.utils.hideKeyboard
 import com.saer.core.utils.showKeyboard
 import com.saer.login.R
 import com.saer.login.databinding.FragmentEnterPhoneNumberBinding
@@ -57,16 +58,15 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
 
         viewModel.observeEnterPhoneUi(viewLifecycleOwner) { enterPhoneUi ->
             enterPhoneUi.apply(
-                sendCodeButton = binding.sendCodeButton,
-                phoneTitle = binding.enterPhoneNumberTitle,
-                resources = resources
+                binding = binding,
+                resources = resources,
             )
         }
 
         context?.let { setPhoneNumberMask(binding.inputPhoneNumber, it) }
 
         binding.sendCodeButton.setOnClickListener {
-            viewModel.sendCode()
+            viewModel.checkPhoneNumber()
         }
 
         if (BuildConfig.DEBUG) binding.inputPhoneNumber.setText("9892634770")
@@ -75,5 +75,15 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
     override fun onResume() {
         super.onResume()
         showKeyboard(binding.inputPhoneNumber)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onStop()
     }
 }

@@ -26,6 +26,7 @@
     <string name="code_hint">12345</string>
     <string name="enter_code">Enter code</string>
     <string name="we_have_sent_sms">We’ve sent an SMS with an activation code to your phone\n %1$s</string>
+    <string name="resend_code">Resend code</string>
 
     //Registration
     <string name="set_up_your_first_and_last_name">Set up your first and last name</string>

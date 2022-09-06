@@ -8,6 +8,8 @@ import com.saer.login.*
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.drinkless.td.libcore.telegram.TdApi
 import org.junit.Before
@@ -33,15 +35,16 @@ class EnterCodeViewModelTest(
     private val resources: com.saer.core.Resources = mock()
     private val authRepository: AuthRepository = mock()
 
+    private var enterCodeUiStateFlow: MutableStateFlow<EnterCodeUi?> = MutableStateFlow(null)
+
     @Before
     fun setup() = runTest {
-        var data: EnterCodeUi? = null
         Mockito.`when`(enterCodeUiCommunication.map(data = any()))
             .thenAnswer {
-                data = it.arguments[0] as EnterCodeUi
+                enterCodeUiStateFlow.tryEmit(it.arguments[0] as EnterCodeUi)
                 return@thenAnswer null
             }
-        Mockito.`when`(enterCodeUiCommunication.value).thenAnswer { data }
+        Mockito.`when`(enterCodeUiCommunication.value).thenAnswer { enterCodeUiStateFlow.value }
 
         val authStateFlow =
             MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
@@ -69,9 +72,25 @@ class EnterCodeViewModelTest(
                 resources = resources
             )
 
+        val enterCodeUis = mutableListOf<EnterCodeUi?>()
+        val job = launch(coroutineRule.testDispatcher) {
+            enterCodeUiStateFlow.toList(enterCodeUis)
+        }
+
+        assertThat(enterCodeUis.lastOrNull()).isInstanceOf(EnterCodeUi.WaitCodeUi::class.java)
         Mockito.verify(enterCodeUiCommunication, times(1)).map(any())
         viewModel.enterCode(code = code)
-        assertThat(enterCodeUiCommunication.value).isInstanceOf(expected::class.java)
+
+        if (code.length == resources.getInt(R.integer.code_size)) {
+            Mockito.verify(enterCodeUiCommunication, times(3)).map(any())
+            assertThat(enterCodeUis[enterCodeUis.size - 2]).isInstanceOf(EnterCodeUi.CompleteEnterCodeUi::class.java)
+            assertThat(enterCodeUis.lastOrNull()).isInstanceOf(expected::class.java)
+        } else {
+            Mockito.verify(enterCodeUiCommunication, times(1)).map(any())
+            assertThat(enterCodeUiCommunication.value).isInstanceOf(expected::class.java)
+        }
+
+        job.cancel()
     }
 
     companion object {

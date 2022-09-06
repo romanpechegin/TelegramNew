@@ -1,6 +1,7 @@
 package com.saer.login.ui
 
 import android.util.Log
+import android.view.View
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.saer.core.Resources
@@ -15,13 +16,27 @@ interface EnterCodeUi {
         viewModel: EnterCodeViewModel
     )
 
-    class WaitCodeUi : EnterCodeUi {
+    class WaitCodeUi(private val phone: String = "") : EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
-            binding.enterCodeEditText.isEnabled = true
+            binding.sendCodeButton.visibility = View.VISIBLE
+            binding.enterCodeDescription.text = binding.root.context?.getString(
+                R.string.we_have_sent_sms,
+                phone
+            )
+        }
+    }
+
+    class ResendingCodeUi : EnterCodeUi {
+        override fun apply(
+            resources: Resources,
+            binding: FragmentEnterCodeBinding,
+            viewModel: EnterCodeViewModel
+        ) {
+            binding.sendCodeButton.visibility = View.GONE
         }
     }
 
@@ -67,14 +82,14 @@ interface EnterCodeUi {
     }
 
     class ErrorCodeUi(
-        private val throwable: Throwable
+        private val throwable: Throwable? = null
     ) : EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
-            throwable.message?.let { throwableMessage ->
+            throwable?.message?.let { throwableMessage ->
                 var message = ""
 
                 when (throwableMessage) {

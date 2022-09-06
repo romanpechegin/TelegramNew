@@ -8,6 +8,7 @@ import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
+import com.saer.core.utils.phoneNumberOrNull
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -34,7 +35,9 @@ class EnterPhoneNumberViewModel(
                 .map {
                     when (it) {
                         is TdApi.AuthorizationStateReady -> EnterPhoneUi.WaitEnterPhoneUi()
-                        is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.SendCodeUi(phoneNumber)
+                        is TdApi.AuthorizationStateWaitCode -> EnterPhoneUi.NavigateToEnterCodeUi(
+                            phoneNumber
+                        )
                         is TdApi.AuthorizationStateWaitPassword -> EnterPhoneUi.WaitEnterPhoneUi()
                         is TdApi.AuthorizationStateWaitPhoneNumber -> EnterPhoneUi.WaitEnterPhoneUi()
                         is TdApi.AuthorizationStateWaitTdlibParameters -> EnterPhoneUi.WaitEnterPhoneUi()
@@ -51,19 +54,25 @@ class EnterPhoneNumberViewModel(
         }
     }
 
-    private fun correctPhoneNumber(phoneNumber: String = this.phoneNumber): String? {
-        val onlyDigitPhoneNumber = phoneNumber.filter { it.isDigit() }
-        return if (onlyDigitPhoneNumber.length == resources.getInt(R.integer.phone_size)) onlyDigitPhoneNumber
-        else null
+    fun onStop() {
+        viewModelScope.launch {
+            if (enterPhoneUiCommunication.value is EnterPhoneUi.NavigateToEnterCodeUi)
+                enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
+        }
     }
 
     fun enterPhoneNumber(phoneNumber: String) {
         if (this.phoneNumber != phoneNumber) {
             this.phoneNumber = phoneNumber
-            correctPhoneNumber = correctPhoneNumber(phoneNumber)
-            if (correctPhoneNumber != null) enterPhoneUiCommunication.map(EnterPhoneUi.CompleteEnterPhoneUi())
-            else enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
-        } else enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
+            correctPhoneNumber =
+                phoneNumberOrNull(phoneNumber, resources.getInt(R.integer.phone_size))
+
+            if (enterPhoneUiCommunication.value is EnterPhoneUi.PhoneIsNotComplete) {
+                viewModelScope.launch {
+                    enterPhoneUiCommunication.map(EnterPhoneUi.WaitEnterPhoneUi())
+                }
+            }
+        }
     }
 
     fun observeEnterPhoneUi(
@@ -74,15 +83,18 @@ class EnterPhoneNumberViewModel(
         collector = collector
     )
 
-    fun sendCode() {
-        if (correctPhoneNumber() != null) {
-            viewModelScope.launch(ioDispatcher) {
+    fun checkPhoneNumber() {
+        viewModelScope.launch(ioDispatcher) {
+            if (correctPhoneNumber != null) {
                 try {
-                    correctPhoneNumber?.let { authRepository.checkPhoneNumber(it) }
+                    correctPhoneNumber?.let {
+                        enterPhoneUiCommunication.map(EnterPhoneUi.PendingResultSendingPhoneUi())
+                        authRepository.checkPhoneNumber(it)
+                    }
                 } catch (e: Throwable) {
                     enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
                 }
-            }
+            } else enterPhoneUiCommunication.map(EnterPhoneUi.PhoneIsNotComplete())
         }
     }
 

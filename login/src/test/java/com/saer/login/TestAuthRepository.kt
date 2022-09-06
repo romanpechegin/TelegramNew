@@ -56,4 +56,8 @@ class TestAuthRepository : AuthRepository {
             else -> authStateFlow.emit(TdApi.AuthorizationStateWaitPassword())
         }
     }
+
+    override fun connectionState(): Flow<TdApi.ConnectionState> {
+        TODO("Not yet implemented")
+    }
 }

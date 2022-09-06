@@ -51,17 +51,17 @@ class RegistrationViewModel @Inject constructor(
     }
 
     fun registerUser() {
-        if (firstName.isNotEmpty()) {
-            viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
+            if (firstName.isNotEmpty()) {
                 try {
                     registrationUiCommunication.map(RegisterUi.CheckingNameUi())
                     authRepository.sendName(firstName, lastName)
                 } catch (e: Throwable) {
                     registrationUiCommunication.map(RegisterUi.ErrorUi(e))
                 }
+            } else {
+                registrationUiCommunication.map(RegisterUi.EnterFirstNameUi())
             }
-        } else {
-            registrationUiCommunication.map(RegisterUi.EnterFirstNameUi())
         }
     }
 }

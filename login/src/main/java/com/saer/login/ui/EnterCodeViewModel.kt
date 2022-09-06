@@ -1,6 +1,5 @@
 package com.saer.login.ui
 
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -30,11 +29,12 @@ class EnterCodeViewModel(
         viewModelScope.launch {
             authRepository.observeAuthState()
                 .map {
-                    Log.e("TAG", "authorizationState: $it")
                     when (it) {
                         is TdApi.AuthorizationStateReady -> EnterCodeUi.SuccessAuthUi()
                         is TdApi.AuthorizationStateWaitPassword -> EnterCodeUi.WaitPasswordUi()
-                        is TdApi.AuthorizationStateWaitCode -> EnterCodeUi.WaitCodeUi()
+                        is TdApi.AuthorizationStateWaitCode -> {
+                            EnterCodeUi.WaitCodeUi(it.codeInfo.phoneNumber)
+                        }
                         is TdApi.AuthorizationStateWaitPhoneNumber -> EnterCodeUi.WaitPhoneUi()
                         is TdApi.AuthorizationStateWaitTdlibParameters -> EnterCodeUi.WaitCodeUi()
                         is TdApi.AuthorizationStateWaitEncryptionKey -> EnterCodeUi.WaitCodeUi()
@@ -62,23 +62,28 @@ class EnterCodeViewModel(
         val legalCode = code.filter { it.isDigit() }
 
         if (legalCode.isNotEmpty() && legalCode.length == resources.getInt(R.integer.code_size)) {
-            enterCodeUiCommunication.map(EnterCodeUi.CompleteEnterCodeUi())
-
             viewModelScope.launch(ioDispatcher) {
+                enterCodeUiCommunication.map(EnterCodeUi.CompleteEnterCodeUi())
                 try {
                     authRepository.checkCode(code)
                 } catch (e: Throwable) {
                     enterCodeUiCommunication.map(EnterCodeUi.ErrorCodeUi(e))
                 }
             }
-        } else {
-            enterCodeUiCommunication.map(EnterCodeUi.WaitCodeUi())
         }
     }
 
     fun sendCode(phoneNumber: String) {
         viewModelScope.launch {
-            authRepository.checkPhoneNumber(phoneNumber)
+            if (phoneNumber.isEmpty()) enterCodeUiCommunication.map(
+                EnterCodeUi.ErrorCodeUi(
+                    Throwable("Phone number is null")
+                )
+            )
+            else {
+                enterCodeUiCommunication.map(EnterCodeUi.ResendingCodeUi())
+                authRepository.checkPhoneNumber(phoneNumber)
+            }
         }
     }
 

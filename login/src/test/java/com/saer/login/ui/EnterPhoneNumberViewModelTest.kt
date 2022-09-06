@@ -4,8 +4,8 @@ package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
 import com.saer.core.Communication
+import com.saer.core.Resources
 import com.saer.login.CORRECT_PHONE_NUMBER
-import com.saer.login.INCORRECT_PHONE_NUMBER
 import com.saer.login.MainDispatcherRule
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
@@ -21,6 +21,7 @@ import org.junit.runners.Parameterized
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(Parameterized::class)
@@ -33,22 +34,25 @@ class EnterPhoneNumberViewModelTest(
     val coroutineRule = MainDispatcherRule()
     private val testEnterPhoneUiCommunication: Communication<EnterPhoneUi> = mock()
     private val testAuthRepository: AuthRepository = mock()
-    private val testResources: com.saer.core.Resources = mock()
+    private val testResources: Resources = mock()
+    private lateinit var viewModel: EnterPhoneNumberViewModel
+    private var enterPhoneUiList = mutableListOf<EnterPhoneUi>()
 
     @Before
     fun setup() {
-        var data: EnterPhoneUi? = null
-        Mockito.`when`(testEnterPhoneUiCommunication.map(data = any()))
-            .thenAnswer {
-                data = it.arguments[0] as EnterPhoneUi
-                return@thenAnswer null
-            }
-        Mockito.`when`(testEnterPhoneUiCommunication.value).thenAnswer { data }
-
-        val authStateFlow =
-            MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
-        Mockito.`when`(testAuthRepository.observeAuthState()).thenReturn(authStateFlow)
         runTest {
+            enterPhoneUiList = mutableListOf()
+            Mockito.`when`(testEnterPhoneUiCommunication.map(data = any()))
+                .thenAnswer {
+                    enterPhoneUiList.add(it.arguments[0] as EnterPhoneUi)
+                    return@thenAnswer null
+                }
+            Mockito.`when`(testEnterPhoneUiCommunication.value)
+                .thenAnswer { enterPhoneUiList.last() }
+
+            val authStateFlow =
+                MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
+            Mockito.`when`(testAuthRepository.observeAuthState()).thenReturn(authStateFlow)
             Mockito.`when`(testAuthRepository.checkPhoneNumber(any()))
                 .thenAnswer {
                     when (it.arguments[0]) {
@@ -59,36 +63,57 @@ class EnterPhoneNumberViewModelTest(
         }
 
         Mockito.`when`(testResources.getInt(resId = R.integer.phone_size)).thenReturn(11)
+
+        viewModel = EnterPhoneNumberViewModel(
+            enterPhoneUiCommunication = testEnterPhoneUiCommunication,
+            authRepository = testAuthRepository,
+            resources = testResources,
+            ioDispatcher = coroutineRule.testDispatcher
+        )
     }
 
     @Test
-    fun `should to return SendCodeUi if phone number is correct and WaitEnterPhoneUi if phone number is incorrect `() =
+    fun `should to return NavigateToEnterCodeUi if phone number is correct and WaitEnterPhoneUi if phone number is incorrect `() =
         runTest {
-            val viewModel = EnterPhoneNumberViewModel(
-                enterPhoneUiCommunication = testEnterPhoneUiCommunication,
-                authRepository = testAuthRepository,
-                resources = testResources,
-                ioDispatcher = coroutineRule.testDispatcher
-            )
+            assertThat(testEnterPhoneUiCommunication.value)
+                .isInstanceOf(EnterPhoneUi.WaitEnterPhoneUi::class.java)
+            Mockito.verify(testEnterPhoneUiCommunication, times(1)).map(any())
 
             viewModel.enterPhoneNumber(phoneNumber = phoneNumber)
-            viewModel.sendCode()
-            assertThat(testEnterPhoneUiCommunication.value)
-                .isInstanceOf(expected::class.java)
+            Mockito.verify(testEnterPhoneUiCommunication, times(1)).map(any())
+
+            viewModel.checkPhoneNumber()
+            if (phoneNumber.length == testResources.getInt(R.integer.phone_size)) {
+                assertThat(enterPhoneUiList[enterPhoneUiList.size - 2])
+                    .isInstanceOf(EnterPhoneUi.PendingResultSendingPhoneUi::class.java)
+                assertThat(testEnterPhoneUiCommunication.value)
+                    .isInstanceOf(expected::class.java)
+                Mockito.verify(testEnterPhoneUiCommunication, times(3)).map(any())
+                viewModel.onStop()
+                assertThat(testEnterPhoneUiCommunication.value).isInstanceOf(EnterPhoneUi.WaitEnterPhoneUi::class.java)
+                Mockito.verify(testEnterPhoneUiCommunication, times(4)).map(any())
+            } else {
+                assertThat(testEnterPhoneUiCommunication.value)
+                    .isInstanceOf(expected::class.java)
+                Mockito.verify(testEnterPhoneUiCommunication, times(2)).map(any())
+
+                viewModel.enterPhoneNumber(phoneNumber = "${phoneNumber}1")
+                assertThat(testEnterPhoneUiCommunication.value)
+                    .isInstanceOf(EnterPhoneUi.WaitEnterPhoneUi::class.java)
+                Mockito.verify(testEnterPhoneUiCommunication, times(3)).map(any())
+            }
         }
 
     companion object {
         @Parameterized.Parameters(name = "{index}: phone number = {0}, result = {1}")
         @JvmStatic
         fun data() = listOf(
-            arrayOf("7989", EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf("1999", EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.SendCodeUi(CORRECT_PHONE_NUMBER)),
-            arrayOf("+7 (989) 263-47-7", EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf(INCORRECT_PHONE_NUMBER, EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf("7989263477asdf^00", EnterPhoneUi.WaitEnterPhoneUi()),
-            arrayOf("+79892634770", EnterPhoneUi.SendCodeUi(CORRECT_PHONE_NUMBER)),
-            arrayOf("7989263477asdf^0", EnterPhoneUi.SendCodeUi(CORRECT_PHONE_NUMBER))
+            arrayOf("7989", EnterPhoneUi.PhoneIsNotComplete()),
+            arrayOf("1999", EnterPhoneUi.PhoneIsNotComplete()),
+            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.NavigateToEnterCodeUi(CORRECT_PHONE_NUMBER)),
+            arrayOf("+7 (989) 263-47-7", EnterPhoneUi.PhoneIsNotComplete()),
+            arrayOf("7989263477asdf^00", EnterPhoneUi.PhoneIsNotComplete()),
+            arrayOf("79892634770", EnterPhoneUi.NavigateToEnterCodeUi(CORRECT_PHONE_NUMBER)),
         )
     }
 }

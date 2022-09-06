@@ -7,8 +7,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.telegram.core.TelegramFlow
 import kotlinx.telegram.coroutines.*
 import kotlinx.telegram.flows.authorizationStateFlow
+import kotlinx.telegram.flows.connectionStateFlow
 import org.drinkless.td.libcore.telegram.TdApi
 import org.drinkless.td.libcore.telegram.TdApi.AuthorizationState
+import org.drinkless.td.libcore.telegram.TdApi.ConnectionState
 import javax.inject.Inject
 
 const val TOO_MANY_REQUESTS_EXCEPTION = "Too Many Requests: retry after "
@@ -23,6 +25,7 @@ interface AuthRepository {
     suspend fun checkCode(code: String)
     suspend fun sendName(firstName: String, lastName: String)
     suspend fun checkPassword(password: String)
+    fun connectionState(): Flow<ConnectionState>
 
     @LoginFeature
     class Base @Inject constructor(
@@ -51,5 +54,9 @@ interface AuthRepository {
 
         override suspend fun checkPassword(password: String) =
             api.checkAuthenticationPassword(password)
+
+        override fun connectionState(): Flow<ConnectionState> {
+            return api.connectionStateFlow()
+        }
     }
 }

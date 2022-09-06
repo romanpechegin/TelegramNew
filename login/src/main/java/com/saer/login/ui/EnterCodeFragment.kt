@@ -14,6 +14,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
 import com.saer.core.Resources
+import com.saer.core.utils.hideKeyboard
 import com.saer.core.utils.showKeyboard
 import com.saer.login.R
 import com.saer.login.databinding.FragmentEnterCodeBinding
@@ -50,11 +51,6 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.enterCodeDescription.text = getString(
-            R.string.we_have_sent_sms,
-            arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
-        )
-
         binding.sendCodeButton.setOnClickListener {
             viewModel.sendCode(
                 arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
@@ -65,8 +61,8 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
             viewModel.enterCode(code = code.toString())
         }
 
-        viewModel.observeEnterCodeUi(viewLifecycleOwner) {
-            it.apply(
+        viewModel.observeEnterCodeUi(viewLifecycleOwner) { enterCodeUi ->
+            enterCodeUi.apply(
                 resources = resources,
                 binding = binding,
                 viewModel = viewModel
@@ -81,5 +77,10 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
     override fun onResume() {
         super.onResume()
         showKeyboard(binding.enterCodeEditText)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
     }
 }

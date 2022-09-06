@@ -6,7 +6,7 @@ import org.junit.Test
 internal class ViewUtilsKtTest {
 
     @Test
-    fun test() {
+    fun `test lastNotNullIndexFromArray`() {
         val array = arrayOfNulls<Char?>(5)
         assertThat(lastNotNullIndexFromArray(array)).isEqualTo(0)
         array[3] = Char(3)

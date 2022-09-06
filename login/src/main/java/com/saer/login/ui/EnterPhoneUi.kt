@@ -1,62 +1,58 @@
 package com.saer.login.ui
 
-import android.widget.TextView
+import android.view.View
 import androidx.navigation.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.saer.core.Resources
 import com.saer.login.R
+import com.saer.login.databinding.FragmentEnterPhoneNumberBinding
 import com.saer.login.repositories.PHONE_NUMBER_INVALID_EXCEPTION
 import com.saer.login.repositories.TOO_MANY_REQUESTS_EXCEPTION
 
 interface EnterPhoneUi {
 
     fun apply(
-        sendCodeButton: FloatingActionButton,
-        phoneTitle: TextView,
-        resources: Resources
+        binding: FragmentEnterPhoneNumberBinding,
+        resources: Resources,
     )
 
     class WaitEnterPhoneUi : EnterPhoneUi {
 
-        override fun apply(
-            sendCodeButton: FloatingActionButton,
-            phoneTitle: TextView,
-            resources: Resources
-        ) {
-//            sendCodeButton.visibility = View.GONE
-            phoneTitle.text = resources.getString(resId = R.string.your_phone_number)
+        override fun apply(binding: FragmentEnterPhoneNumberBinding, resources: Resources) {
+            binding.apply {
+                sendCodeButton.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
+                enterPhoneNumberTitle.text = resources.getString(resId = R.string.your_phone_number)
+                inputPhoneNumber.isEnabled = true
+            }
         }
     }
 
-    class SendCodeUi(private val phoneNumber: String) : EnterPhoneUi {
-        override fun apply(
-            sendCodeButton: FloatingActionButton,
-            phoneTitle: TextView,
-            resources: Resources
-        ) {
-            sendCodeButton.findNavController()
+    class NavigateToEnterCodeUi(private val phoneNumber: String) : EnterPhoneUi {
+        override fun apply(binding: FragmentEnterPhoneNumberBinding, resources: Resources) {
+            binding.sendCodeButton.findNavController()
                 .navigate(EnterPhoneNumberFragmentDirections.actionEnterPhoneNumberFragmentToEnterCodeFragment(phoneNumber))
         }
     }
 
-    class CompleteEnterPhoneUi : EnterPhoneUi {
-        override fun apply(
-            sendCodeButton: FloatingActionButton,
-            phoneTitle: TextView,
-            resources: Resources
-        ) {
-//            sendCodeButton.visibility = View.VISIBLE
-            phoneTitle.text = resources.getString(R.string.click_send_code)
+    class PendingResultSendingPhoneUi : EnterPhoneUi {
+        override fun apply(binding: FragmentEnterPhoneNumberBinding, resources: Resources) {
+            binding.apply {
+                progressBar.visibility = View.VISIBLE
+                sendCodeButton.visibility = View.INVISIBLE
+                inputPhoneNumber.isEnabled = false
+            }
+        }
+    }
+
+    class PhoneIsNotComplete : EnterPhoneUi {
+        override fun apply(binding: FragmentEnterPhoneNumberBinding, resources: Resources) {
+
         }
     }
 
     class ErrorPhoneUi(private val throwable: Throwable) : EnterPhoneUi {
-        override fun apply(
-            sendCodeButton: FloatingActionButton,
-            phoneTitle: TextView,
-            resources: Resources
-        ) {
+        override fun apply(binding: FragmentEnterPhoneNumberBinding, resources: Resources) {
             throwable.message?.let { throwableMessage ->
                 var message = ""
 
@@ -75,10 +71,16 @@ interface EnterPhoneUi {
                 }
 
                 Snackbar.make(
-                    phoneTitle,
+                    binding.enterPhoneNumberTitle,
                     message.ifEmpty { throwableMessage },
                     Snackbar.LENGTH_LONG
                 ).show()
+            }
+            binding.apply {
+                sendCodeButton.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
+                enterPhoneNumberTitle.text = resources.getString(resId = R.string.your_phone_number)
+                inputPhoneNumber.isEnabled = true
             }
         }
     }
