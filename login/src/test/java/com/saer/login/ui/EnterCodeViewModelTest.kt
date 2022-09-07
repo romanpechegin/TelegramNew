@@ -8,8 +8,6 @@ import com.saer.login.*
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.drinkless.td.libcore.telegram.TdApi
 import org.junit.Before
@@ -26,7 +24,7 @@ import org.mockito.kotlin.times
 @RunWith(Parameterized::class)
 class EnterCodeViewModelTest(
     private val code: String,
-    private val expected: EnterCodeUi
+    private val expectedUi: EnterCodeUi,
 ) {
 
     @get:Rule
@@ -34,17 +32,19 @@ class EnterCodeViewModelTest(
     private val enterCodeUiCommunication: Communication<EnterCodeUi> = mock()
     private val resources: com.saer.core.Resources = mock()
     private val authRepository: AuthRepository = mock()
+    private lateinit var viewModel: EnterCodeViewModel
 
-    private var enterCodeUiStateFlow: MutableStateFlow<EnterCodeUi?> = MutableStateFlow(null)
+    private lateinit var enterCodeUiList: MutableList<EnterCodeUi>
 
     @Before
     fun setup() = runTest {
+        enterCodeUiList = mutableListOf()
         Mockito.`when`(enterCodeUiCommunication.map(data = any()))
             .thenAnswer {
-                enterCodeUiStateFlow.tryEmit(it.arguments[0] as EnterCodeUi)
+                enterCodeUiList.add(it.arguments[0] as EnterCodeUi)
                 return@thenAnswer null
             }
-        Mockito.`when`(enterCodeUiCommunication.value).thenAnswer { enterCodeUiStateFlow.value }
+        Mockito.`when`(enterCodeUiCommunication.value).thenAnswer { enterCodeUiList.last() }
 
         val authStateFlow =
             MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
@@ -55,42 +55,48 @@ class EnterCodeViewModelTest(
                     CORRECT_CODE_FOR_PASSWORD -> authStateFlow.tryEmit(TdApi.AuthorizationStateWaitPassword())
                     CORRECT_CODE -> authStateFlow.tryEmit(TdApi.AuthorizationStateReady())
                     INCORRECT_CODE -> throw IllegalStateException()
+                    UNREGISTER_PHONE_NUMBER -> authStateFlow.tryEmit(TdApi.AuthorizationStateWaitRegistration())
                     else -> authStateFlow.tryEmit(TdApi.AuthorizationStateWaitCode())
                 }
             }
 
         Mockito.`when`(resources.getInt(R.integer.code_size)).thenReturn(5)
-    }
 
-    @Test
-    fun `test enter code `() = runTest {
-        val viewModel =
+        viewModel =
             EnterCodeViewModel(
                 ioDispatcher = coroutineRule.testDispatcher,
                 enterCodeUiCommunication = enterCodeUiCommunication,
                 authRepository = authRepository,
                 resources = resources
             )
+    }
 
-        val enterCodeUis = mutableListOf<EnterCodeUi?>()
-        val job = launch(coroutineRule.testDispatcher) {
-            enterCodeUiStateFlow.toList(enterCodeUis)
-        }
-
-        assertThat(enterCodeUis.lastOrNull()).isInstanceOf(EnterCodeUi.WaitCodeUi::class.java)
+    @Test
+    fun `test enter code `() = runTest {
+        assertThat(enterCodeUiCommunication.value).isInstanceOf(EnterCodeUi.WaitCodeUi::class.java)
         Mockito.verify(enterCodeUiCommunication, times(1)).map(any())
+
         viewModel.enterCode(code = code)
 
         if (code.length == resources.getInt(R.integer.code_size)) {
+            assertThat(enterCodeUiList[enterCodeUiList.size - 2]).isInstanceOf(EnterCodeUi.CompleteEnterCodeUi::class.java)
+            assertThat(enterCodeUiCommunication.value).isInstanceOf(expectedUi::class.java)
             Mockito.verify(enterCodeUiCommunication, times(3)).map(any())
-            assertThat(enterCodeUis[enterCodeUis.size - 2]).isInstanceOf(EnterCodeUi.CompleteEnterCodeUi::class.java)
-            assertThat(enterCodeUis.lastOrNull()).isInstanceOf(expected::class.java)
-        } else {
-            Mockito.verify(enterCodeUiCommunication, times(1)).map(any())
-            assertThat(enterCodeUiCommunication.value).isInstanceOf(expected::class.java)
-        }
 
-        job.cancel()
+            viewModel.onStop()
+            if (enterCodeUiCommunication.value is EnterCodeUi.NavigateToEnterPasswordUi ||
+                enterCodeUiCommunication.value is EnterCodeUi.NavigateToRegistrationUi
+            ) {
+                assertThat(enterCodeUiCommunication.value).isInstanceOf(EnterCodeUi.WaitCodeUi::class.java)
+                Mockito.verify(enterCodeUiCommunication, times(4)).map(any())
+            } else if (enterCodeUiCommunication.value is EnterCodeUi.SuccessAuthUi) {
+                assertThat(enterCodeUiCommunication.value).isInstanceOf(expectedUi::class.java)
+                Mockito.verify(enterCodeUiCommunication, times(3)).map(any())
+            }
+        } else {
+            assertThat(enterCodeUiCommunication.value).isInstanceOf(expectedUi::class.java)
+            Mockito.verify(enterCodeUiCommunication, times(1)).map(any())
+        }
     }
 
     companion object {
@@ -99,9 +105,10 @@ class EnterCodeViewModelTest(
         fun data() = listOf(
             arrayOf("", EnterCodeUi.WaitCodeUi()),
             arrayOf("123", EnterCodeUi.WaitCodeUi()),
-            arrayOf(CORRECT_CODE_FOR_PASSWORD, EnterCodeUi.WaitPasswordUi()),
+            arrayOf(CORRECT_CODE_FOR_PASSWORD, EnterCodeUi.NavigateToEnterPasswordUi()),
             arrayOf(INCORRECT_CODE, EnterCodeUi.ErrorCodeUi(IllegalStateException())),
             arrayOf(CORRECT_CODE, EnterCodeUi.SuccessAuthUi()),
+            arrayOf(UNREGISTER_PHONE_NUMBER, EnterCodeUi.NavigateToRegistrationUi()),
             arrayOf("asdffdsafads", EnterCodeUi.WaitCodeUi()),
         )
     }

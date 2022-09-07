@@ -8,6 +8,7 @@ import org.drinkless.td.libcore.telegram.TdApi
 const val CORRECT_CODE_FOR_PASSWORD = "12345"
 const val CORRECT_CODE = "00000"
 const val INCORRECT_CODE = "11111"
+const val UNREGISTER_PHONE_NUMBER = "22222"
 
 const val UNIQUE_FIRST_NAME = "Roman"
 const val BUSY_FIRST_NAME = "Ivan"

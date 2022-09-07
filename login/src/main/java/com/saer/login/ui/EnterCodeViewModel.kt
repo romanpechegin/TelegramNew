@@ -31,14 +31,14 @@ class EnterCodeViewModel(
                 .map {
                     when (it) {
                         is TdApi.AuthorizationStateReady -> EnterCodeUi.SuccessAuthUi()
-                        is TdApi.AuthorizationStateWaitPassword -> EnterCodeUi.WaitPasswordUi()
+                        is TdApi.AuthorizationStateWaitPassword -> EnterCodeUi.NavigateToEnterPasswordUi()
                         is TdApi.AuthorizationStateWaitCode -> {
                             EnterCodeUi.WaitCodeUi(it.codeInfo.phoneNumber)
                         }
-                        is TdApi.AuthorizationStateWaitPhoneNumber -> EnterCodeUi.WaitPhoneUi()
+                        is TdApi.AuthorizationStateWaitPhoneNumber -> EnterCodeUi.WaitCodeUi()
                         is TdApi.AuthorizationStateWaitTdlibParameters -> EnterCodeUi.WaitCodeUi()
                         is TdApi.AuthorizationStateWaitEncryptionKey -> EnterCodeUi.WaitCodeUi()
-                        is TdApi.AuthorizationStateWaitRegistration -> EnterCodeUi.EnterNameUi()
+                        is TdApi.AuthorizationStateWaitRegistration -> EnterCodeUi.NavigateToRegistrationUi()
                         else -> EnterCodeUi.ErrorCodeUi(IllegalStateException())
                     }
                 }
@@ -51,9 +51,19 @@ class EnterCodeViewModel(
         }
     }
 
+    fun onStop() {
+        viewModelScope.launch {
+            if (enterCodeUiCommunication.value is EnterCodeUi.NavigateToEnterPasswordUi ||
+                enterCodeUiCommunication.value is EnterCodeUi.NavigateToRegistrationUi
+            ) {
+                enterCodeUiCommunication.map(EnterCodeUi.WaitCodeUi())
+            }
+        }
+    }
+
     fun observeEnterCodeUi(
         lifecycleOwner: LifecycleOwner,
-        collector: (value: EnterCodeUi) -> Unit
+        collector: (value: EnterCodeUi) -> Unit,
     ) {
         enterCodeUiCommunication.observe(lifecycleOwner, collector)
     }
@@ -76,9 +86,7 @@ class EnterCodeViewModel(
     fun sendCode(phoneNumber: String) {
         viewModelScope.launch {
             if (phoneNumber.isEmpty()) enterCodeUiCommunication.map(
-                EnterCodeUi.ErrorCodeUi(
-                    Throwable("Phone number is null")
-                )
+                EnterCodeUi.ErrorCodeUi(Throwable("Phone number is null"))
             )
             else {
                 enterCodeUiCommunication.map(EnterCodeUi.ResendingCodeUi())
@@ -93,7 +101,7 @@ class EnterCodeViewModel(
         @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
         private val enterCodeUiCommunication: Communication<EnterCodeUi>,
         private val authRepository: AuthRepository,
-        private val resources: Resources
+        private val resources: Resources,
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == EnterCodeViewModel::class.java)

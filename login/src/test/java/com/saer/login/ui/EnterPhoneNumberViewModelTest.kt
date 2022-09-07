@@ -27,7 +27,7 @@ import org.mockito.kotlin.times
 @RunWith(Parameterized::class)
 class EnterPhoneNumberViewModelTest(
     private val phoneNumber: String,
-    private val expected: EnterPhoneUi
+    private val expectedUi: EnterPhoneUi
 ) {
 
     @get:Rule
@@ -36,7 +36,7 @@ class EnterPhoneNumberViewModelTest(
     private val testAuthRepository: AuthRepository = mock()
     private val testResources: Resources = mock()
     private lateinit var viewModel: EnterPhoneNumberViewModel
-    private var enterPhoneUiList = mutableListOf<EnterPhoneUi>()
+    private lateinit var enterPhoneUiList: MutableList<EnterPhoneUi>
 
     @Before
     fun setup() {
@@ -87,14 +87,14 @@ class EnterPhoneNumberViewModelTest(
                 assertThat(enterPhoneUiList[enterPhoneUiList.size - 2])
                     .isInstanceOf(EnterPhoneUi.PendingResultSendingPhoneUi::class.java)
                 assertThat(testEnterPhoneUiCommunication.value)
-                    .isInstanceOf(expected::class.java)
+                    .isInstanceOf(expectedUi::class.java)
                 Mockito.verify(testEnterPhoneUiCommunication, times(3)).map(any())
                 viewModel.onStop()
                 assertThat(testEnterPhoneUiCommunication.value).isInstanceOf(EnterPhoneUi.WaitEnterPhoneUi::class.java)
                 Mockito.verify(testEnterPhoneUiCommunication, times(4)).map(any())
             } else {
                 assertThat(testEnterPhoneUiCommunication.value)
-                    .isInstanceOf(expected::class.java)
+                    .isInstanceOf(expectedUi::class.java)
                 Mockito.verify(testEnterPhoneUiCommunication, times(2)).map(any())
 
                 viewModel.enterPhoneNumber(phoneNumber = "${phoneNumber}1")

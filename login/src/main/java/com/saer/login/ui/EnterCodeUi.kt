@@ -40,18 +40,7 @@ interface EnterCodeUi {
         }
     }
 
-    class ErrorCodeFormatUi : EnterCodeUi {
-        override fun apply(
-            resources: Resources,
-            binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
-        ) {
-
-        }
-
-    }
-
-    class WaitPasswordUi : EnterCodeUi {
+    class NavigateToEnterPasswordUi : EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
@@ -67,7 +56,7 @@ interface EnterCodeUi {
             binding: FragmentEnterCodeBinding,
             viewModel: EnterCodeViewModel
         ) {
-//            binding.enterCodeEditText.isEnabled = false
+            binding.enterCodeEditText.isEnabled = false
         }
     }
 
@@ -109,17 +98,7 @@ interface EnterCodeUi {
         }
     }
 
-    class WaitPhoneUi : EnterCodeUi {
-        override fun apply(
-            resources: Resources,
-            binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
-        ) {
-
-        }
-    }
-
-    class EnterNameUi : EnterCodeUi {
+    class NavigateToRegistrationUi : EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,

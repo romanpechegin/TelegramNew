@@ -83,4 +83,9 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
         super.onPause()
         hideKeyboard()
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onStop()
+    }
 }
