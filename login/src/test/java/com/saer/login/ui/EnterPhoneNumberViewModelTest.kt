@@ -6,6 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.login.CORRECT_PHONE_NUMBER
+import com.saer.login.COUNTRY_NAME
 import com.saer.login.MainDispatcherRule
 import com.saer.login.R
 import com.saer.login.repositories.AuthRepository
@@ -13,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.drinkless.td.libcore.telegram.TdApi
+import org.drinkless.td.libcore.telegram.TdApi.CountryInfo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,16 +29,18 @@ import org.mockito.kotlin.times
 @RunWith(Parameterized::class)
 class EnterPhoneNumberViewModelTest(
     private val phoneNumber: String,
-    private val expectedUi: EnterPhoneUi
+    private val expectedUi: EnterPhoneUi,
 ) {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
     private val testEnterPhoneUiCommunication: Communication<EnterPhoneUi> = mock()
+    private val countryCommunication: Communication<CountryInfo> = mock()
     private val testAuthRepository: AuthRepository = mock()
     private val testResources: Resources = mock()
     private lateinit var viewModel: EnterPhoneNumberViewModel
     private lateinit var enterPhoneUiList: MutableList<EnterPhoneUi>
+    private lateinit var countryList: MutableList<CountryInfo>
 
     @Before
     fun setup() {
@@ -50,6 +54,15 @@ class EnterPhoneNumberViewModelTest(
             Mockito.`when`(testEnterPhoneUiCommunication.value)
                 .thenAnswer { enterPhoneUiList.last() }
 
+            countryList = mutableListOf()
+            Mockito.`when`(countryCommunication.map(any()))
+                .thenAnswer {
+                    countryList.add(it.arguments[0] as CountryInfo)
+                    return@thenAnswer null
+                }
+            Mockito.`when`(countryCommunication.value)
+                .thenAnswer { countryList.last() }
+
             val authStateFlow =
                 MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
             Mockito.`when`(testAuthRepository.observeAuthState()).thenReturn(authStateFlow)
@@ -60,12 +73,22 @@ class EnterPhoneNumberViewModelTest(
                         else -> authStateFlow.tryEmit(value = TdApi.AuthorizationStateWaitPhoneNumber())
                     }
                 }
+
+            Mockito.`when`(testAuthRepository.currentCountry()).thenReturn(TdApi.Text("RU"))
+            Mockito.`when`(testAuthRepository.countries())
+                .thenReturn(
+                    TdApi.Countries(arrayOf(
+                        TdApi.CountryInfo("RU", "Russia", "Russia", false, arrayOf("7")),
+                        TdApi.CountryInfo("USA", "USA", "USA", false, arrayOf("1")),
+                    ))
+                )
         }
 
         Mockito.`when`(testResources.getInt(resId = R.integer.phone_size)).thenReturn(11)
 
         viewModel = EnterPhoneNumberViewModel(
             enterPhoneUiCommunication = testEnterPhoneUiCommunication,
+            countryCommunication = countryCommunication,
             authRepository = testAuthRepository,
             resources = testResources,
             ioDispatcher = coroutineRule.testDispatcher
@@ -103,6 +126,12 @@ class EnterPhoneNumberViewModelTest(
                 Mockito.verify(testEnterPhoneUiCommunication, times(3)).map(any())
             }
         }
+
+    @Test
+    fun `getting current country code`() = runTest {
+        Mockito.verify(countryCommunication, times(1)).map(any())
+        assertThat(countryCommunication.value.englishName).isEqualTo(COUNTRY_NAME)
+    }
 
     companion object {
         @Parameterized.Parameters(name = "{index}: phone number = {0}, result = {1}")

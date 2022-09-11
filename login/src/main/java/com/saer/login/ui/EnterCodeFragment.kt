@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
-import com.saer.core.Resources
 import com.saer.core.utils.hideKeyboard
 import com.saer.core.utils.showKeyboard
 import com.saer.login.R
@@ -30,9 +29,6 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
     private val viewModel: EnterCodeViewModel by viewModels {
         viewModelFactory.get()
     }
-
-    @Inject
-    lateinit var resources: Resources
 
     private val binding: FragmentEnterCodeBinding by viewBinding(CreateMethod.INFLATE)
 

@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
-import com.saer.core.Resources
 import com.saer.login.R
 import com.saer.login.databinding.FragmentRegistrationBinding
 import com.saer.login.di.LoginComponentViewModel
@@ -22,9 +21,6 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
 
     @Inject
     lateinit var viewModel: RegistrationViewModel
-
-    @Inject
-    lateinit var resources: Resources
 
     private val binding: FragmentRegistrationBinding by viewBinding(CreateMethod.INFLATE)
 

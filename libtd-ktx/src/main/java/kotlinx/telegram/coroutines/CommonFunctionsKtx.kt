@@ -133,7 +133,7 @@ suspend fun TelegramFlow.getGroupsInCommon(
  *
  * @return [Text] Contains some text.
  */
-suspend fun TelegramFlow.getInviteText(): Text = this.sendFunctionAsync(TdApi.GetInviteText())
+suspend fun TelegramFlow.getInviteText(): Text = this.sendFunctionAsync(GetInviteText())
 
 /**
  * Suspend function, which converts a JsonValue object to corresponding JSON-serialized string. This

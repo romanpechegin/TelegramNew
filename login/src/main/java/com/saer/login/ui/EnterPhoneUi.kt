@@ -28,10 +28,10 @@ interface EnterPhoneUi {
         }
     }
 
-    class NavigateToEnterCodeUi(private val phoneNumber: String) : EnterPhoneUi {
+    class NavigateToEnterCodeUi() : EnterPhoneUi {
         override fun apply(binding: FragmentEnterPhoneNumberBinding, resources: Resources) {
             binding.sendCodeButton.findNavController()
-                .navigate(EnterPhoneNumberFragmentDirections.actionEnterPhoneNumberFragmentToEnterCodeFragment(phoneNumber))
+                .navigate(EnterPhoneNumberFragmentDirections.actionEnterPhoneNumberFragmentToEnterCodeFragment())
         }
     }
 

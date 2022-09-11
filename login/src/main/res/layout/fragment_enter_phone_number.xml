@@ -67,13 +67,36 @@
                 app:layout_constraintTop_toBottomOf="@id/enter_phone_number_title" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirmCountryCodeLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="32dp"
-                android:hint="@string/phone_number"
+                android:layout_marginTop="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/confirm_country_code_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/confirmCountryCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
+                    android:drawablePadding="12dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textNoSuggestions"
+                    android:minWidth="200dp"
+                    android:minHeight="48dp"
+                    tools:text="Russia" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="@string/phone_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/confirmCountryCodeLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input_phone_number"

@@ -1,16 +1,15 @@
 package com.saer.login.repositories
 
 import com.saer.api.TelegramCredentials
+import com.saer.api.TelegramFlow
+import com.saer.api.coroutines.*
+import com.saer.api.flows.authorizationStateFlow
+import com.saer.api.flows.connectionStateFlow
 import com.saer.core.di.LoginFeature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.telegram.core.TelegramFlow
-import kotlinx.telegram.coroutines.*
-import kotlinx.telegram.flows.authorizationStateFlow
-import kotlinx.telegram.flows.connectionStateFlow
 import org.drinkless.td.libcore.telegram.TdApi
-import org.drinkless.td.libcore.telegram.TdApi.AuthorizationState
-import org.drinkless.td.libcore.telegram.TdApi.ConnectionState
+import org.drinkless.td.libcore.telegram.TdApi.*
 import javax.inject.Inject
 
 const val TOO_MANY_REQUESTS_EXCEPTION = "Too Many Requests: retry after "
@@ -26,10 +25,12 @@ interface AuthRepository {
     suspend fun sendName(firstName: String, lastName: String)
     suspend fun checkPassword(password: String)
     fun connectionState(): Flow<ConnectionState>
+    suspend fun countries(): Countries
+    suspend fun currentCountry(): Text
 
     @LoginFeature
     class Base @Inject constructor(
-        private val api: TelegramFlow
+        private val api: TelegramFlow,
     ) : AuthRepository {
 
         override fun observeAuthState(): Flow<AuthorizationState> =
@@ -58,5 +59,9 @@ interface AuthRepository {
         override fun connectionState(): Flow<ConnectionState> {
             return api.connectionStateFlow()
         }
+
+        override suspend fun countries(): Countries = api.getCountries()
+
+        override suspend fun currentCountry(): Text = api.getCountryCode()
     }
 }

@@ -11,10 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.saer.api.BuildConfig
 import com.saer.base_classes.BaseFragment
-import com.saer.core.Resources
-import com.saer.core.common.setPhoneNumberMask
 import com.saer.core.utils.hideKeyboard
 import com.saer.core.utils.showKeyboard
 import com.saer.login.R
@@ -32,9 +29,6 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         viewModelFactory.get()
     }
 
-    @Inject
-    lateinit var resources: Resources
-
     private val binding: FragmentEnterPhoneNumberBinding by viewBinding(CreateMethod.INFLATE)
 
     override fun onAttach(context: Context) {
@@ -46,7 +40,7 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View = binding.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,13 +57,18 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
             )
         }
 
-        context?.let { setPhoneNumberMask(binding.inputPhoneNumber, it) }
+        viewModel.observeCountryCommunication(viewLifecycleOwner) { inputMask ->
+            binding.confirmCountryCode.setText(inputMask.currentMaskName())
+            inputMask.setMask(binding.inputPhoneNumber)
+        }
 
         binding.sendCodeButton.setOnClickListener {
             viewModel.checkPhoneNumber()
         }
 
-        if (BuildConfig.DEBUG) binding.inputPhoneNumber.setText("9892634770")
+        binding.confirmCountryCode.setOnClickListener {
+
+        }
     }
 
     override fun onResume() {
