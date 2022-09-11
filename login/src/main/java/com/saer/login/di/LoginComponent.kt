@@ -5,19 +5,23 @@ import androidx.lifecycle.ViewModel
 import com.saer.api.TelegramFlow
 import com.saer.core.Resources
 import com.saer.core.di.LoginFeature
-import com.saer.login.ui.EnterCodeFragment
-import com.saer.login.ui.EnterPhoneNumberFragment
-import com.saer.login.ui.RegistrationFragment
+import com.saer.login.ui.*
 import dagger.Component
 import kotlin.properties.Delegates
 
 @LoginFeature
-@Component(dependencies = [LoginDeps::class], modules = [LoginModule::class])
+@Component(
+    dependencies = [LoginDeps::class],
+    modules = [LoginModule::class]
+)
 internal interface LoginComponent {
 
     fun inject(fragment: EnterPhoneNumberFragment)
     fun inject(fragment: EnterCodeFragment)
     fun inject(fragment: RegistrationFragment)
+    fun enterPhoneNumberViewModel(): EnterPhoneNumberViewModel.Factory
+    fun enterCodeViewModel(): EnterCodeViewModel.Factory
+    fun registrationViewModel(): RegistrationViewModel.Factory
 
     @Component.Builder
     interface Builder {
@@ -46,7 +50,7 @@ internal object LoginDepsStore : LoginDepsProvider {
     override var deps: LoginDeps by Delegates.notNull()
 }
 
-internal class LoginComponentViewModel: ViewModel() {
+internal class LoginComponentViewModel : ViewModel() {
     val loginComponent =
         DaggerLoginComponent.builder()
             .deps(LoginDepsProvider.deps)

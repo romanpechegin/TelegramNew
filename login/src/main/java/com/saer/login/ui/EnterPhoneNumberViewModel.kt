@@ -2,30 +2,29 @@ package com.saer.login.ui
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.core.common.InputMask
 import com.saer.core.di.IoDispatcher
-import com.saer.core.di.LoginFeature
 import com.saer.core.utils.phoneNumberOrNull
 import com.saer.login.R
 import com.saer.login.mappers.MapperAuthorisationStateToEnterPhoneUi
 import com.saer.login.repositories.AuthRepository
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class EnterPhoneNumberViewModel(
+class EnterPhoneNumberViewModel @AssistedInject constructor(
     private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
     private val countryCommunication: Communication<InputMask>,
     private val authRepository: AuthRepository,
     private val resources: Resources,
-    private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     uiMapper: MapperAuthorisationStateToEnterPhoneUi,
 ) : ViewModel() {
 
@@ -104,26 +103,8 @@ class EnterPhoneNumberViewModel(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    @LoginFeature
-    class Factory @Inject constructor(
-        private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
-        private val countryCommunication: Communication<InputMask>,
-        private val authRepository: AuthRepository,
-        private val resources: Resources,
-        @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-        private val mapperAuthorisationStateToEnterPhoneUi: MapperAuthorisationStateToEnterPhoneUi,
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            require(modelClass == EnterPhoneNumberViewModel::class.java)
-            return EnterPhoneNumberViewModel(
-                enterPhoneUiCommunication,
-                countryCommunication,
-                authRepository,
-                resources,
-                ioDispatcher,
-                mapperAuthorisationStateToEnterPhoneUi
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(): EnterPhoneNumberViewModel
     }
 }

@@ -6,27 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
+import com.saer.core.di.lazyViewModel
 import com.saer.core.utils.hideKeyboard
 import com.saer.core.utils.showKeyboard
 import com.saer.login.R
 import com.saer.login.databinding.FragmentEnterPhoneNumberBinding
 import com.saer.login.di.LoginComponentViewModel
-import dagger.Lazy
-import javax.inject.Inject
 
 class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
 
-    @Inject
-    internal lateinit var viewModelFactory: Lazy<EnterPhoneNumberViewModel.Factory>
-
-    private val viewModel: EnterPhoneNumberViewModel by viewModels {
-        viewModelFactory.get()
+    private val viewModel: EnterPhoneNumberViewModel by lazyViewModel {
+        ViewModelProvider(this).get<LoginComponentViewModel>()
+            .loginComponent.enterPhoneNumberViewModel().create()
     }
 
     private val binding: FragmentEnterPhoneNumberBinding by viewBinding(CreateMethod.INFLATE)

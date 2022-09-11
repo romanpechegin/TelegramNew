@@ -7,14 +7,15 @@ import com.saer.core.Communication
 import com.saer.core.di.IoDispatcher
 import com.saer.login.mappers.MapperAuthorisationStateToRegisterUi
 import com.saer.login.repositories.AuthRepository
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class RegistrationViewModel @Inject constructor(
+class RegistrationViewModel @AssistedInject constructor(
     private val authRepository: AuthRepository,
     private val registrationUiCommunication: Communication<RegisterUi>,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -54,5 +55,10 @@ class RegistrationViewModel @Inject constructor(
                 registrationUiCommunication.map(RegisterUi.EnterFirstNameUi())
             }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(): RegistrationViewModel
     }
 }

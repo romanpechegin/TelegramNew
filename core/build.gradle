@@ -35,6 +35,7 @@ dependencies {
     implementation project(":libtd")
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ktx"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     // Dagger
     api "com.google.dagger:dagger:$dagger"
