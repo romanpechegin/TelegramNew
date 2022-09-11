@@ -48,9 +48,9 @@ class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.sendCodeButton.setOnClickListener {
-            viewModel.sendCode(
-                arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
-            )
+//            viewModel.sendCode(
+//                arguments?.let { EnterCodeFragmentArgs.fromBundle(it).phoneNumber } ?: ""
+//            )
         }
 
         binding.enterCodeEditText.doAfterTextChanged { code ->

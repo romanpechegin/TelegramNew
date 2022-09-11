@@ -5,60 +5,51 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.saer.core.Communication
 import com.saer.core.di.IoDispatcher
+import com.saer.login.mappers.MapperAuthorisationStateToRegisterUi
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
 class RegistrationViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val registrationUiCommunication: Communication<RegisterUi>,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    mapperAuthorisationStateToRegisterUi: MapperAuthorisationStateToRegisterUi
 ) : ViewModel() {
     var firstName: String = ""
     var lastName: String = ""
 
+    private val coroutineExceptionHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            viewModelScope.launch {
+                registrationUiCommunication.map(RegisterUi.ErrorUi(throwable))
+            }
+        }
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             authRepository.observeAuthState()
-                .map {
-                    when (it) {
-                        is TdApi.AuthorizationStateReady -> RegisterUi.SuccessRegisterUi()
-                        is TdApi.AuthorizationStateWaitRegistration -> RegisterUi.WaitEnterNameUi()
-                        is TdApi.AuthorizationStateWaitTdlibParameters -> RegisterUi.WaitEnterNameUi()
-                        is TdApi.AuthorizationStateWaitEncryptionKey -> RegisterUi.WaitEnterNameUi()
-                        else -> RegisterUi.ErrorUi(Throwable(it.javaClass.simpleName))
-                    }
-                }
-                .catch { e ->
-                    registrationUiCommunication.map(RegisterUi.ErrorUi(e))
-                }
-                .collectLatest {
-                    registrationUiCommunication.map(it)
-                }
+                .map(mapperAuthorisationStateToRegisterUi::map)
+                .collectLatest(registrationUiCommunication::map)
         }
     }
 
     fun observeRegistrationUi(
         lifecycleOwner: LifecycleOwner,
-        collector: (value: RegisterUi) -> Unit
+        collector: (value: RegisterUi) -> Unit,
     ) {
         registrationUiCommunication.observe(lifecycleOwner, collector)
     }
 
     fun registerUser() {
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             if (firstName.isNotEmpty()) {
-                try {
-                    registrationUiCommunication.map(RegisterUi.CheckingNameUi())
-                    authRepository.sendName(firstName, lastName)
-                } catch (e: Throwable) {
-                    registrationUiCommunication.map(RegisterUi.ErrorUi(e))
-                }
+                registrationUiCommunication.map(RegisterUi.CheckingNameUi())
+                authRepository.sendName(firstName, lastName)
             } else {
                 registrationUiCommunication.map(RegisterUi.EnterFirstNameUi())
             }

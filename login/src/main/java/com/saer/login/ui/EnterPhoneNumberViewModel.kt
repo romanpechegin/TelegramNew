@@ -11,6 +11,7 @@ import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
 import com.saer.core.utils.phoneNumberOrNull
 import com.saer.login.R
+import com.saer.login.mappers.MapperAuthorisationStateToEnterPhoneUi
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -95,13 +96,9 @@ class EnterPhoneNumberViewModel(
     fun checkPhoneNumber() {
         viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             if (correctPhoneNumber != null) {
-                try {
-                    correctPhoneNumber?.let {
-                        enterPhoneUiCommunication.map(EnterPhoneUi.PendingResultSendingPhoneUi())
-                        authRepository.checkPhoneNumber(it)
-                    }
-                } catch (e: Throwable) {
-                    enterPhoneUiCommunication.map(EnterPhoneUi.ErrorPhoneUi(e))
+                correctPhoneNumber?.let {
+                    enterPhoneUiCommunication.map(EnterPhoneUi.PendingResultSendingPhoneUi())
+                    authRepository.checkPhoneNumber(it)
                 }
             } else enterPhoneUiCommunication.map(EnterPhoneUi.PhoneIsNotComplete())
         }

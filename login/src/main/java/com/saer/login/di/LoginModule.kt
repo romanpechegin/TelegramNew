@@ -5,10 +5,12 @@ import com.saer.core.common.InputMask
 import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
 import com.saer.core.di.MainDispatcher
+import com.saer.login.mappers.MapperAuthorisationStateToEnterCodeUi
+import com.saer.login.mappers.MapperAuthorisationStateToEnterPhoneUi
+import com.saer.login.mappers.MapperAuthorisationStateToRegisterUi
 import com.saer.login.repositories.AuthRepository
 import com.saer.login.ui.EnterCodeUi
 import com.saer.login.ui.EnterPhoneUi
-import com.saer.login.ui.MapperAuthorisationStateToEnterPhoneUi
 import com.saer.login.ui.RegisterUi
 import dagger.Binds
 import dagger.Module
@@ -42,6 +44,14 @@ class LoginModule {
     @Provides
     fun provideMapperAuthorisationStateToEnterPhoneUi(): MapperAuthorisationStateToEnterPhoneUi =
         MapperAuthorisationStateToEnterPhoneUi.Base()
+
+    @Provides
+    fun provideMapperAuthorisationStateToEnterCodeUi(): MapperAuthorisationStateToEnterCodeUi =
+        MapperAuthorisationStateToEnterCodeUi.Base()
+
+    @Provides
+    fun provideMapperAuthorisationStateToRegisterUi(): MapperAuthorisationStateToRegisterUi =
+        MapperAuthorisationStateToRegisterUi.Base()
 
     @Provides
     @LoginFeature

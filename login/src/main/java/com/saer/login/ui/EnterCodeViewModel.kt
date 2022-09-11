@@ -9,50 +9,40 @@ import com.saer.core.Resources
 import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
 import com.saer.login.R
+import com.saer.login.mappers.MapperAuthorisationStateToEnterCodeUi
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.drinkless.td.libcore.telegram.TdApi
 import javax.inject.Inject
 
 class EnterCodeViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val enterCodeUiCommunication: Communication<EnterCodeUi>,
     private val authRepository: AuthRepository,
-    private val resources: Resources
+    private val resources: Resources,
+    mapperAuthorisationStateToEnterCodeUi: MapperAuthorisationStateToEnterCodeUi
 ) : ViewModel() {
 
+    private val coroutineExceptionHandler =
+        CoroutineExceptionHandler { _, throwable ->
+            viewModelScope.launch {
+                enterCodeUiCommunication.map(EnterCodeUi.ErrorCodeUi(throwable))
+            }
+        }
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             authRepository.observeAuthState()
-                .map {
-                    when (it) {
-                        is TdApi.AuthorizationStateReady -> EnterCodeUi.SuccessAuthUi()
-                        is TdApi.AuthorizationStateWaitPassword -> EnterCodeUi.NavigateToEnterPasswordUi()
-                        is TdApi.AuthorizationStateWaitCode -> {
-                            EnterCodeUi.WaitCodeUi(it.codeInfo.phoneNumber)
-                        }
-                        is TdApi.AuthorizationStateWaitPhoneNumber -> EnterCodeUi.WaitCodeUi()
-                        is TdApi.AuthorizationStateWaitTdlibParameters -> EnterCodeUi.WaitCodeUi()
-                        is TdApi.AuthorizationStateWaitEncryptionKey -> EnterCodeUi.WaitCodeUi()
-                        is TdApi.AuthorizationStateWaitRegistration -> EnterCodeUi.NavigateToRegistrationUi()
-                        else -> EnterCodeUi.ErrorCodeUi(IllegalStateException())
-                    }
-                }
-                .catch { e ->
-                    enterCodeUiCommunication.map(EnterCodeUi.ErrorCodeUi(e))
-                }
-                .collectLatest {
-                    enterCodeUiCommunication.map(it)
-                }
+                .map(mapperAuthorisationStateToEnterCodeUi::map)
+                .collectLatest(enterCodeUiCommunication::map)
         }
     }
 
     fun onStop() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             if (enterCodeUiCommunication.value is EnterCodeUi.NavigateToEnterPasswordUi ||
                 enterCodeUiCommunication.value is EnterCodeUi.NavigateToRegistrationUi
             ) {
@@ -72,19 +62,15 @@ class EnterCodeViewModel(
         val legalCode = code.filter { it.isDigit() }
 
         if (legalCode.isNotEmpty() && legalCode.length == resources.getInt(R.integer.code_size)) {
-            viewModelScope.launch(ioDispatcher) {
+            viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
                 enterCodeUiCommunication.map(EnterCodeUi.CompleteEnterCodeUi())
-                try {
-                    authRepository.checkCode(code)
-                } catch (e: Throwable) {
-                    enterCodeUiCommunication.map(EnterCodeUi.ErrorCodeUi(e))
-                }
+                authRepository.checkCode(code)
             }
         }
     }
 
     fun sendCode(phoneNumber: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             if (phoneNumber.isEmpty()) enterCodeUiCommunication.map(
                 EnterCodeUi.ErrorCodeUi(Throwable("Phone number is null"))
             )
@@ -102,6 +88,7 @@ class EnterCodeViewModel(
         private val enterCodeUiCommunication: Communication<EnterCodeUi>,
         private val authRepository: AuthRepository,
         private val resources: Resources,
+        private val mapperAuthorisationStateToEnterCodeUi: MapperAuthorisationStateToEnterCodeUi
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             require(modelClass == EnterCodeViewModel::class.java)
@@ -109,7 +96,8 @@ class EnterCodeViewModel(
                 ioDispatcher,
                 enterCodeUiCommunication,
                 authRepository,
-                resources
+                resources,
+                mapperAuthorisationStateToEnterCodeUi
             ) as T
         }
     }
