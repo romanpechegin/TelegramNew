@@ -46,7 +46,7 @@ android {
 
 dependencies {
 
-    implementation project(':libtd-ktx')
+//    implementation project(':libtd-ktx')
     implementation project(':login')
     implementation project(':base_classes')
     implementation project(':core')
