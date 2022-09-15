@@ -28,7 +28,7 @@ class LoginModule {
 
     @Provides
     @LoginFeature
-    fun provideCountryCommunication(): Communication<InputMask> =
+    fun provideInputMaskCommunication(): Communication<InputMask> =
         Communication.StateFlow(InputMask.EmptyMask())
 
     @Provides

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class EnterPhoneNumberViewModel @AssistedInject constructor(
     private val enterPhoneUiCommunication: Communication<EnterPhoneUi>,
-    private val countryCommunication: Communication<InputMask>,
+    private val inputMaskCommunication: Communication<InputMask>,
     private val authRepository: AuthRepository,
     private val resources: Resources,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -51,7 +51,7 @@ class EnterPhoneNumberViewModel @AssistedInject constructor(
                 currentCountryCode = authRepository.currentCountry().text,
                 countries = authRepository.countries().countries
             )
-            countryCommunication.map(inputMask)
+            inputMaskCommunication.map(inputMask)
         }
     }
 
@@ -87,7 +87,7 @@ class EnterPhoneNumberViewModel @AssistedInject constructor(
     fun observeCountryCommunication(
         viewLifecycleOwner: LifecycleOwner,
         collector: (value: InputMask) -> Unit,
-    ) = countryCommunication.observe(
+    ) = inputMaskCommunication.observe(
         viewLifecycleOwner = viewLifecycleOwner,
         collector = collector
     )

@@ -5,6 +5,7 @@ package com.saer.login.ui
 import com.google.common.truth.Truth.assertThat
 import com.saer.core.Communication
 import com.saer.login.*
+import com.saer.login.mappers.MapperAuthorisationStateToEnterCodeUi
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,7 @@ class EnterCodeViewModelTest(
     private val resources: com.saer.core.Resources = mock()
     private val authRepository: AuthRepository = mock()
     private lateinit var viewModel: EnterCodeViewModel
+    private val mapperAuthorisationStateToEnterCodeUi = MapperAuthorisationStateToEnterCodeUi.Base()
 
     private lateinit var enterCodeUiList: MutableList<EnterCodeUi>
 
@@ -67,14 +69,15 @@ class EnterCodeViewModelTest(
                 ioDispatcher = coroutineRule.testDispatcher,
                 enterCodeUiCommunication = enterCodeUiCommunication,
                 authRepository = authRepository,
-                resources = resources
+                resources = resources,
+                mapperAuthorisationStateToEnterCodeUi = mapperAuthorisationStateToEnterCodeUi
             )
     }
 
     @Test
     fun `test enter code `() = runTest {
-        assertThat(enterCodeUiCommunication.value).isInstanceOf(EnterCodeUi.WaitCodeUi::class.java)
         Mockito.verify(enterCodeUiCommunication, times(1)).map(any())
+        assertThat(enterCodeUiCommunication.value).isInstanceOf(EnterCodeUi.WaitCodeUi::class.java)
 
         viewModel.enterCode(code = code)
 

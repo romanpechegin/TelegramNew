@@ -32,15 +32,6 @@ interface InputMask {
                     countryInfo.callingCodes.first()
                 }
 
-//            val affineFormats = ArrayList<String>(callingCodes.drop(0))
-//            if (callingCodes.size > 1) {
-//            callingCodes.forEach {
-//                affineFormats.add(
-//                    resources.getString(R.string.phone_number_masks_ru)
-//                )
-//            }
-//            }
-
             val maskedTextChangedListener = MaskedTextChangedListener.installOn(
                 editText = editText,
                 primaryFormat = resources.getString(R.string.phone_number_mask, callingCodes.first()),
@@ -56,24 +47,3 @@ interface InputMask {
         }
     }
 }
-
-//fun setPhoneNumberMask(editText: EditText, callingCode: Array<String>?, resources: Resources) {
-//    if (callingCode != null) {
-//        val affineFormats = ArrayList<String>(callingCode.drop(0))
-//        if (callingCode.size > 1) {
-//            callingCode.forEach {
-//                affineFormats.add(
-//                    resources.getStringArray(R.array.phone_number_masks).first()
-//                )
-//            }
-//        }
-//
-//        val maskedTextChangedListener = MaskedTextChangedListener.installOn(
-//            editText = editText,
-//            primaryFormat =,
-//            affineFormats = affineFormats,
-//            affinityCalculationStrategy = AffinityCalculationStrategy.PREFIX,
-//        )
-//        editText.hint = maskedTextChangedListener.placeholder()
-//    }
-//}

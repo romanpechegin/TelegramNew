@@ -5,16 +5,16 @@ package com.saer.login.ui
 import com.google.common.truth.Truth.assertThat
 import com.saer.core.Communication
 import com.saer.core.Resources
+import com.saer.core.common.InputMask
 import com.saer.login.CORRECT_PHONE_NUMBER
-import com.saer.login.COUNTRY_NAME
 import com.saer.login.MainDispatcherRule
 import com.saer.login.R
+import com.saer.login.mappers.MapperAuthorisationStateToEnterPhoneUi
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.drinkless.td.libcore.telegram.TdApi
-import org.drinkless.td.libcore.telegram.TdApi.CountryInfo
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,12 +35,13 @@ class EnterPhoneNumberViewModelTest(
     @get:Rule
     val coroutineRule = MainDispatcherRule()
     private val testEnterPhoneUiCommunication: Communication<EnterPhoneUi> = mock()
-    private val countryCommunication: Communication<CountryInfo> = mock()
+    private val inputMaskCommunication: Communication<InputMask> = mock()
     private val testAuthRepository: AuthRepository = mock()
     private val testResources: Resources = mock()
+    private val mapper = MapperAuthorisationStateToEnterPhoneUi.Base()
     private lateinit var viewModel: EnterPhoneNumberViewModel
     private lateinit var enterPhoneUiList: MutableList<EnterPhoneUi>
-    private lateinit var countryList: MutableList<CountryInfo>
+    private lateinit var inputMasks: MutableList<InputMask>
 
     @Before
     fun setup() {
@@ -54,14 +55,14 @@ class EnterPhoneNumberViewModelTest(
             Mockito.`when`(testEnterPhoneUiCommunication.value)
                 .thenAnswer { enterPhoneUiList.last() }
 
-            countryList = mutableListOf()
-            Mockito.`when`(countryCommunication.map(any()))
+            inputMasks = mutableListOf()
+            Mockito.`when`(inputMaskCommunication.map(any()))
                 .thenAnswer {
-                    countryList.add(it.arguments[0] as CountryInfo)
+                    inputMasks.add(it.arguments[0] as InputMask)
                     return@thenAnswer null
                 }
-            Mockito.`when`(countryCommunication.value)
-                .thenAnswer { countryList.last() }
+            Mockito.`when`(inputMaskCommunication.value)
+                .thenAnswer { inputMasks.last() }
 
             val authStateFlow =
                 MutableStateFlow<TdApi.AuthorizationState>(TdApi.AuthorizationStateWaitTdlibParameters())
@@ -88,19 +89,20 @@ class EnterPhoneNumberViewModelTest(
 
         viewModel = EnterPhoneNumberViewModel(
             enterPhoneUiCommunication = testEnterPhoneUiCommunication,
-            countryCommunication = countryCommunication,
+            inputMaskCommunication = inputMaskCommunication,
             authRepository = testAuthRepository,
             resources = testResources,
-            ioDispatcher = coroutineRule.testDispatcher
+            ioDispatcher = coroutineRule.testDispatcher,
+            uiMapper = mapper
         )
     }
 
     @Test
     fun `should to return NavigateToEnterCodeUi if phone number is correct and WaitEnterPhoneUi if phone number is incorrect `() =
         runTest {
+            Mockito.verify(testEnterPhoneUiCommunication, times(1)).map(any())
             assertThat(testEnterPhoneUiCommunication.value)
                 .isInstanceOf(EnterPhoneUi.WaitEnterPhoneUi::class.java)
-            Mockito.verify(testEnterPhoneUiCommunication, times(1)).map(any())
 
             viewModel.enterPhoneNumber(phoneNumber = phoneNumber)
             Mockito.verify(testEnterPhoneUiCommunication, times(1)).map(any())
@@ -129,8 +131,9 @@ class EnterPhoneNumberViewModelTest(
 
     @Test
     fun `getting current country code`() = runTest {
-        Mockito.verify(countryCommunication, times(1)).map(any())
-        assertThat(countryCommunication.value.englishName).isEqualTo(COUNTRY_NAME)
+        Mockito.verify(inputMaskCommunication, times(1)).map(any())
+        assertThat(inputMaskCommunication.value).isInstanceOf(InputMask.PhoneNumberMask::class.java)
+        assertThat(inputMaskCommunication.value.currentMaskName()).isEqualTo("Russia")
     }
 
     companion object {
@@ -139,10 +142,10 @@ class EnterPhoneNumberViewModelTest(
         fun data() = listOf(
             arrayOf("7989", EnterPhoneUi.PhoneIsNotComplete()),
             arrayOf("1999", EnterPhoneUi.PhoneIsNotComplete()),
-            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.NavigateToEnterCodeUi(CORRECT_PHONE_NUMBER)),
+            arrayOf(CORRECT_PHONE_NUMBER, EnterPhoneUi.NavigateToEnterCodeUi()),
             arrayOf("+7 (989) 263-47-7", EnterPhoneUi.PhoneIsNotComplete()),
             arrayOf("7989263477asdf^00", EnterPhoneUi.PhoneIsNotComplete()),
-            arrayOf("79892634770", EnterPhoneUi.NavigateToEnterCodeUi(CORRECT_PHONE_NUMBER)),
+            arrayOf("79892634770", EnterPhoneUi.NavigateToEnterCodeUi()),
         )
     }
 }

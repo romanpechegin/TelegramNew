@@ -6,6 +6,7 @@ import com.google.common.truth.Truth.assertThat
 import com.saer.core.Communication
 import com.saer.login.MainDispatcherRule
 import com.saer.login.UNIQUE_FIRST_NAME
+import com.saer.login.mappers.MapperAuthorisationStateToRegisterUi
 import com.saer.login.repositories.AuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,13 +27,15 @@ class RegistrationViewModelTest(
     private val firstName: String,
     private val lastName: String,
     private val expectedUi: RegisterUi,
-    private val clickRegister: Boolean
+    private val clickRegister: Boolean,
 ) {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
     private val registrationUiCommunication: Communication<RegisterUi> = mock()
     private val authRepository: AuthRepository = mock()
+    private val mapper: MapperAuthorisationStateToRegisterUi = MapperAuthorisationStateToRegisterUi.Base()
+    private lateinit var viewModel: RegistrationViewModel
 
     @Before
     fun setup() = runTest {
@@ -54,17 +57,17 @@ class RegistrationViewModelTest(
                 data = it.arguments[0] as RegisterUi
                 return@thenAnswer null
             }
+
+        viewModel = RegistrationViewModel(
+            authRepository = authRepository,
+            registrationUiCommunication = registrationUiCommunication,
+            ioDispatcher = coroutineRule.testDispatcher,
+            mapperAuthorisationStateToRegisterUi = mapper
+        )
     }
 
     @Test
     fun `test enter first and last name `() = runTest {
-        val viewModel =
-            RegistrationViewModel(
-                authRepository,
-                registrationUiCommunication,
-                coroutineRule.testDispatcher
-            )
-
         viewModel.firstName = firstName
         viewModel.lastName = lastName
         if (clickRegister) viewModel.registerUser()
