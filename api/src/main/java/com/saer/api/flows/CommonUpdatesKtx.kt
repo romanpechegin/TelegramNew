@@ -1,8 +1,12 @@
 package com.saer.api.flows
 
+import com.saer.api.TelegramCredentials
 import com.saer.api.TelegramFlow
+import com.saer.api.coroutines.checkDatabaseEncryptionKey
+import com.saer.api.coroutines.setTdlibParameters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import org.drinkless.td.libcore.telegram.TdApi
 import org.drinkless.td.libcore.telegram.TdApi.*
 
@@ -12,6 +16,14 @@ import org.drinkless.td.libcore.telegram.TdApi.*
 fun TelegramFlow.authorizationStateFlow(): Flow<AuthorizationState> =
     this.getUpdatesFlowOfType<TdApi.UpdateAuthorizationState>()
     .mapNotNull { it.authorizationState }
+        .onEach {
+            when (it) {
+                is AuthorizationStateWaitTdlibParameters ->
+                    this.setTdlibParameters(TelegramCredentials.parameters)
+                is AuthorizationStateWaitEncryptionKey ->
+                    this.checkDatabaseEncryptionKey(null)
+            }
+        }
 
 /**
  * emits [UpdateOption] if an option changed its value.

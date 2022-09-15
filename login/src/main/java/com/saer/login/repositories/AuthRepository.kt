@@ -1,14 +1,11 @@
 package com.saer.login.repositories
 
-import com.saer.api.TelegramCredentials
 import com.saer.api.TelegramFlow
 import com.saer.api.coroutines.*
 import com.saer.api.flows.authorizationStateFlow
 import com.saer.api.flows.connectionStateFlow
 import com.saer.core.di.LoginFeature
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
-import org.drinkless.td.libcore.telegram.TdApi
 import org.drinkless.td.libcore.telegram.TdApi.*
 import javax.inject.Inject
 
@@ -35,14 +32,6 @@ interface AuthRepository {
 
         override fun observeAuthState(): Flow<AuthorizationState> =
             api.authorizationStateFlow()
-                .onEach {
-                    when (it) {
-                        is TdApi.AuthorizationStateWaitTdlibParameters ->
-                            api.setTdlibParameters(TelegramCredentials.parameters)
-                        is TdApi.AuthorizationStateWaitEncryptionKey ->
-                            api.checkDatabaseEncryptionKey(null)
-                    }
-                }
 
         override suspend fun checkPhoneNumber(phoneNumber: String) =
             api.setAuthenticationPhoneNumber(phoneNumber, null)
