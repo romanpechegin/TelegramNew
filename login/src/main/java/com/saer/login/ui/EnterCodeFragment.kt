@@ -15,11 +15,10 @@ import com.saer.base_classes.BaseFragment
 import com.saer.core.di.lazyViewModel
 import com.saer.core.utils.hideKeyboard
 import com.saer.core.utils.showKeyboard
-import com.saer.login.R
 import com.saer.login.databinding.FragmentEnterCodeBinding
 import com.saer.login.di.LoginComponentViewModel
 
-class EnterCodeFragment : BaseFragment(R.layout.fragment_enter_code) {
+class EnterCodeFragment : BaseFragment() {
 
     private val viewModel: EnterCodeViewModel by lazyViewModel {
         ViewModelProvider(this).get<LoginComponentViewModel>()

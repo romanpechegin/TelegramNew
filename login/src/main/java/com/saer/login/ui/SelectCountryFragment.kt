@@ -15,12 +15,11 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
 import com.saer.core.di.lazyViewModel
-import com.saer.login.R
 import com.saer.login.databinding.FragmentSelectCountryBinding
 import com.saer.login.di.LoginComponentViewModel
 import com.saer.login.ui.adapters.CountriesAdapter
 
-class SelectCountryFragment : BaseFragment(R.layout.fragment_select_country) {
+class SelectCountryFragment : BaseFragment() {
 
     private val viewModel: SelectCountryViewModel by lazyViewModel {
         ViewModelProvider(this).get<LoginComponentViewModel>()

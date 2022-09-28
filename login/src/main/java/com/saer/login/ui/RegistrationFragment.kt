@@ -13,11 +13,10 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
 import com.saer.core.di.lazyViewModel
-import com.saer.login.R
 import com.saer.login.databinding.FragmentRegistrationBinding
 import com.saer.login.di.LoginComponentViewModel
 
-class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
+class RegistrationFragment : BaseFragment() {
 
     private val viewModel: RegistrationViewModel by lazyViewModel {
         ViewModelProvider(this).get<LoginComponentViewModel>()

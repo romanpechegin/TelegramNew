@@ -20,7 +20,7 @@ import com.saer.login.R
 import com.saer.login.databinding.FragmentEnterPhoneNumberBinding
 import com.saer.login.di.LoginComponentViewModel
 
-class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_number) {
+class EnterPhoneNumberFragment : BaseFragment() {
 
     private val viewModel: EnterPhoneNumberViewModel by lazyViewModel {
         ViewModelProvider(this).get<LoginComponentViewModel>()
