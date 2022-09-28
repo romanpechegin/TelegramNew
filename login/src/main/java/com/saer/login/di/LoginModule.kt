@@ -1,7 +1,7 @@
 package com.saer.login.di
 
-import com.saer.core.Communication
 import com.saer.core.common.InputMask
+import com.saer.core.communications.Communication
 import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
 import com.saer.core.di.MainDispatcher
@@ -10,6 +10,7 @@ import com.saer.login.mappers.MapperAuthorisationStateToEnterPhoneUi
 import com.saer.login.mappers.MapperAuthorisationStateToRegisterUi
 import com.saer.login.repositories.AuthRepository
 import com.saer.login.ui.EnterCodeUi
+import com.saer.login.ui.EnterPasswordUi
 import com.saer.login.ui.EnterPhoneUi
 import com.saer.login.ui.RegisterUi
 import dagger.Binds
@@ -40,6 +41,11 @@ class LoginModule {
     @LoginFeature
     fun provideRegistrationCommunication(): Communication<RegisterUi> =
         Communication.StateFlow(RegisterUi.WaitEnterNameUi())
+
+    @Provides
+    @LoginFeature
+    fun provideEnterPasswordUiCommunication(): Communication<EnterPasswordUi> =
+        Communication.StateFlow(EnterPasswordUi.Wait())
 
     @Provides
     fun provideMapperAuthorisationStateToEnterPhoneUi(): MapperAuthorisationStateToEnterPhoneUi =

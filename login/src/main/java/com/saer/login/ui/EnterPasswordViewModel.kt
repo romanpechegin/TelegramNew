@@ -1,19 +1,21 @@
 package com.saer.login.ui
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saer.core.Communication
+import com.saer.core.communications.Communication
 import com.saer.core.di.IoDispatcher
 import com.saer.login.repositories.AuthRepository
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.drinkless.td.libcore.telegram.TdApi
-import javax.inject.Inject
 
-class EnterPasswordViewModel @Inject constructor(
+class EnterPasswordViewModel @AssistedInject constructor(
     private val authRepository: AuthRepository,
     private val enterPasswordUiCommunication: Communication<EnterPasswordUi>,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -40,9 +42,22 @@ class EnterPasswordViewModel @Inject constructor(
         }
     }
 
+    fun observeEnterPasswordUiCommunication(
+        viewLifecycleOwner: LifecycleOwner,
+        collector: (value: EnterPasswordUi) -> Unit,
+    ) = enterPasswordUiCommunication.observe(
+        viewLifecycleOwner,
+        collector
+    )
+
     fun enterPassword(password: String) {
         viewModelScope.launch(ioDispatcher) {
             authRepository.checkPassword(password)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(): EnterPasswordViewModel
     }
 }

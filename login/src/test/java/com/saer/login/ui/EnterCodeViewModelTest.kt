@@ -3,7 +3,7 @@
 package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.saer.core.Communication
+import com.saer.core.communications.Communication
 import com.saer.login.*
 import com.saer.login.mappers.MapperAuthorisationStateToEnterCodeUi
 import com.saer.login.repositories.AuthRepository

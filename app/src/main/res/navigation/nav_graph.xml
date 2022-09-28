@@ -2,10 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/login_graph">
+    app:startDestination="@id/chats_graph">
 
     <include app:graph="@navigation/login_graph" />
     <action
         android:id="@+id/action_global_login_graph"
-        app:destination="@id/login_graph" />
+        app:destination="@id/login_graph"
+        app:enterAnim="@anim/from_right"
+        app:exitAnim="@anim/to_left"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right" />
+
+    <include app:graph="@navigation/chats_graph" />
+    <action
+        android:id="@+id/action_global_chats_graph"
+        app:destination="@id/chats_graph"
+        app:enterAnim="@anim/from_right"
+        app:exitAnim="@anim/to_left"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right" />
 </navigation>

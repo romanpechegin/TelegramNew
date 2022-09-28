@@ -17,6 +17,13 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_enterPhoneNumberFragment_to_selectCountryFragment"
+            app:destination="@id/selectCountryFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/enterCodeFragment"
@@ -48,4 +55,9 @@
         android:name="com.saer.login.ui.EnterPasswordFragment"
         android:label="fragment_enter_password"
         tools:layout="@layout/fragment_enter_password" />
+    <fragment
+        android:id="@+id/selectCountryFragment"
+        android:name="com.saer.login.ui.SelectCountryFragment"
+        android:label="SelectCountryFragment"
+        tools:layout="@layout/fragment_select_country" />
 </navigation>

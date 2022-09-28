@@ -1,6 +1,6 @@
 package com.saer.login.mappers
 
-import com.saer.core.Mapper
+import com.saer.core.mappers.Mapper
 import com.saer.login.ui.RegisterUi
 import org.drinkless.td.libcore.telegram.TdApi
 import org.drinkless.td.libcore.telegram.TdApi.AuthorizationState

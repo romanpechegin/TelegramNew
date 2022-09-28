@@ -79,7 +79,4 @@ dependencies {
 //    testImplementation "org.mockito:mockito-core:4.6.1"
     testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin"
     androidTestImplementation "org.mockito:mockito-core:$mockito_core"
-
-    api "com.github.valeryponomarenko.componentsmanager:androidx:$components_manager"
-
 }

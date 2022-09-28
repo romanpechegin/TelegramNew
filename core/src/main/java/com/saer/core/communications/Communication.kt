@@ -1,4 +1,4 @@
-package com.saer.core
+package com.saer.core.communications
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ interface Communication<T> {
         collector: (value: T) -> Unit
     )
 
-    class StateFlow<T : Any>(initValue: T) : Communication<T> {
+    open class StateFlow<T : Any>(initValue: T) : Communication<T> {
 
         private val stateFlow = MutableStateFlow(initValue)
 

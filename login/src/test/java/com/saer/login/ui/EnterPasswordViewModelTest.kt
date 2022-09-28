@@ -1,7 +1,7 @@
 package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.saer.core.Communication
+import com.saer.core.communications.Communication
 import com.saer.login.CORRECT_PASSWORD
 import com.saer.login.INCORRECT_PASSWORD
 import com.saer.login.MainDispatcherRule

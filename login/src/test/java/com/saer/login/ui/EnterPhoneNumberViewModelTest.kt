@@ -3,9 +3,9 @@
 package com.saer.login.ui
 
 import com.google.common.truth.Truth.assertThat
-import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.core.common.InputMask
+import com.saer.core.communications.Communication
 import com.saer.login.CORRECT_PHONE_NUMBER
 import com.saer.login.MainDispatcherRule
 import com.saer.login.R

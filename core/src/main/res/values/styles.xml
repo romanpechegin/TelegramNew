@@ -6,4 +6,5 @@
     <style name="DrawableDayNightStyle">
         <item name="android:drawableTint">@color/md_theme_light_onBackground</item>
     </style>
+
 </resources>

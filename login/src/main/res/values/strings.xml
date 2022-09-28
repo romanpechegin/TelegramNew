@@ -36,4 +36,9 @@
 
     <string name="back_button">back button</string>
     <string name="enter_code_image">enter_code_image</string>
+    <string name="search">Search</string>
+    <string name="choose_country">Choose a country</string>
+
+    // Password
+    <string name="password">Password</string>
 </resources>

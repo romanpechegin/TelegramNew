@@ -1,5 +1,7 @@
 package com.saer.core.di
 
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -23,6 +25,12 @@ class Factory<T : ViewModel>(
 }
 
 inline fun <reified T : ViewModel> Fragment.lazyViewModel(
+    noinline create: (stateHandle: SavedStateHandle) -> T
+) = viewModels<T> {
+    Factory(this, create)
+}
+
+inline fun <reified T : ViewModel> AppCompatActivity.lazyViewModel(
     noinline create: (stateHandle: SavedStateHandle) -> T
 ) = viewModels<T> {
     Factory(this, create)

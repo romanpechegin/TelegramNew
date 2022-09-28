@@ -3,8 +3,8 @@ package com.saer.login.ui
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saer.core.Communication
 import com.saer.core.Resources
+import com.saer.core.communications.Communication
 import com.saer.core.di.IoDispatcher
 import com.saer.login.R
 import com.saer.login.mappers.MapperAuthorisationStateToEnterCodeUi

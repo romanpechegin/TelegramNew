@@ -6,6 +6,9 @@ import com.saer.api.ApiModule
 import com.saer.core.di.AppScope
 import com.saer.core.di.CoreModule
 import com.saer.login.di.LoginDeps
+import com.saer.login.di.LoginModule
+import com.saer.telegramnew.MainActivity
+import com.saer.telegramnew.MainActivityViewModel
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -16,10 +19,14 @@ import dagger.Provides
     modules = [
         AppModule::class,
         ApiModule::class,
-        CoreModule::class
+        CoreModule::class,
+        LoginModule::class
     ]
 )
 interface AppComponent : LoginDeps {
+    fun inject(activity: MainActivity)
+
+    fun mainActivityViewModel(): MainActivityViewModel.Factory
 
     @Component.Builder
     interface Builder {

@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.saer.base_classes.BaseFragment
@@ -63,7 +65,12 @@ class EnterPhoneNumberFragment : BaseFragment(R.layout.fragment_enter_phone_numb
         }
 
         binding.confirmCountryCode.setOnClickListener {
+            findNavController().navigate(R.id.action_enterPhoneNumberFragment_to_selectCountryFragment)
+        }
 
+        setFragmentResultListener(SelectCountryFragment.COUNTRY_CODE_REQUEST_KEY) { _, bundle ->
+            val countryCode = bundle.get(SelectCountryFragment.COUNTRY_CODE_REQUEST_KEY) as String?
+            if (countryCode != null) viewModel.chosenCountry(countryCode)
         }
     }
 

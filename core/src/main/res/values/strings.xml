@@ -2,6 +2,7 @@
     // Phone number mask
 <!--    <string-array name="phone_number_masks_ru">-->
         <string name="phone_number_mask">+%s […]</string>
+        <string name="phone_number_mask2">+%s </string>
 <!--        <string name="phone_number_musk_with_two_digits1">+%s ([0]) [0000]-[0000]</string>-->
 <!--        <string name="phone_number_musk_with_two_digits2">+%s ([00]) [0000]-[0000]</string>-->
 <!--        <string name="phone_number_musk_with_two_digits3">+%s ([000]) [0000]-[0000]</string>-->

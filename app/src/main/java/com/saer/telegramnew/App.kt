@@ -9,7 +9,7 @@ import com.saer.telegramnew.di.DaggerAppComponent
 
 class App : Application() {
 
-    private val appComponent: AppComponent by lazy {
+    val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
             .application(this)
             .build()

@@ -1,6 +1,5 @@
 package com.saer.login.ui
 
-import android.util.Log
 import android.view.View
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -13,14 +12,14 @@ interface EnterCodeUi {
     fun apply(
         resources: Resources,
         binding: FragmentEnterCodeBinding,
-        viewModel: EnterCodeViewModel
+        viewModel: EnterCodeViewModel,
     )
 
     class WaitCodeUi(private val phone: String = "") : EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
             binding.sendCodeButton.visibility = View.VISIBLE
             binding.enterCodeDescription.text = binding.root.context?.getString(
@@ -34,7 +33,7 @@ interface EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
             binding.sendCodeButton.visibility = View.GONE
         }
@@ -44,9 +43,10 @@ interface EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
-            Log.e("TAG", "apply: ${javaClass.simpleName}")
+            binding.enterCodeEditText.findNavController()
+                .navigate(R.id.action_enterCodeFragment_to_enterPasswordFragment)
         }
     }
 
@@ -54,7 +54,7 @@ interface EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
             binding.enterCodeEditText.isEnabled = false
         }
@@ -64,19 +64,19 @@ interface EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
 
         }
     }
 
     class ErrorCodeUi(
-        private val throwable: Throwable? = null
+        private val throwable: Throwable? = null,
     ) : EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
             throwable?.message?.let { throwableMessage ->
                 var message = ""
@@ -89,7 +89,7 @@ interface EnterCodeUi {
                     }
                 }
                 Snackbar.make(
-                    binding.root,
+                    binding.enterCodeTitle,
                     message.ifEmpty { throwableMessage },
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -102,7 +102,7 @@ interface EnterCodeUi {
         override fun apply(
             resources: Resources,
             binding: FragmentEnterCodeBinding,
-            viewModel: EnterCodeViewModel
+            viewModel: EnterCodeViewModel,
         ) {
             binding.enterCodeEditText.clearText()
             binding.root.findNavController()

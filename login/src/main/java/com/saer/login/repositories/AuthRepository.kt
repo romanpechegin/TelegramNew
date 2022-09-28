@@ -1,11 +1,13 @@
 package com.saer.login.repositories
 
+import com.saer.api.TelegramException
 import com.saer.api.TelegramFlow
 import com.saer.api.coroutines.*
 import com.saer.api.flows.authorizationStateFlow
 import com.saer.api.flows.connectionStateFlow
-import com.saer.core.di.LoginFeature
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import org.drinkless.td.libcore.telegram.TdApi.*
 import javax.inject.Inject
 
@@ -24,8 +26,8 @@ interface AuthRepository {
     fun connectionState(): Flow<ConnectionState>
     suspend fun countries(): Countries
     suspend fun currentCountry(): Text
+    fun observeAuthRequired(): Flow<Boolean>
 
-    @LoginFeature
     class Base @Inject constructor(
         private val api: TelegramFlow,
     ) : AuthRepository {
@@ -52,5 +54,17 @@ interface AuthRepository {
         override suspend fun countries(): Countries = api.getCountries()
 
         override suspend fun currentCountry(): Text = api.getCountryCode()
+
+        override fun observeAuthRequired(): Flow<Boolean> =
+            observeAuthState()
+                .filter { it is AuthorizationStateWaitEncryptionKey }
+                .map {
+                    try {
+                        api.getMe()
+                    } catch (e: TelegramException) {
+                        if (e.message == "Unauthorized") return@map true
+                    }
+                    false
+                }
     }
 }

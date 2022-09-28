@@ -3,10 +3,11 @@ package com.saer.login.ui
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.saer.core.Communication
 import com.saer.core.Resources
 import com.saer.core.common.InputMask
+import com.saer.core.communications.Communication
 import com.saer.core.di.IoDispatcher
+import com.saer.core.mappers.mapToCountries
 import com.saer.core.utils.phoneNumberOrNull
 import com.saer.login.R
 import com.saer.login.mappers.MapperAuthorisationStateToEnterPhoneUi
@@ -49,7 +50,7 @@ class EnterPhoneNumberViewModel @AssistedInject constructor(
             val inputMask: InputMask = InputMask.PhoneNumberMask(
                 resources = resources,
                 currentCountryCode = authRepository.currentCountry().text,
-                countries = authRepository.countries().countries
+                countries = authRepository.countries().mapToCountries()
             )
             inputMaskCommunication.map(inputMask)
         }
@@ -100,6 +101,18 @@ class EnterPhoneNumberViewModel @AssistedInject constructor(
                     authRepository.checkPhoneNumber(it)
                 }
             } else enterPhoneUiCommunication.map(EnterPhoneUi.PhoneIsNotComplete())
+        }
+    }
+
+    fun chosenCountry(countryCode: String) {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
+            val countries = authRepository.countries().mapToCountries()
+            val inputMask: InputMask = InputMask.PhoneNumberMask(
+                resources = resources,
+                currentCountryCode = countryCode,
+                countries = countries
+            )
+            inputMaskCommunication.map(inputMask)
         }
     }
 

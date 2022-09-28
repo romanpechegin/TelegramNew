@@ -1,0 +1,77 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+}
+
+android {
+    namespace 'com.saer.telegramnew'
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 32
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(':base_classes')
+    implementation project(':core')
+
+    implementation "androidx.core:core-ktx:$core_ktx"
+    implementation "androidx.appcompat:appcompat:$app_compat"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation "com.google.android.material:material:$material"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    testImplementation "junit:junit:$junit"
+    testImplementation "com.google.truth:truth:$google_truth"
+    androidTestImplementation "com.google.truth:truth:$google_truth"
+    androidTestImplementation "androidx.test.ext:junit:$google_truth"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
+    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+    // Dagger
+    api "com.google.dagger:dagger:$dagger"
+    kapt "com.google.dagger:dagger-compiler:$dagger"
+
+    implementation "com.github.kirich1409:viewbindingpropertydelegate:$viewBindingDelegate"
+
+//    implementation "com.github.tdlibx:td:$tdlibx"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ktx"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_ktx"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extensions"
+
+//    testImplementation "org.mockito:mockito-core:4.6.1"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin"
+    androidTestImplementation "org.mockito:mockito-core:$mockito_core"
+}

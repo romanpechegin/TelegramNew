@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/listOfChatsFragment"
+    android:id="@+id/chats_graph">
+
+    <fragment
+        android:id="@+id/listOfChatsFragment"
+        android:name="com.saer.telegramnew.ui.ListOfChatsFragment"
+        android:label="fragment_list_of_chats"
+        tools:layout="@layout/fragment_list_of_chats"/>
+
+</navigation>
