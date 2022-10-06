@@ -23,7 +23,7 @@ import dagger.Provides
         LoginModule::class
     ]
 )
-interface AppComponent : LoginDeps {
+interface AppComponent : LoginDeps, ChatsDeps {
     fun inject(activity: MainActivity)
 
     fun mainActivityViewModel(): MainActivityViewModel.Factory

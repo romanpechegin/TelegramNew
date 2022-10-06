@@ -38,6 +38,8 @@ android {
 dependencies {
     implementation project(':base_classes')
     implementation project(':core')
+    implementation project(':api')
+    implementation project(':libtd')
 
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$app_compat"

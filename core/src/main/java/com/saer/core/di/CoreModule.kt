@@ -7,6 +7,8 @@ import com.saer.core.communications.CountryCommunication
 import com.saer.core.mappers.CountryMapper
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 @Module
 class CoreModule {
@@ -23,4 +25,8 @@ class CoreModule {
 
     @Provides
     fun provideCountryCommunication(): CountryCommunication = CountryCommunication.Base()
+
+    @Provides
+    @IoDispatcher
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

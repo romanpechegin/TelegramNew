@@ -2,7 +2,6 @@ package com.saer.login.di
 
 import com.saer.core.common.InputMask
 import com.saer.core.communications.Communication
-import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
 import com.saer.core.di.MainDispatcher
 import com.saer.login.mappers.MapperAuthorisationStateToEnterCodeUi
@@ -16,7 +15,6 @@ import com.saer.login.ui.RegisterUi
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainCoroutineDispatcher
 
@@ -58,11 +56,6 @@ class LoginModule {
     @Provides
     fun provideMapperAuthorisationStateToRegisterUi(): MapperAuthorisationStateToRegisterUi =
         MapperAuthorisationStateToRegisterUi.Base()
-
-    @Provides
-    @LoginFeature
-    @IoDispatcher
-    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
     @LoginFeature

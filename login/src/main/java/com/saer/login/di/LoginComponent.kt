@@ -6,9 +6,11 @@ import com.saer.api.TelegramFlow
 import com.saer.core.Resources
 import com.saer.core.communications.CountriesCommunication
 import com.saer.core.communications.CountryCommunication
+import com.saer.core.di.IoDispatcher
 import com.saer.core.di.LoginFeature
 import com.saer.login.ui.*
 import dagger.Component
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlin.properties.Delegates
 
 @LoginFeature
@@ -44,6 +46,7 @@ interface LoginDeps {
     fun resources(): Resources
     fun countriesCommunication(): CountriesCommunication
     fun countryCommunication(): CountryCommunication
+    @IoDispatcher fun ioDispatcher(): CoroutineDispatcher
 }
 
 interface LoginDepsProvider {

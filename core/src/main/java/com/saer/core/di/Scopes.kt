@@ -18,3 +18,7 @@ annotation class IoDispatcher
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class LoginFeature
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ChatsFeature

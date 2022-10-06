@@ -47,9 +47,7 @@ interface AuthRepository {
         override suspend fun checkPassword(password: String) =
             api.checkAuthenticationPassword(password)
 
-        override fun connectionState(): Flow<ConnectionState> {
-            return api.connectionStateFlow()
-        }
+        override fun connectionState(): Flow<ConnectionState> = api.connectionStateFlow()
 
         override suspend fun countries(): Countries = api.getCountries()
 

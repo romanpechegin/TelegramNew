@@ -2,6 +2,7 @@ package com.saer.login.ui
 
 import androidx.navigation.findNavController
 import com.saer.login.databinding.FragmentEnterPasswordBinding
+import com.saer.navigation.R
 
 interface EnterPasswordUi {
 
@@ -21,7 +22,7 @@ interface EnterPasswordUi {
 
     class Success : EnterPasswordUi {
         override fun apply(binding: FragmentEnterPasswordBinding) {
-            binding.applyButton.findNavController().navigate(com.saer.navigation.R.id.action_global_chats_graph)
+            binding.applyButton.findNavController().navigate(R.id.action_global_chats_graph)
         }
     }
 
